@@ -1,6 +1,6 @@
 # FitStreak API — Backend Documentation
 
-Dokumentasi lengkap 8 endpoint REST untuk aplikasi FitStreak. Backend menggunakan model Neural Network (`smartfit.keras`) beserta artefak preprocessing yang dihasilkan dari notebook capstone.
+Dokumentasi lengkap 8 endpoint REST untuk aplikasi FitStreak. Backend menggunakan model Neural Network (`aurafit.keras`) beserta artefak preprocessing yang dihasilkan dari notebook capstone.
 
 ---
 
@@ -8,7 +8,7 @@ Dokumentasi lengkap 8 endpoint REST untuk aplikasi FitStreak. Backend menggunaka
 
 | File | Keterangan |
 |---|---|
-| `smartfit.keras` | Model Neural Network utama (train dari notebook) |
+| `aurafit.keras` | Model Neural Network utama (train dari notebook) |
 | `scaler_nn.pkl` | StandardScaler — fit pada X_train (5 fitur) |
 | `le_intensity.pkl` | LabelEncoder untuk `Intensity_Level` |
 | `le_category.pkl` | LabelEncoder untuk `Category` |
@@ -490,7 +490,7 @@ with open('le_category.pkl',  'rb') as f: le_category  = pickle.load(f)
 with open('le_goal.pkl',      'rb') as f: le_goal      = pickle.load(f)
 
 import tensorflow as tf
-nn_model = tf.keras.models.load_model('smartfit.keras')
+nn_model = tf.keras.models.load_model('aurafit.keras')
 ```
 
 ---

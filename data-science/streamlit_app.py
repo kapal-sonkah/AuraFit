@@ -3,13 +3,13 @@ import pandas as pd
 import plotly.express as px
 
 # 1. Setup Halaman & Judul
-st.set_page_config(page_title="SmartFit AI Dashboard", layout="wide")
-st.title("🏃‍♂️ SmartFit: Re-kalibrasi BMI & Aktivitas")
+st.set_page_config(page_title="AuraFit AI Dashboard", layout="wide")
+st.title("🏃‍♂️ AuraFit: Re-kalibrasi BMI & Aktivitas")
 
 # 2. Load Datasets
 @st.cache_data
 def load_all_data():
-    master_df = pd.read_csv('master_smartfit_final.csv')
+    master_df = pd.read_csv('master_aurafit_final.csv')
     nut_df = pd.read_csv('abbrev_cleaned.csv')
     choices_df = pd.read_csv('food_choices_cleaned.csv')
     return master_df, nut_df, choices_df
@@ -78,7 +78,7 @@ with col2:
 
 # 6. Integrasi Dataset Nutrisi & Preferensi
 st.write("---")
-st.write("### 🥗 Rekomendasi Menu Cerdas SmartFit")
+st.write("### 🥗 Rekomendasi Menu Cerdas AuraFit")
 st.caption(f"Target Nutrisi: {food_goal}")
 
 # Logika pengambilan saran makanan berdasarkan preferensi masakan favorit dari dataset

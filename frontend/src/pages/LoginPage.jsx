@@ -79,12 +79,12 @@ function LoginPage({ loginSuccess }) {
 
         <div className="relative z-10 h-full flex flex-col items-center justify-between py-10 px-8 text-white text-center">
           <div>
-            <h2 className="text-5xl font-special-gothic-expanded-one">SmartFit</h2>
+            <h2 className="text-5xl font-special-gothic-expanded-one">AuraFit</h2>
             <p className="font-montserrat">Your Personal Digital Health Coach.</p>
           </div>
 
           <div>
-            <img src={Logo} alt="SmartFit Logo" className="w-80 h-80" />
+            <img src={Logo} alt="AuraFit Logo" className="w-80 h-80" />
           </div>
 
           <div>

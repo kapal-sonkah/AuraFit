@@ -118,10 +118,10 @@ function LandingPage() {
       <section className="relative w-full min-h-screen flex items-center">
         <div className="w-full bg-white/60 backdrop-blur-sm py-8 sm:py-12 px-6 sm:px-12 z-10">
           <h1 className="font-special-gothic-expanded-one text-5xl sm:text-6xl md:text-8xl text-black mb-3 transition-all duration-700 opacity-100 translate-y-0">
-            SmartFit
+            AuraFit
           </h1>
           <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-black mb-2 transition-all duration-700 delay-150 opacity-100 translate-y-0">
-            Meet SmartFit: Your Personal Digital Health Coach.
+            Meet AuraFit: Your Personal Digital Health Coach.
           </h2>
           <p className="text-sm sm:text-base font-semibold text-black/75 transition-all duration-700 delay-300 opacity-100 translate-y-0">
             Tailored nutrition and fitness plans powered by AI, designed to adapt as you grow.
@@ -137,7 +137,7 @@ function LandingPage() {
               Meet the Team
             </h2>
             <p className="text-black/60 font-semibold text-sm sm:text-base text-center mb-8">
-              The people who built SmartFit
+              The people who built AuraFit
             </p>
 
             {/* Grid items (`<li>`) implicitly stretch to match the height of their row. 
@@ -160,7 +160,7 @@ function LandingPage() {
       {/* Footer */}
       <footer className="w-full bg-white/60 backdrop-blur-sm py-5 px-6 sm:px-12">
         <p className="text-center text-black/70 font-semibold text-sm">
-          © 2026 SmartFit Team. All rights reserved.
+          © 2026 AuraFit Team. All rights reserved.
         </p>
       </footer>
     </div>

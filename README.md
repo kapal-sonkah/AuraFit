@@ -1,16 +1,16 @@
-# SmartFit - Pelatih Kesehatan Digital Pribadi Anda
+# AuraFit - Pelatih Kesehatan Digital Pribadi Anda
 
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/e95dc3d6-55c5-4bf3-9902-e7bb136f2245" />
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/9f349a85-089e-4fac-b76b-0f88323ad75c" />
 
 
 ## Deskripsi Singkat
-SmartFit merupakan aplikasi web kesehatan inovatif yang dirancang sebagai solusi personal untuk mengatasi rencana nutrisi dan olahraga yang terlalu umum. Aplikasi ini dapat mentransformasi pendekatan konvensional dengan menggabungkan **analisis data fisik presisi** dan **algoritma adaptif** untuk menciptakan rencana kesehatan yang dipersonalisasi.
+AuraFit merupakan aplikasi web kesehatan inovatif yang dirancang sebagai solusi personal untuk mengatasi rencana nutrisi dan olahraga yang terlalu umum. Aplikasi ini dapat mentransformasi pendekatan konvensional dengan menggabungkan **analisis data fisik presisi** dan **algoritma adaptif** untuk menciptakan rencana kesehatan yang dipersonalisasi.
 
 Aplikasi ini dibangun menggunakan library React.js dan menggunakan Tailwind CSS sebagai framework CSS untuk merancang antarmukanya.
 
 ## Fitur Utama
-Aplikasi web SmartFit dibangun dengan cakupan fitur utama sebagai berikut:
+Aplikasi web AuraFit dibangun dengan cakupan fitur utama sebagai berikut:
 
 * **Onboarding & Profiling Sistematis:** Analisis data fisik awal secara presisi mencakup BMI, usia, komposisi tubuh, dan tingkat aktivitas harian.
 * **Goal Setting & Path Prediction:** Penentuan jalur target kesehatan otomatis (seperti *weight loss* atau *muscle gain*) berdasarkan profil fisik awal.
@@ -28,23 +28,23 @@ https://drive.google.com/drive/folders/1aKqEcjae_mxVht5zLzDN71-BF6qRahdf?usp=sha
 1. Git: Untuk melakukan clone repositori dari GitHub.
 2. Node.js (Versi LTS - 20.x atau terbaru) & npm: Untuk menjalankan framework Vite (Frontend) dan Express.js (Backend).
 3. Python (Wajib versi 3.11 atau lebih baru): Untuk menjalankan inferensi model AI
-4. PostgreSQL: sebagai database aplikasi. Buat database dengan nama 'smartfit'
+4. PostgreSQL: sebagai database aplikasi. Buat database dengan nama 'aurafit'
 5. Sediakan Port 3000 untuk service backend
 
 ### Langkah-langkah
 1. Clone repositori ini ke direktori lokal anda.
 ```bash
-git clone https://github.com/susenayw/SmartFit.git
+git clone https://github.com/susenayw/AuraFit.git
 ```
 
 2. Masuk ke dalam direktori project
 ```bash
-cd SmartFit
+cd AuraFit
 ```
 
 3. Anda sudah masuk ke direktori root project. Masuk ke folder ai-model untuk mengaktifkan server api model
 ```bash
-cd ai-model/smartfit-ai-model
+cd ai-model/aurafit-ai-model
 ```
 
 4. Jalankan service AI model
@@ -102,4 +102,4 @@ npm run dev
 13. Buka http://localhost:5173/ di browser. Aplikasi sudah siap untuk digunakan
 
 ## Link aplikasi 
-https://smartfit-app.vercel.app/
+https://aurafit-app.vercel.app/

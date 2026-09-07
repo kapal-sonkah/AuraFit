@@ -328,7 +328,7 @@ callbacks = [
         restore_best_weights=True
     ),
     ModelCheckpoint(
-        'smartfit.keras',
+        'aurafit.keras',
         monitor='val_accuracy',
         save_best_only=True
     ),

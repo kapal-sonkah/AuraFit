@@ -52,7 +52,7 @@ export default function DashboardPage({ onLogout, user }) {
       if (!user) return;
 
       const todayStr = new Date().toISOString().split('T')[0];
-      const cacheKey = `smartfit_ai_${user.id}_${todayStr}`;
+      const cacheKey = `aurafit_ai_${user.id}_${todayStr}`;
       
       // Cek apakah hari ini sudah pernah mengambil rekomendasi AI
       const cachedData = localStorage.getItem(cacheKey);
@@ -101,7 +101,7 @@ export default function DashboardPage({ onLogout, user }) {
 
         <header className={`sticky top-0 z-20 flex items-center justify-between py-2 -mx-4 px-4 transition-colors duration-300 ${scrolled ? 'bg-green-900/80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
           <h1 className="text-white text-3xl tracking-wide font-special-gothic-expanded-one select-none">
-            SmartFit
+            AuraFit
           </h1>
           <nav aria-label="Main navigation">
             <button
