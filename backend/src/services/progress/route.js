@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authenticateToken from '../../middlewares/authentication.js';
+import authenticateCron from '../../middlewares/cron-authentication.js';
 import { getProgressToday, updateActivityProgress, updateFoodProgress } from './progress-controller.js';
 import db from './db.js';
 
@@ -9,7 +10,7 @@ router.get('/today', authenticateToken, getProgressToday);
 router.post('/activity', authenticateToken, updateActivityProgress);
 router.post('/food', authenticateToken, updateFoodProgress);
 
-router.get('/cron/daily-reset', async (req, res) => {
+router.get('/cron/daily-reset', authenticateCron, async (req, res) => {
   try {
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
