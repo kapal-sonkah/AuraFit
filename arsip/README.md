@@ -1,7 +1,11 @@
 # Arsip
 
-Berkas pada folder ini **tidak dijalankan** oleh sistem AuraFit. Isinya
-disimpan sebagai rujukan dan bukti asal-usul, bukan sebagai komponen aplikasi.
+Berkas pada folder ini **tidak dijalankan** oleh sistem AuraFit dan tidak
+dirujuk kode mana pun. Isinya disimpan sebagai rujukan dan bukti asal-usul,
+bukan sebagai komponen aplikasi.
+
+Akar repositori karenanya hanya memuat komponen yang benar-benar berjalan,
+yaitu `backend/` dan `frontend/`.
 
 ## model-capstone
 
@@ -25,5 +29,19 @@ Alasan pemindahan:
 3. Layanan lama bergantung pada TensorFlow, yang melampaui batas ukuran
    lingkungan deployment yang tersedia bagi tim.
 
-Folder ini dipertahankan agar penurunan aturan pada AuraFit dapat ditelusuri
-kembali ke sumbernya, dan agar kontribusi tim capstone terdahulu tetap terlihat.
+## data-science
+
+Dasbor Streamlit untuk rekalibrasi BMI dan aktivitas mingguan, beserta berkas
+data yang dipakainya.
+
+Piagam proyek menempatkan rekalibrasi mingguan berbasis AI **di luar cakupan**;
+ringkasan mingguan yang termasuk cakupan adalah pelaporan data tersimpan.
+Dasbor ini karenanya bukan bagian sistem yang dibangun, dan tidak dipanggil
+aplikasi mana pun.
+
+## Dokumen proyek terdahulu
+
+`Project Plan SmartFit.pdf` dan `Project Brief - CC26-PSU224.pdf` adalah
+dokumen perencanaan dari proyek capstone. Keduanya disimpan sebagai catatan
+sejarah; dokumen perencanaan yang berlaku untuk AuraFit adalah piagam proyek
+yang disusun terpisah.

@@ -79,11 +79,19 @@ npm run dev
 
 ## Link aplikasi 
 https://aurafit-app.vercel.app/
+## Struktur repositori
+
+| Folder | Isi |
+|---|---|
+| `backend/` | Express 5 dan PostgreSQL. Menyediakan autentikasi, rencana harian, progres, dan rekomendasi |
+| `frontend/` | React dan Vite |
+| `arsip/` | Berkas yang tidak dijalankan sistem: layanan model capstone, dasbor Streamlit, dan dokumen proyek terdahulu. Lihat `arsip/README.md` |
+
 ## Rekomendasi harian
 
-Rekomendasi aktivitas dan makanan disusun backend dari aturan berbasis BMI pada
-`backend/src/services/recommendations/`. Sistem tidak memerlukan layanan model
-terpisah maupun Python.
+Rekomendasi aktivitas dan makanan disusun backend dari aturan berbasis BMI dan
+tujuan pengguna, pada `backend/src/services/recommendations/`. Pemilihan butir
+memakai benih dari identitas pengguna dan tanggal, sehingga rencana satu hari
+tetap sama pada permintaan berulang dan dapat diuji.
 
-Layanan klasifikasi dari proyek capstone terdahulu disimpan di
-`arsip/model-capstone/` sebagai rujukan; berkas di sana tidak dijalankan.
+Sistem tidak memerlukan layanan model terpisah maupun Python.
