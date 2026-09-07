@@ -77,8 +77,21 @@ npm run dev
 
 11. Buka http://localhost:5173/ di browser. Aplikasi sudah siap untuk digunakan
 
-## Link aplikasi 
-https://aurafit-app.vercel.app/
+## Aplikasi yang berjalan
+
+| Bagian | Tautan |
+|---|---|
+| Aplikasi | https://aurafit-wheat.vercel.app |
+| API | https://aurafit-backend-lilac.vercel.app |
+
+Basis data memakai Neon pada region Singapore. Pada jenjang gratis, basis data
+tidur ketika tidak dipakai, sehingga permintaan pertama setelah menganggur
+memerlukan beberapa detik untuk bangun.
+
+Tautan `aurafit-app.vercel.app` yang sebelumnya tercantum **bukan aplikasi
+ini**. Alamat itu menyajikan basis kode lain dan tidak dikelola dari
+repositori ini.
+
 ## Struktur repositori
 
 | Folder | Isi |
