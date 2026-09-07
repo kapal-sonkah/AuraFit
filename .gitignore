@@ -20,3 +20,8 @@ data/*.xlsx
 
 .env
 node_modules/
+
+# Konfigurasi perkakas pengembang, bukan bagian aplikasi
+.claude/
+.vscode/
+.idea/
