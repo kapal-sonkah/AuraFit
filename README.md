@@ -15,12 +15,8 @@ Aplikasi web AuraFit dibangun dengan cakupan fitur utama sebagai berikut:
 * **Onboarding & Profiling Sistematis:** Analisis data fisik awal secara presisi mencakup BMI, usia, komposisi tubuh, dan tingkat aktivitas harian.
 * **Goal Setting & Path Prediction:** Penentuan jalur target kesehatan otomatis (seperti *weight loss* atau *muscle gain*) berdasarkan profil fisik awal.
 * **Calorie & Activity Dashboard:** Visualisasi data pelacakan asupan nutrisi harian serta kalkulasi defisit atau surplus kalori secara dinamis.
-* **Sistem Rekomendasi Adaptif:** Panduan menu makanan (nutrisi) dan jenis latihan fisik harian yang disesuaikan khusus dengan kebutuhan kalori pengguna.
-* **Re-kalibrasi Mingguan Berbasis AI:** Analitik mingguan yang otomatis memperbarui target dan rekomendasi berdasarkan progres nyata performa fisik pengguna.
+* **Sistem Rekomendasi Harian:** Panduan menu makanan dan jenis latihan fisik harian, disusun dari aturan berbasis BMI dan tujuan pengguna.
 * **Gamifikasi Streak:** Sistem pelacakan konsistensi harian dengan indikator visual interaktif untuk meningkatkan motivasi, kedisiplinan, dan retensi pengguna.
-
-## Model AI
-https://drive.google.com/drive/folders/1aKqEcjae_mxVht5zLzDN71-BF6qRahdf?usp=sharing
 
 ## Cara setup aplikasi di lokal
 
