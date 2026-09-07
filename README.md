@@ -27,14 +27,13 @@ https://drive.google.com/drive/folders/1aKqEcjae_mxVht5zLzDN71-BF6qRahdf?usp=sha
 ### Persyaratan
 1. Git: Untuk melakukan clone repositori dari GitHub.
 2. Node.js (Versi LTS - 20.x atau terbaru) & npm: Untuk menjalankan framework Vite (Frontend) dan Express.js (Backend).
-3. Python (Wajib versi 3.11 atau lebih baru): Untuk menjalankan inferensi model AI
-4. PostgreSQL: sebagai database aplikasi. Buat database dengan nama 'aurafit'
-5. Sediakan Port 3000 untuk service backend
+3. PostgreSQL: sebagai database aplikasi. Buat database dengan nama 'aurafit'
+4. Sediakan Port 3000 untuk service backend
 
 ### Langkah-langkah
 1. Clone repositori ini ke direktori lokal anda.
 ```bash
-git clone https://github.com/susenayw/AuraFit.git
+git clone https://github.com/kapal-sonkah/AuraFit.git
 ```
 
 2. Masuk ke dalam direktori project
@@ -42,64 +41,53 @@ git clone https://github.com/susenayw/AuraFit.git
 cd AuraFit
 ```
 
-3. Anda sudah masuk ke direktori root project. Masuk ke folder ai-model untuk mengaktifkan server api model
-```bash
-cd ai-model/aurafit-ai-model
-```
-
-4. Jalankan service AI model
-```bash
-# Buat virtual environment
-python -m venv venv
-
-# Aktifkan (Windows)
-venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Jalankan server
-uvicorn api:app --reload
-```
-5. Buka terminal baru, lalu masuk ke folder backend untuk mengaktifkan server backend
+3. Masuk ke folder backend untuk menjalankan server backend
 
 ```bash
 cd backend
 
 # Install packages
-npm install 
+npm install
 ```
 
-6. Buat file .env berdasarkan file .env.example. Ubah value yang diberi comment (#) sesuai dengan konfigurasi sistem anda
+4. Buat file .env berdasarkan file .env.example. Ubah value yang diberi comment (#) sesuai dengan konfigurasi sistem anda
 
-7. Jalankan command untuk migrate database
+5. Jalankan command untuk migrate database
 ```cmd
 npm run migrate up
 ```
 
-8. Jalankan server
+6. Jalankan server
 ```cmd
 npm run start:dev
 ```
 
-9. Server berjalan pada local di port 3000
+7. Server berjalan pada local di port 3000
 
-10. Buka terminal baru, pergi ke folder frontend
+8. Buka terminal baru, pergi ke folder frontend
 ```bash
 cd frontend
 ```
 
-11. Install packages
+9. Install packages
 ```bash
 npm install
 ```
 
-12. Jalankan program
+10. Jalankan program
 ```bash
 npm run dev
 ```
 
-13. Buka http://localhost:5173/ di browser. Aplikasi sudah siap untuk digunakan
+11. Buka http://localhost:5173/ di browser. Aplikasi sudah siap untuk digunakan
 
 ## Link aplikasi 
 https://aurafit-app.vercel.app/
+## Rekomendasi harian
+
+Rekomendasi aktivitas dan makanan disusun backend dari aturan berbasis BMI pada
+`backend/src/services/recommendations/`. Sistem tidak memerlukan layanan model
+terpisah maupun Python.
+
+Layanan klasifikasi dari proyek capstone terdahulu disimpan di
+`arsip/model-capstone/` sebagai rujukan; berkas di sana tidak dijalankan.
