@@ -66,7 +66,7 @@ export default function DashboardPage({ onLogout, user }) {
       }
 
       // Jika belum, panggil model FastAPI
-      const { error, data } = await getAIRecommendations(user);
+      const { error, data } = await getAIRecommendations();
       
       if (!error && data) {
         setActivities(data.activities);

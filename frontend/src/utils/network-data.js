@@ -84,38 +84,24 @@ async function logout() {
   localStorage.removeItem('refreshToken');
 }
 
-const AI_MODEL_URL = import.meta.env.VITE_AI_MODEL_URL || 'http://127.0.0.1:8000';
 
-async function getAIRecommendations(user) {
-
-  const formattedGoal = (user.goal).replace('-', '_');
-
-  // Mapping data user dari database ke format yang diminta FastAPI
-  const payload = {
-    gender: user.gender, // Pastikan formatnya sesuai (misal: 'male' / 'female')
-    weight_kg: parseFloat(user.weight_kg),
-    height_cm: parseFloat(user.height_cm),
-    goal: formattedGoal,
-    age: parseInt(user.age)
-  };
-
+async function getAIRecommendations() {
+  // Rekomendasi kini disusun backend dari aturan berbasis BMI, bukan dari
+  // layanan klasifikasi terpisah. Data pengguna diambil backend dari basis
+  // data, sehingga tidak perlu dikirim ulang dari sini.
   try {
-    const response = await fetch(`${AI_MODEL_URL}/predict`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload),
+    const response = await fetch(`${BASE_URL}/recommendations/today`, {
+      headers: { 'Authorization': `Bearer ${getAccessToken()}` },
     });
 
     if (!response.ok) {
       return { error: true, data: null };
     }
 
-    const data = await response.json();
-    return { error: false, data };
+    const responseJson = await response.json();
+    return { error: false, data: responseJson.data };
   } catch (error) {
-    console.error('Gagal mengambil data dari API Model:', error);
+    console.error('Gagal mengambil rencana harian:', error);
     return { error: true, data: null };
   }
 }
