@@ -8,7 +8,7 @@ function FoodItem({ food, consumed, onClick }) {
       onClick={onClick}
     >
       <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center shrink-0 text-2xl select-none" role="img" aria-label="food icon">
-        {food.emoji}
+        <span aria-hidden="true">{food.emoji}</span>
       </div>
       <div>
         <p className="text-gray-800 font-semibold text-sm leading-tight">{food.name}</p>

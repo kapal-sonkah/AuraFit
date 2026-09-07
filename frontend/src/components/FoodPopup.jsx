@@ -24,7 +24,7 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
         <div className="flex items-center gap-4">
           {/* Emoji icon */}
           <div className="w-16 h-16 rounded-lg bg-white flex items-center justify-center text-4xl shrink-0 select-none">
-            {food.emoji}
+            <span aria-hidden="true">{food.emoji}</span>
           </div>
 
           {/* Info makanan */}

@@ -37,3 +37,33 @@
 html, body {  
   overscroll-behavior: none; 
 }
+
+/* Cincin fokus.
+ *
+ * Sebelumnya tidak ada satu pun gaya :focus di seluruh antarmuka, sehingga
+ * pengguna papan ketik tidak dapat melihat elemen mana yang sedang aktif.
+ * :focus-visible dipakai agar cincin hanya muncul pada navigasi papan ketik,
+ * bukan setiap kali tombol diklik dengan tetikus. */
+@layer base {
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid #34d399;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* Menghormati preferensi sistem untuk mengurangi gerak.
+ *
+ * Antarmuka memakai transisi hingga 700 ms dan penskalaan pada hover. Bagi
+ * sebagian orang, gerak semacam itu memicu pusing atau mual. Ketika preferensi
+ * ini menyala, gerak dihilangkan tanpa mengubah tata letak. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

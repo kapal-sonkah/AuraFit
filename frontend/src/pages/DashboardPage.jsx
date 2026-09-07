@@ -107,7 +107,7 @@ export default function DashboardPage({ onLogout, user }) {
           <nav aria-label="Main navigation">
             <button
               aria-label={menuOpen ? "Close menu" : "Open menu"}
-              className="flex flex-col gap-1.5 p-2 rounded-md hover:bg-white/10 transition-colors"
+              className="flex flex-col items-center justify-center gap-1.5 min-w-11 min-h-11 rounded-md hover:bg-white/10 transition-colors cursor-pointer"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {[0, 1, 2].map((i) => <span key={i} className="block w-6 h-0.5 bg-white rounded" />)}
