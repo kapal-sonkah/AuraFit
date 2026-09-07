@@ -5,6 +5,7 @@ import CaloriesLog from "../components/CaloriesLog";
 import ProfilePopup from "../components/ProfilePopUp";
 import { loadProgress, saveActivityProgress, saveFoodProgress } from '../utils/progress-storage';
 import { getAIRecommendations } from '../utils/network-data';
+import { LATAR_UTAMA } from '../utils/backgrounds';
 
 export default function DashboardPage({ onLogout, user }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -92,7 +93,7 @@ export default function DashboardPage({ onLogout, user }) {
       {/* fixed background layers */}
       <div
         className="fixed inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
-        style={{ backgroundImage: "url('/images/landing-page-background.png')", backgroundColor: "#166534" }}
+        style={{ backgroundImage: LATAR_UTAMA, backgroundColor: "#0b1f16" }}
       />
       <div className="fixed inset-0 bg-green-900/50 pointer-events-none" />
 

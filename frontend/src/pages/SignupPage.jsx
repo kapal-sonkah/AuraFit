@@ -3,6 +3,7 @@ import Logo from '../assets/images/SFMonoLight.svg';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/network-data";
+import { LATAR_AUTENTIKASI } from '../utils/backgrounds';
 
 function SignupPage() {
   const [firstName, setFirstName] = React.useState('');
@@ -216,7 +217,7 @@ function SignupPage() {
       {/* decorative aside — hidden on mobile */}
       <aside
         className="hidden md:flex w-2/5 flex-col h-screen bg-cover bg-center relative justify-center items-center text-center text-white sticky top-0"
-        style={{ backgroundImage: "url('/images/signup-background.png')" }}
+        style={{ backgroundImage: LATAR_AUTENTIKASI }}
       >
         <div className="absolute inset-0 bg-green-700/60 backdrop-blur-xs" aria-hidden="true" />
 

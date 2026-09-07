@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from '../assets/images/SFMonoLight.svg';
 import { login } from '../utils/network-data';
 import React from "react";
+import { LATAR_AUTENTIKASI } from '../utils/backgrounds';
 
 function LoginPage({ loginSuccess }) {
 
@@ -73,7 +74,7 @@ function LoginPage({ loginSuccess }) {
       {/* decorative aside — hidden on mobile */}
       <aside
         className="hidden md:flex w-2/5 flex-col h-screen bg-cover bg-center justify-center items-center text-center text-white sticky top-0"
-        style={{ backgroundImage: "url('/images/signup-background.png')" }}
+        style={{ backgroundImage: LATAR_AUTENTIKASI }}
       >
         <div className="absolute inset-0 bg-green-700/60 backdrop-blur-xs" aria-hidden="true" />
 
