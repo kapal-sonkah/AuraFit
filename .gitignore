@@ -1,0 +1,22 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+bin/
+lib/
+share/
+pyvenv.cfg
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data Science specific (Optional)
+.ipynb_checkpoints/
+data/*.csv
+data/*.xlsx
+
+.env
+node_modules/

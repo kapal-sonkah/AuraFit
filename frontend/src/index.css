@@ -1,0 +1,39 @@
+@font-face {
+  font-family: Montserrat;
+  src: url(./assets/fonts/Montserrat-Variable.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: SpecialGothicExpandedOne-Regular;
+  src: url(./assets/fonts/SpecialGothicExpandedOne-Regular.ttf) format("truetype");
+}
+
+@import "tailwindcss";
+
+@plugin "tailwind-corner-smoothing";
+
+@theme{
+  --font-sans: Montserrat, "sans-serif";
+  --font-special-gothic-expanded-one: "SpecialGothicExpandedOne-Regular", "sans-serif";
+}
+
+@layer base {
+  html, body, #root {
+    @apply m-0 p-0 h-full w-full;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+html, body {  
+  overscroll-behavior: none; 
+}

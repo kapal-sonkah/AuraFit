@@ -1,0 +1,592 @@
+{
+  "_meta": {
+    "project": "AI Exercise Recommender — Capstone",
+    "version": "1.0.0",
+    "description": "JSON specification lengkap untuk backend REST API sistem rekomendasi olahraga berbasis BMI + Neural Network + Streak system",
+    "model_used": "Neural Network (Keras/TensorFlow) + Rule-based engine",
+    "dataset": "exercise_balanced_3000.csv (augmented dari exercise_800.csv)",
+    "author": "Capstone Team"
+  },
+
+  "endpoints": [
+
+    {
+      "id": "EP-01",
+      "name": "Register & Onboarding User",
+      "method": "POST",
+      "url": "/api/v1/users/register",
+      "description": "Registrasi user baru, simpan data fisik awal untuk kalkulasi BMI",
+      "request_body": {
+        "name": "string — nama lengkap user",
+        "email": "string — email unik",
+        "password": "string — min 8 karakter",
+        "gender": "string — enum: ['L', 'P']",
+        "weight_kg": "float — berat badan dalam kg, contoh: 90.0",
+        "height_cm": "float — tinggi badan dalam cm, contoh: 165.0",
+        "age": "integer — umur dalam tahun, contoh: 28",
+        "goal": "string — enum: ['Weight Loss', 'Cardio & Endurance', 'Cardio & Agility', 'Muscle Gain', 'Core & Stamina', 'Full Body Cardio', 'Health Maintenance']"
+      },
+      "response_success": {
+        "status": 201,
+        "body": {
+          "success": true,
+          "message": "Registrasi berhasil",
+          "data": {
+            "user_id": "uuid-string — contoh: usr_a1b2c3d4",
+            "name": "string",
+            "email": "string",
+            "bmi_profile": {
+              "bmi": "float — contoh: 33.1",
+              "bmi_category": "string — enum: ['Underweight', 'Normal', 'Overweight', 'Obesitas']",
+              "ideal_weight_kg": "float — contoh: 61.4",
+              "weight_to_lose_kg": "float — contoh: 28.6",
+              "bmr_kcal_per_day": "integer — contoh: 1796",
+              "estimated_days_to_ideal": "integer — contoh: 734"
+            },
+            "streak": {
+              "current_streak": 0,
+              "longest_streak": 0,
+              "total_calories_burned": 0,
+              "total_steps": 0,
+              "calories_target_to_ideal": "float — contoh: 220220.0",
+              "progress_percent": 0.0
+            },
+            "token": "string — JWT token untuk autentikasi"
+          }
+        }
+      },
+      "response_error": {
+        "400": {"success": false, "message": "Email sudah terdaftar / data tidak valid"},
+        "422": {"success": false, "message": "Validasi gagal", "errors": ["field: pesan error"]}
+      }
+    },
+
+    {
+      "id": "EP-02",
+      "name": "Login",
+      "method": "POST",
+      "url": "/api/v1/users/login",
+      "description": "Login user, return JWT token",
+      "request_body": {
+        "email": "string",
+        "password": "string"
+      },
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": {
+            "token": "string — JWT",
+            "user_id": "string",
+            "name": "string"
+          }
+        }
+      }
+    },
+
+    {
+      "id": "EP-03",
+      "name": "Get Rekomendasi Olahraga Hari Ini (Core AI Endpoint)",
+      "method": "GET",
+      "url": "/api/v1/recommendations/today",
+      "description": "Endpoint utama. Memanggil model NN untuk prediksi intensitas, lalu filter dataset, hitung kalori & langkah, return rekomendasi hari ini. Streak_week dihitung otomatis dari history user.",
+      "auth": "Bearer Token (JWT)",
+      "headers": {
+        "Authorization": "Bearer <token>"
+      },
+      "query_params": {
+        "user_id": "string — opsional jika sudah dari token"
+      },
+      "internal_process": [
+        "1. Ambil data user dari DB (weight, height, age, gender, goal, streak_week)",
+        "2. Hitung BMI, BMR, berat ideal → rule-based engine",
+        "3. Encode fitur: [MET_estimasi, Category_Encoded, Goal_Encoded, BMI, Streak_Week]",
+        "4. Panggil nn_model.predict(fitur_scaled) → dapat pred_intensity + confidence",
+        "5. Filter dataset: WHERE Intensity_Level = pred_intensity AND Goal_Tag = user_goal",
+        "6. Sample 1 aktivitas (random_state = streak_week agar deterministik per minggu)",
+        "7. Hitung kalori: MET × weight_kg × (durasi/60)",
+        "8. Estimasi langkah dari kalori",
+        "9. Return JSON response di bawah"
+      ],
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": {
+            "user_summary": {
+              "user_id": "string",
+              "name": "string",
+              "bmi": 33.1,
+              "bmi_category": "Obesitas",
+              "bmr_kcal_per_day": 1796,
+              "ideal_weight_kg": 61.4,
+              "weight_to_lose_kg": 28.6,
+              "estimated_days_to_ideal": 734
+            },
+            "streak_info": {
+              "current_streak_days": 5,
+              "streak_week": 0,
+              "longest_streak_days": 12,
+              "total_calories_burned_all_time": 1580.5,
+              "total_steps_all_time": 32400,
+              "calories_target_to_ideal": 220220.0,
+              "progress_percent": 0.72,
+              "is_streak_alive": true,
+              "last_workout_date": "2025-01-14"
+            },
+            "recommendation": {
+              "date": "2025-01-15",
+              "day_number": 6,
+              "is_rest_day": false,
+              "activity_code": 10452,
+              "activity_name": "Recreational Dumbbell Shoulder Press",
+              "category": "Resistance Training",
+              "major_heading": "Resistance Training",
+              "intensity_level": "Moderate",
+              "nn_confidence_percent": 99.8,
+              "goal_tag": "Weight Loss",
+              "duration_minutes": 30,
+              "met_value": 3.2,
+              "calories_burned": 144.0,
+              "estimated_steps": 2799,
+              "has_step_tracking": true
+            },
+            "weekly_schedule_preview": [
+              {
+                "day_offset": 0,
+                "date": "2025-01-15",
+                "label": "Hari ini",
+                "is_rest": false,
+                "activity_name": "Recreational Dumbbell Shoulder Press",
+                "intensity": "Moderate",
+                "calories_burned": 144.0,
+                "duration_minutes": 30
+              },
+              {
+                "day_offset": 1,
+                "date": "2025-01-16",
+                "label": "Besok",
+                "is_rest": false,
+                "activity_name": "preview — digenerate saat dipanggil",
+                "intensity": "Moderate",
+                "calories_burned": null,
+                "duration_minutes": null
+              },
+              {
+                "day_offset": 2,
+                "date": "2025-01-17",
+                "label": "Lusa",
+                "is_rest": true,
+                "activity_name": "Hari Istirahat",
+                "intensity": "Rest",
+                "calories_burned": 0,
+                "duration_minutes": 0
+              }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "id": "EP-04",
+      "name": "Complete Workout (Selesai Olahraga — Update Streak)",
+      "method": "POST",
+      "url": "/api/v1/workouts/complete",
+      "description": "User menandai olahraga hari ini selesai. Backend update streak, akumulasi kalori & langkah, cek apakah streak putus atau naik.",
+      "auth": "Bearer Token (JWT)",
+      "request_body": {
+        "user_id": "string",
+        "recommendation_id": "string — ID dari response EP-03",
+        "actual_duration_minutes": "integer — durasi aktual user olahraga, contoh: 28",
+        "actual_steps": "integer — opsional, dari smartwatch/pedometer, contoh: 3000",
+        "completed_at": "string — ISO 8601 timestamp, contoh: 2025-01-15T07:30:00Z"
+      },
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "message": "Workout berhasil dicatat! Streak kamu sekarang 6 hari!",
+          "data": {
+            "workout_log": {
+              "log_id": "string — uuid",
+              "user_id": "string",
+              "date": "2025-01-15",
+              "activity_name": "Recreational Dumbbell Shoulder Press",
+              "intensity": "Moderate",
+              "duration_minutes": 28,
+              "calories_burned_actual": 134.4,
+              "steps_actual": 3000,
+              "met_value": 3.2
+            },
+            "streak_update": {
+              "previous_streak": 5,
+              "current_streak": 6,
+              "streak_status": "enum: ['maintained', 'broken', 'new_record']",
+              "longest_streak": 12,
+              "streak_milestone": "enum: [null, '3_days', '7_days', '14_days', '30_days', '60_days', '100_days']"
+            },
+            "progress_update": {
+              "total_calories_burned_all_time": 1714.9,
+              "total_steps_all_time": 35400,
+              "calories_target_to_ideal": 220220.0,
+              "progress_percent": 0.78,
+              "weight_lost_estimated_kg": 0.22,
+              "days_remaining_estimated": 728
+            },
+            "gamification": {
+              "points_earned": 50,
+              "total_points": 320,
+              "badges_unlocked": [],
+              "next_milestone": "7 hari streak — 1 hari lagi!"
+            }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "EP-05",
+      "name": "Skip / Miss Workout (Streak Putus)",
+      "method": "POST",
+      "url": "/api/v1/workouts/skip",
+      "description": "Dipanggil otomatis oleh sistem (cron job tengah malam) atau manual user. Reset streak counter ke 0, tapi kalori yang sudah terbakar TETAP tersimpan (tidak hilang).",
+      "auth": "Bearer Token (JWT)",
+      "request_body": {
+        "user_id": "string",
+        "date": "string — tanggal yang di-skip, format: YYYY-MM-DD",
+        "reason": "string — opsional: ['sakit', 'sibuk', 'lupa', 'lainnya']"
+      },
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "message": "Streak putus. Semangat mulai lagi besok!",
+          "data": {
+            "streak_broken": true,
+            "streak_reset_to": 0,
+            "previous_streak": 5,
+            "longest_streak_preserved": 5,
+            "total_calories_still_valid": 1580.5,
+            "motivational_message": "Streak putus bukan berarti gagal. Kalori yang sudah kamu bakar tetap terhitung! Ayo mulai lagi besok."
+          }
+        }
+      }
+    },
+
+    {
+      "id": "EP-06",
+      "name": "Get Workout History (Riwayat + Streak Calendar)",
+      "method": "GET",
+      "url": "/api/v1/workouts/history",
+      "auth": "Bearer Token (JWT)",
+      "query_params": {
+        "user_id": "string",
+        "month": "integer — bulan, contoh: 1",
+        "year": "integer — tahun, contoh: 2025",
+        "limit": "integer — default: 30",
+        "page": "integer — default: 1"
+      },
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": {
+            "calendar": [
+              {
+                "date": "2025-01-01",
+                "status": "enum: ['done', 'miss', 'rest', 'upcoming']",
+                "calories_burned": 144.0,
+                "activity_name": "Jogging ringan"
+              }
+            ],
+            "logs": [
+              {
+                "log_id": "string",
+                "date": "2025-01-15",
+                "activity_name": "Recreational Dumbbell Shoulder Press",
+                "category": "Resistance Training",
+                "intensity": "Moderate",
+                "duration_minutes": 28,
+                "calories_burned": 134.4,
+                "steps": 3000,
+                "met_value": 3.2,
+                "streak_day": 6
+              }
+            ],
+            "summary": {
+              "total_workouts": 20,
+              "total_calories_this_month": 2880.0,
+              "total_steps_this_month": 54000,
+              "avg_calories_per_day": 144.0,
+              "completion_rate_percent": 71.4
+            },
+            "pagination": {
+              "page": 1,
+              "limit": 30,
+              "total": 20,
+              "total_pages": 1
+            }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "EP-07",
+      "name": "Update User Profile & Recalculate BMI",
+      "method": "PUT",
+      "url": "/api/v1/users/profile",
+      "description": "Update berat/tinggi/goal user. BMI dan semua kalkulasi akan di-recalculate otomatis.",
+      "auth": "Bearer Token (JWT)",
+      "request_body": {
+        "user_id": "string",
+        "weight_kg": "float — opsional",
+        "height_cm": "float — opsional",
+        "age": "integer — opsional",
+        "goal": "string — opsional"
+      },
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "message": "Profil diperbarui",
+          "data": {
+            "updated_bmi_profile": {
+              "bmi": 32.5,
+              "bmi_category": "Obesitas",
+              "ideal_weight_kg": 61.4,
+              "weight_to_lose_kg": 27.6,
+              "estimated_days_to_ideal": 709
+            },
+            "progress_recalculated": {
+              "calories_target_to_ideal": 212520.0,
+              "progress_percent": 0.81
+            }
+          }
+        }
+      }
+    },
+
+    {
+      "id": "EP-08",
+      "name": "Get User Dashboard (Summary)",
+      "method": "GET",
+      "url": "/api/v1/users/dashboard",
+      "auth": "Bearer Token (JWT)",
+      "description": "Data lengkap untuk halaman utama / home screen aplikasi.",
+      "response_success": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": {
+            "greeting": "Selamat pagi, Budi!",
+            "user": {
+              "user_id": "string",
+              "name": "string",
+              "bmi": 33.1,
+              "bmi_category": "Obesitas",
+              "goal": "Weight Loss"
+            },
+            "streak": {
+              "current_streak_days": 6,
+              "streak_week": 0,
+              "is_today_done": false,
+              "progress_percent": 0.78
+            },
+            "today_recommendation_preview": {
+              "activity_name": "Recreational Dumbbell Shoulder Press",
+              "intensity": "Moderate",
+              "duration_minutes": 30,
+              "calories_target": 144.0,
+              "estimated_steps": 2799
+            },
+            "weekly_stats": {
+              "calories_this_week": 720.0,
+              "workouts_this_week": 5,
+              "avg_steps_this_week": 2800
+            }
+          }
+        }
+      }
+    }
+  ],
+
+  "database_schema": {
+    "_note": "Tabel-tabel yang dibutuhkan di database (PostgreSQL / MySQL)",
+    "tables": {
+      "users": {
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(100)",
+          "email": "VARCHAR(100) UNIQUE NOT NULL",
+          "password_hash": "VARCHAR(255)",
+          "gender": "ENUM('L', 'P')",
+          "weight_kg": "FLOAT",
+          "height_cm": "FLOAT",
+          "age": "INTEGER",
+          "goal": "VARCHAR(50)",
+          "created_at": "TIMESTAMP",
+          "updated_at": "TIMESTAMP"
+        }
+      },
+      "bmi_profiles": {
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "user_id": "UUID FK → users.id",
+          "bmi": "FLOAT",
+          "bmi_category": "VARCHAR(20)",
+          "ideal_weight_kg": "FLOAT",
+          "weight_to_lose_kg": "FLOAT",
+          "bmr_kcal_per_day": "INTEGER",
+          "calories_target_total": "FLOAT",
+          "estimated_days": "INTEGER",
+          "calculated_at": "TIMESTAMP"
+        }
+      },
+      "streak_records": {
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "user_id": "UUID FK → users.id",
+          "current_streak": "INTEGER DEFAULT 0",
+          "longest_streak": "INTEGER DEFAULT 0",
+          "streak_week": "INTEGER DEFAULT 0",
+          "last_workout_date": "DATE",
+          "total_calories_burned": "FLOAT DEFAULT 0",
+          "total_steps": "INTEGER DEFAULT 0",
+          "total_points": "INTEGER DEFAULT 0",
+          "updated_at": "TIMESTAMP"
+        }
+      },
+      "workout_logs": {
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "user_id": "UUID FK → users.id",
+          "date": "DATE",
+          "activity_code": "INTEGER",
+          "activity_name": "VARCHAR(255)",
+          "category": "VARCHAR(100)",
+          "intensity_level": "VARCHAR(20)",
+          "goal_tag": "VARCHAR(50)",
+          "duration_minutes": "INTEGER",
+          "met_value": "FLOAT",
+          "calories_burned": "FLOAT",
+          "steps": "INTEGER DEFAULT 0",
+          "nn_confidence_percent": "FLOAT",
+          "streak_day": "INTEGER",
+          "status": "ENUM('done', 'skipped', 'rest')",
+          "completed_at": "TIMESTAMP",
+          "created_at": "TIMESTAMP"
+        }
+      },
+      "badges": {
+        "columns": {
+          "id": "UUID PRIMARY KEY",
+          "user_id": "UUID FK → users.id",
+          "badge_type": "VARCHAR(50) — contoh: '7_days_streak', 'first_workout', '10kg_lost'",
+          "earned_at": "TIMESTAMP"
+        }
+      }
+    }
+  },
+
+  "model_contract": {
+    "_note": "Ini adalah 'kontrak' antara Python model (Colab/server) dan backend",
+    "model_type": "Neural Network (Keras Sequential) + Rule-based engine",
+    "input_features": {
+      "order": "HARUS SAMA PERSIS dengan urutan saat training",
+      "features": [
+        {"index": 0, "name": "MET_Value", "type": "float", "description": "MET estimasi awal dari BMI: max(1.0, 8.0 - (bmi - 18.5) * 0.2)"},
+        {"index": 1, "name": "Category_Encoded", "type": "integer", "description": "Label-encoded dari category string via le_category.transform()"},
+        {"index": 2, "name": "Goal_Encoded", "type": "integer", "description": "Label-encoded dari goal string via le_goal.transform()"},
+        {"index": 3, "name": "User_BMI", "type": "float", "description": "BMI user yang dihitung: weight / (height/100)^2"},
+        {"index": 4, "name": "Streak_Week", "type": "integer", "description": "Minggu ke-berapa user dalam program: streak_days // 7"}
+      ],
+      "preprocessing": "scaler_nn.transform(fitur) — StandardScaler, WAJIB disimpan dan di-load"
+    },
+    "output": {
+      "type": "softmax probabilities",
+      "classes": ["Light", "Moderate", "Sedentary", "Vigorous"],
+      "predicted_class": "le_intensity.classes_[np.argmax(pred_proba)]",
+      "confidence": "round(np.max(pred_proba) * 100, 1)"
+    },
+    "artifacts_to_save_and_deploy": [
+      {"file": "nn_model.h5 atau nn_model.keras", "description": "Model NN yang sudah di-train"},
+      {"file": "scaler_nn.pkl", "description": "StandardScaler — WAJIB sama dengan saat training"},
+      {"file": "le_intensity.pkl", "description": "LabelEncoder untuk Intensity_Level"},
+      {"file": "le_category.pkl", "description": "LabelEncoder untuk Category"},
+      {"file": "le_goal.pkl", "description": "LabelEncoder untuk Goal_Tag"},
+      {"file": "exercise_balanced_3000.csv", "description": "Dataset untuk filtering rekomendasi"}
+    ],
+    "rule_based_formulas": {
+      "bmi": "weight_kg / (height_m ** 2)",
+      "bmi_categories": {
+        "Underweight": "bmi < 18.5",
+        "Normal": "18.5 <= bmi < 25",
+        "Overweight": "25 <= bmi < 30",
+        "Obesitas": "bmi >= 30"
+      },
+      "bmr_male": "10 * weight + 6.25 * height_cm - 5 * age + 5",
+      "bmr_female": "10 * weight + 6.25 * height_cm - 5 * age - 161",
+      "ideal_weight_male": "height_cm - 100 - ((height_cm - 150) / 4)",
+      "ideal_weight_female": "height_cm - 100 - ((height_cm - 150) / 2.5)",
+      "calories_burned": "MET_Value * weight_kg * (duration_minutes / 60)",
+      "estimated_steps": "int((calories_burned / weight_kg) * 1000 * 2.2) if calories_burned > 0 else 0",
+      "days_to_ideal": "int((weight_to_lose_kg * 7700) / avg_daily_calories_burned)",
+      "duration_progressive": "min(base_duration.get(intensity, 30) + streak_week * 5, 60)",
+      "duration_base": {
+        "Sedentary": 15,
+        "Light": 20,
+        "Moderate": 30,
+        "Vigorous": 40
+      },
+      "streak_broken_condition": "today_date - last_workout_date > 1 hari (kecuali hari istirahat)"
+    }
+  },
+
+  "goal_category_mapping": {
+    "_note": "Pemetaan goal user → category dataset (heuristik dari notebook)",
+    "Weight Loss": "Walking",
+    "Cardio & Agility": "Sports",
+    "Cardio & Endurance": "Running",
+    "Health Maintenance": "Walking",
+    "Full Body Cardio": "Water Activities",
+    "Core & Stamina": "Conditioning Exercise",
+    "Muscle Gain": "Resistance Training"
+  },
+
+  "streak_system_rules": {
+    "how_streak_works": [
+      "Setiap hari user selesai olahraga → current_streak + 1",
+      "Jika lewat 1 hari tanpa olahraga (bukan rest day) → streak reset ke 0",
+      "Hari istirahat (rest day) TIDAK memutus streak — dihitung setiap 3-4 hari sekali",
+      "Kalori yang sudah terbakar TIDAK pernah hilang meski streak putus",
+      "streak_week = current_streak // 7, dipakai sebagai input NN",
+      "Semakin tinggi streak_week → intensitas rekomendasi otomatis naik (progressive overload)"
+    ],
+    "rest_day_pattern": "Setiap hari ke-4 dan ke-7 dalam seminggu adalah hari istirahat",
+    "calories_1kg_fat": 7700,
+    "progress_formula": "total_calories_burned / (weight_to_lose_kg * 7700) * 100",
+    "goal_achieved_condition": "progress_percent >= 100 ATAU bmi_category == 'Normal'"
+  },
+
+  "error_codes": {
+    "400": "Bad Request — request body tidak valid",
+    "401": "Unauthorized — token tidak ada atau expired",
+    "403": "Forbidden — tidak punya akses ke resource ini",
+    "404": "Not Found — user / workout tidak ditemukan",
+    "409": "Conflict — workout hari ini sudah dicatat",
+    "422": "Unprocessable Entity — validasi input gagal",
+    "500": "Internal Server Error — error di server / model inference gagal"
+  },
+
+  "tech_stack_recommendation": {
+    "backend_framework": "FastAPI (Python) — karena model sudah Python, lebih mudah integrate",
+    "alternative_backend": "Express.js (Node) — kalau model di-serve terpisah via API",
+    "database": "PostgreSQL — cocok untuk relational data user & workout logs",
+    "model_serving": "FastAPI langsung load model .h5 saat startup, atau pisah pakai Flask/TorchServe",
+    "authentication": "JWT (JSON Web Token) — simpan di header Authorization: Bearer <token>",
+    "scheduler": "APScheduler atau Celery — untuk cron job cek streak putus tiap tengah malam",
+    "deployment": "Railway / Render / GCP Cloud Run untuk backend + model"
+  }
+}
