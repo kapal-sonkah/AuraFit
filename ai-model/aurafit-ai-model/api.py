@@ -9,7 +9,7 @@ from enum import Enum
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="SmartFit AI Backend - Full Recommendation")
+app = FastAPI(title="AuraFit AI Backend - Full Recommendation")
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MODEL_PATH = "smartfit_fix_model.keras"
+MODEL_PATH = "aurafit_fix_model.keras"
 SCALER_PATH = "./scaler.pkl"
 
 try:

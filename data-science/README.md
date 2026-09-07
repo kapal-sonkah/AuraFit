@@ -1,4 +1,4 @@
-# 🏃‍♂️ SmartFit: BMI Re-calibration & Smart Nutrition Dashboard
+# 🏃‍♂️ AuraFit: BMI Re-calibration & Smart Nutrition Dashboard
 
 An interactive data-driven dashboard built with **Streamlit** that provides personalized BMI analysis, activity recalibration, and intelligent food recommendations — powered by real nutritional data and community lifestyle insights.
 
@@ -22,7 +22,7 @@ An interactive data-driven dashboard built with **Streamlit** that provides pers
 
 This project is powered by three curated datasets:
 
-### 1. `master_smartfit_final.csv` — Activity & BMI Tracking
+### 1. `master_aurafit_final.csv` — Activity & BMI Tracking
 Schema for physical metrics and daily activity logs. Key columns:
 
 | Column | Description |
@@ -97,8 +97,8 @@ Key findings from the Exploratory Data Analysis phase:
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/your-username/smartfit-dashboard.git
-cd smartfit-dashboard
+git clone https://github.com/your-username/aurafit-dashboard.git
+cd aurafit-dashboard
 ```
 
 **2. Install dependencies**
@@ -109,7 +109,7 @@ pip install -r requirements.txt
 **3. Place datasets in the root directory**
 Make sure these files are present:
 ```
-master_smartfit_final.csv
+master_aurafit_final.csv
 abbrev_cleaned.csv
 food_choices_cleaned.csv
 ```
@@ -126,12 +126,12 @@ The app will open at `http://localhost:8501`.
 ## 📁 Project Structure
 
 ```
-smartfit-dashboard/
+aurafit-dashboard/
 │
 ├── streamlit_app.py          # Main Streamlit application
 ├── requirements.txt          # Python dependencies
 │
-├── master_smartfit_final.csv # Activity & BMI dataset
+├── master_aurafit_final.csv # Activity & BMI dataset
 ├── abbrev_cleaned.csv        # Nutrition database (8,618 items)
 └── food_choices_cleaned.csv  # Community lifestyle survey (120 respondents)
 ```
@@ -169,4 +169,4 @@ This project is for educational and portfolio purposes.
 
 ---
 
-*Built with real data for real results — SmartFit helps you move smarter, eat better.*
+*Built with real data for real results — AuraFit helps you move smarter, eat better.*

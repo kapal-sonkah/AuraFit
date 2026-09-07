@@ -1,7 +1,7 @@
 {
-  "name": "smartfit-back-end",
+  "name": "aurafit-back-end",
   "version": "1.0.0",
-  "description": "Back-end app for SmartFit",
+  "description": "Back-end app for AuraFit",
   "main": "index.js",
   "type": "module",
   "scripts": {

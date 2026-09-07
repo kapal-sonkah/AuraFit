@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 
 class UserRepositories {
   constructor() {
-    const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:12345678@localhost:5432/smartfit';
+    const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:12345678@localhost:5432/aurafit';
 
     const isCloudDB = dbUrl.includes('neon.tech') || process.env.NODE_ENV === 'production';
 
