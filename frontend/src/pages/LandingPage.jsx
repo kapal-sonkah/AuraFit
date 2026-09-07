@@ -1,55 +1,47 @@
 import LoginButtons from "../components/Button";
 import { Link } from "react-router-dom";
+import { LATAR_UTAMA } from '../utils/backgrounds';
 
 const CONTRIBUTORS = [
   {
-    name: "Luthfi Zahran Panggabean",
-    role: "Full Stack Developer",
-    username: "BlueElectric05",
-    github: "https://github.com/BlueElectric05",
-    image: "/images/contributors/arka.jpg", 
-  },
-  {
-    name: "Edwin Jonatan Purba",
-    role: "Full Stack Developer",
-    username: "clunckyboy",
-    github: "https://github.com/clunckyboy",
-    image: "/images/contributors/senna.jpg",
-  },
-  {
     name: "Susena Yudha Wijaya",
-    role: "Data Scientist",
+    role: "Project Manager",
     username: "susenayw",
-    github: "https://github.com/susenayw",
-    image: "/images/contributors/rizky.jpg",
   },
   {
     name: "Josh Peter Pardosi",
-    role: "Data Scientist",
-    username: "JoshPardosi-231401031",
-    github: "https://github.com/JoshPardosi-231401031",
-    image: "/images/contributors/hana.jpg",
+    role: "Database & Deployment",
+    username: "joshpeterpardosi",
   },
   {
-    name: "Muhammad Alif Akbar Harahap",
-    role: "AI Engineer",
-    username: "AlifAkbar99",
-    github: "https://github.com/AlifAkbar99",
-    image: "/images/contributors/daffa.jpg",
+    name: "Luthfi Zahran Panggabean",
+    role: "Frontend Developer",
+    username: "BlueElectric05",
   },
   {
-    name: "Muhammad Thomi Dzakwan Nasution",
-    role: "AI Engineer",
-    username: "Thomidz",
-    github: "https://github.com/Thomidz",
-    image: "/images/contributors/lila.jpg",
+    name: "Edwin Jonatan Purba",
+    role: "Backend & Integration",
+    username: "clunckyboy",
   },
-];
+  {
+    name: "Michael Valent Satrio Munthe",
+    role: "QA & Documentation",
+    username: "michaelmunthe123",
+  },
+].map((c) => ({
+  ...c,
+  github: `https://github.com/${c.username}`,
+  // Avatar diambil langsung dari GitHub agar tidak ada berkas gambar yang
+  // perlu disimpan dan tidak ada tautan rusak ketika akun berganti foto.
+  image: `https://github.com/${c.username}.png?size=128`,
+}));
 
 const ROLE_COLORS = {
-  "Full Stack Developer": "bg-blue-100/80 text-blue-700",
-  "Data Scientist":       "bg-purple-100/80 text-purple-700",
-  "AI Engineer":          "bg-green-100/80 text-green-700",
+  "Project Manager":       "bg-amber-100/80 text-amber-700",
+  "Database & Deployment": "bg-blue-100/80 text-blue-700",
+  "Frontend Developer":    "bg-purple-100/80 text-purple-700",
+  "Backend & Integration":  "bg-emerald-100/80 text-emerald-700",
+  "QA & Documentation":    "bg-rose-100/80 text-rose-700",
 };
 
 function ContributorCard({ contributor }) {
@@ -65,10 +57,7 @@ function ContributorCard({ contributor }) {
           src={contributor.image}
           alt={`${contributor.name}'s profile`}
           className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.onerror = null; 
-            e.target.src = `https://github.com/${contributor.username}.png`;
-          }}
+          loading="lazy"
         />
       </div>
 
@@ -98,9 +87,12 @@ function ContributorCard({ contributor }) {
 
 function LandingPage() {
   return (
+    // bg-fixed menahan latar pada ukuran viewport, sehingga bagian halaman di
+    // bawah layar pertama tidak ikut terwarnai dan tampil hitam. Latar
+    // dibiarkan menggulung bersama halaman dan direntangkan menutupinya.
     <div
-      className="w-full min-h-screen bg-fixed bg-center bg-no-repeat bg-slate-100"
-      style={{ backgroundImage: "url('/images/landing-page-background.png')" }}
+      className="w-full min-h-screen bg-center bg-no-repeat"
+      style={{ backgroundImage: LATAR_UTAMA, backgroundSize: 'cover', backgroundColor: '#0b1f16' }}
     >
       {/* Nav — Fixed double class bug from prior snippet */}
       <header className="fixed top-0 right-0 p-4 sm:p-6 z-20">
@@ -124,7 +116,7 @@ function LandingPage() {
             Meet AuraFit: Your Personal Digital Health Coach.
           </h2>
           <p className="text-sm sm:text-base font-semibold text-black/75 transition-all duration-700 delay-300 opacity-100 translate-y-0">
-            Tailored nutrition and fitness plans powered by AI, designed to adapt as you grow.
+            Rencana aktivitas dan asupan harian yang disesuaikan dengan profil tubuhmu, tersimpan rapi dan dapat ditelusuri.
           </p>
         </div>
       </section>
