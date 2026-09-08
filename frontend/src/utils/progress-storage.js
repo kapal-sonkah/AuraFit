@@ -10,44 +10,52 @@ function authHeader() {
 }
 
 export async function loadProgress() {
+  const kosong = { completedActivityIds: [], consumedFoodIds: [], streak: 0 };
   try {
     const res = await fetch(`${BASE_URL}/today`, { headers: authHeader() });
+    if (!res.ok) return { ok: false, ...kosong };
+
     const json = await res.json();
-    if (json.status !== 'success') return { completedActivityIds: [], consumedFoodIds: [], streak: 0 };
-    return json.data;
+    if (json.status !== 'success') return { ok: false, ...kosong };
+
+    return { ok: true, ...kosong, ...json.data };
   } catch {
-    return { completedActivityIds: [], consumedFoodIds: [], streak: 0 };
+    return { ok: false, ...kosong };
   }
 }
 
-export async function saveActivityProgress(activityId, completed) {
+// Penyimpanan progres mengembalikan { ok, streak }.
+//
+// Sebelumnya fungsi ini mengembalikan null baik ketika penyimpanan gagal maupun
+// ketika tanggapan tidak memuat streak, sehingga pemanggil tidak dapat
+// membedakan keduanya dan selalu memperlakukan hasilnya sebagai keberhasilan.
+// Galat jaringan juga ditelan blok catch tanpa diteruskan.
+//
+// Status HTTP diperiksa lebih dulu; tanpa itu tanggapan 401 atau 500 tetap
+// terbaca sebagai berhasil selama badannya dapat diurai.
+async function simpanProgres(jalur, muatan) {
   try {
-    console.log('Saving activity progress:', { activityId, completed });
-
-    const res = await fetch(`${BASE_URL}/activity`, {
+    const res = await fetch(`${BASE_URL}${jalur}`, {
       method: 'POST',
       headers: authHeader(),
-      body: JSON.stringify({ activity_id: activityId, completed }),
+      body: JSON.stringify(muatan),
     });
+
+    if (!res.ok) return { ok: false, streak: null };
+
     const json = await res.json();
-    return json.data?.streak ?? null;
+    if (json.status !== 'success') return { ok: false, streak: null };
+
+    return { ok: true, streak: json.data?.streak ?? null };
   } catch {
-    return null;
+    return { ok: false, streak: null };
   }
 }
 
-export async function saveFoodProgress(foodId, consumed) {
-  try {
-    const res = await fetch(`${BASE_URL}/food`, {
-      method: 'POST',
-      headers: authHeader(),
-      body: JSON.stringify({ food_id: foodId, consumed }),
-    });
+export function saveActivityProgress(activityId, completed) {
+  return simpanProgres('/activity', { activity_id: activityId, completed });
+}
 
-    const json = await res.json();
-    return json.data?.streak ?? null;
-  } catch {
-    console.error('Failed to save food progress');
-    return null;
-  }
+export function saveFoodProgress(foodId, consumed) {
+  return simpanProgres('/food', { food_id: foodId, consumed });
 }
