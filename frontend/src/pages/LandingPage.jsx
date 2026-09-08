@@ -1,4 +1,4 @@
-﻿import LoginButtons from "../components/Button";
+import LoginButtons from "../components/Button";
 import { Link } from "react-router-dom";
 import { LATAR_UTAMA } from '../utils/backgrounds';
 
@@ -72,14 +72,14 @@ function ContributorCard({ contributor }) {
         {contributor.role}
       </span>
 
-      {/* GitHub button â€” forced to stick to the card base using mt-auto */}
+      {/* GitHub button — forced to stick to the card base using mt-auto */}
       <a
         href={contributor.github}
         target="_blank"
         rel="noopener noreferrer"
         className="mt-auto rounded-lg w-full text-center px-6 py-2 bg-gray-300 hover:bg-white text-black font-semibold transition-all duration-200 text-sm"
       >
-        GitHub â†—
+        GitHub ↗
       </a>
     </article>
   );
@@ -94,7 +94,7 @@ function LandingPage() {
       className="w-full min-h-screen bg-center bg-no-repeat"
       style={{ backgroundImage: LATAR_UTAMA, backgroundSize: 'cover', backgroundColor: '#0b1f16' }}
     >
-      {/* Nav â€” Fixed double class bug from prior snippet */}
+      {/* Nav — Fixed double class bug from prior snippet */}
       <header className="fixed top-0 right-0 p-4 sm:p-6 z-20">
         <nav className="flex gap-2 sm:gap-3" aria-label="Main Navigation">
           <Link to="/signup">
@@ -152,7 +152,7 @@ function LandingPage() {
       {/* Footer */}
       <footer className="w-full border-t border-white/10 bg-black/35 backdrop-blur-md py-6 px-6 sm:px-12">
         <p className="text-center text-white/55 font-medium text-sm">
-          Â© 2026 AuraFit Team. All rights reserved.
+          © 2026 AuraFit Team. All rights reserved.
         </p>
       </footer>
     </div>
