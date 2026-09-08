@@ -19,11 +19,17 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
 
   const calorieRatio = dailyCalorieTarget > 0 ? consumedCalories / dailyCalorieTarget : 0;
 
-  const calorieSubColor = 
-    calorieRatio < 0.2 ? 'text-red-500' :
-    calorieRatio < 1 ? 'text-yellow-500' : 'text-green-500';
-  
-  const calorieSub = `${dailyCalorieTarget - consumedCalories}kcal remaining`;
+  // Angka pembanding adalah jumlah kalori seluruh makanan pada rencana hari
+  // ini, bukan kebutuhan kalori personal pengguna; sistem tidak menghitungnya.
+  // Labelnya karena itu menyebut rencana, bukan sisa kebutuhan.
+  //
+  // Merah tidak dipakai untuk progres nol. Belum mencatat apa pun pada pagi
+  // hari adalah keadaan normal, bukan peringatan.
+  const calorieSubColor =
+    calorieRatio >= 1 ? 'text-green-600' :
+    calorieRatio > 0 ? 'text-yellow-600' : 'text-gray-600';
+
+  const calorieSub = `${Math.max(dailyCalorieTarget - consumedCalories, 0)} kcal tersisa dari rencana hari ini`;
 
   // Warna BMI
   const bmiSubColor =
@@ -32,7 +38,7 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
 
   // Warna aktivitas
   const activitySubColor =
-    completedActivities === 0 ? 'text-red-500' :
+    completedActivities === 0 ? 'text-gray-600' :
     completedActivities < 3   ? 'text-yellow-500' : 'text-green-500';
     
   // Warna streak

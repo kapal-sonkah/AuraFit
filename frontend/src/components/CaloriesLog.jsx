@@ -3,19 +3,23 @@ import FoodPopup from './FoodPopup';
 
 function FoodItem({ food, consumed, onClick }) {
   return (
-    <article 
-      className={`rounded-lg p-3 flex items-center gap-3 transition-colors shadow-sm cursor-pointer ${ consumed ? "bg-green-300/70 ring-2 ring-green-400 hover:bg-green-300" : "bg-white/80 hover:bg-white/100" }`} 
+    // Sama seperti kartu aktivitas, elemen article tidak menerima fokus papan
+    // ketik. Diganti button agar dapat dibuka tanpa tetikus.
+    <button
+      type="button"
+      className={`w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors shadow-sm cursor-pointer ${ consumed ? "bg-green-300/70 ring-2 ring-green-400 hover:bg-green-300" : "bg-white/80 hover:bg-white/100" }`}
       onClick={onClick}
+      aria-pressed={consumed}
     >
-      <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center shrink-0 text-2xl select-none" role="img" aria-label="food icon">
+      <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center shrink-0 text-2xl select-none" aria-hidden="true">
         <span aria-hidden="true">{food.emoji}</span>
       </div>
       <div>
         <p className="text-gray-800 font-semibold text-sm leading-tight">{food.name}</p>
-        <p className="text-gray-400 text-xs mt-0.5">{food.portion}</p>
+        <p className="text-gray-600 text-xs mt-0.5">{food.portion}</p>
         <p className="text-gray-500 text-xs mt-0.5">{food.kcal} kcal</p>
       </div>
-    </article>
+    </button>
   );
 }
 
@@ -43,7 +47,7 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume }) 
         food={selected} 
         consumed={selected ? consumedFoodIds.has(selected.id) : false}
         onClose={() => setSelected(null)} 
-        onConsume={(id) => { onConsume(id); setSelected(null); }}
+        onConsume={(id, dikonsumsi) => { onConsume(id, dikonsumsi); setSelected(null); }}
       />
     </>
   );

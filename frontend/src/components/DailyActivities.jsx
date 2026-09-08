@@ -8,9 +8,15 @@ const CHECKER = {
 
 function ActivityCard({ activity, active, onClick }) {
   return (
-    <article 
-      className={`hover:scale-105 hover:shadow-lg transition-all rounded-lg p-3 flex flex-col gap-2 ${active ? "bg-green-300/70 ring-2 ring-green-400" : "bg-white/80"}`}
+    // Elemen article tidak menerima fokus papan ketik dan tidak menanggapi
+    // Enter maupun Spasi, sehingga kartu sebelumnya hanya dapat dibuka dengan
+    // tetikus. Diganti button agar seluruh alur pencatatan dapat diselesaikan
+    // dengan papan ketik.
+    <button
+      type="button"
+      className={`w-full text-left hover:scale-105 hover:shadow-lg transition-all rounded-lg p-3 flex flex-col gap-2 cursor-pointer ${active ? "bg-green-300/70 ring-2 ring-green-400" : "bg-white/80"}`}
       onClick={onClick}
+      aria-pressed={active}
     >
       <p className="text-gray-700 font-semibold text-sm text-center">{activity.name}</p>
       {activity.image ? (
@@ -25,7 +31,7 @@ function ActivityCard({ activity, active, onClick }) {
         />
       ) : null}
       <div className="w-full h-32 rounded-lg bg-gray-200" style={{ ...CHECKER, display: activity.image ? 'none' : 'block' }} role="img" aria-label="Activity image placeholder" />
-    </article>
+    </button>
   );
 }
 
@@ -53,7 +59,7 @@ export default function DailyActivities({ activities = [], completedActivityIds,
         activity={selected} 
         completed={selected ? completedActivityIds.has(selected.id) : false}
         onClose={() => setSelected(null)} 
-        onDone={(id) => { onDone(id); setSelected(null);}}
+        onDone={(id, selesai) => { onDone(id, selesai); setSelected(null); }}
       />
     </>
   );

@@ -37,9 +37,10 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
           {/* Tombol centang */}
           {consumed ? (
             <button
-              onClick={onClose}
+              onClick={() => onConsume(food.id, false)}
               className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center cursor-pointer transition-colors shrink-0"
-              aria-label="Unconsume"
+              aria-label={`Batalkan catatan ${food.name}`}
+              title="Batalkan catatan"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
@@ -47,9 +48,10 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
             </button>
           ) : (
             <button
-              onClick={() => onConsume(food.id)}
+              onClick={() => onConsume(food.id, true)}
               className="w-12 h-12 rounded-full bg-gray-100 hover:bg-white flex items-center justify-center cursor-pointer transition-colors shrink-0"
-              aria-label="Consume"
+              aria-label={`Catat ${food.name} sebagai dikonsumsi`}
+              title="Catat sebagai dikonsumsi"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12" />
