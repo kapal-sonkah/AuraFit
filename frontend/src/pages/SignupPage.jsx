@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Logo from '../assets/images/SFMonoLight.svg';
+import Logo from '../assets/images/aurafit-mark.svg';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/network-data";
@@ -228,7 +228,7 @@ function SignupPage() {
           </div>
 
           <div>
-            <img src={Logo} alt="AuraFit Logo" className="w-80 h-80" />
+            <img src={Logo} alt="" aria-hidden="true" className="w-56 h-56" />
           </div>
 
           <div>

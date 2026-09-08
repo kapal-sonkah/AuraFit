@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="AuraFit">
+  <title>AuraFit</title>
+
+  <!-- Aura: dua busur terbuka yang memeluk monogram, mewakili bagian "Aura".
+       Dibiarkan terbuka agar terbaca sebagai lingkaran cahaya, bukan cincin
+       tertutup.
+
+       Warna ditetapkan langsung, bukan currentColor, karena berkas ini dimuat
+       melalui elemen img yang tidak mewarisi warna dari induknya. -->
+  <path d="M60 8a52 52 0 1 0 44 80"
+        fill="none" stroke="#6ee7b7" stroke-width="7"
+        stroke-linecap="round" opacity="0.35" />
+  <path d="M60 24a36 36 0 0 1 32 52"
+        fill="none" stroke="#34d399" stroke-width="7"
+        stroke-linecap="round" opacity="0.7" />
+
+  <!-- Monogram A: puncak menanjak, mewakili bagian "Fit" sekaligus arah naik. -->
+  <path d="M38 86 60 34l22 52"
+        fill="none" stroke="#ecfdf5" stroke-width="9"
+        stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Palang huruf A -->
+  <path d="M48 70h24"
+        fill="none" stroke="#ecfdf5" stroke-width="9"
+        stroke-linecap="round" />
+</svg>
