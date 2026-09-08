@@ -86,12 +86,21 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
               </button>
             </div>
           ) : (
-            <button
-              onClick={() => onDone(activity.id, true)}
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={onClose}
+                className="bg-gray-200 hover:bg-gray-300 text-black font-semibold px-6 py-2.5 rounded-xl cursor-pointer transition-colors"
+              >
+                Tutup
+              </button>
+              <button
+                onClick={() => onDone(activity.id, true)}
               className="bg-green-900 hover:bg-green-800 text-white font-semibold px-6 py-2.5 rounded-xl cursor-pointer transition-colors"
             >
-              Selesai
-            </button>
+                Tandai selesai
+              </button>
+            </div>
           )}
         </div>
 

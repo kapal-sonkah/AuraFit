@@ -19,6 +19,9 @@ function ActivityCard({ activity, active, onClick }) {
       aria-pressed={active}
     >
       <p className="text-gray-700 font-semibold text-sm text-center">{activity.name}</p>
+      {active ? (
+        <p className="text-green-800 text-xs font-semibold text-center">Sudah selesai</p>
+      ) : null}
       {activity.image ? (
         <img 
           src={activity.image} 
@@ -40,8 +43,8 @@ export default function DailyActivities({ activities = [], completedActivityIds,
 
   return (
     <>
-      <section aria-label="Daily Activities" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-        <h2 className="text-black font-bold text-lg text-center mb-4">Daily Activities</h2>
+      <section aria-label="Aktivitas hari ini" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
+        <h2 className="text-black font-bold text-lg text-center mb-4">Aktivitas Hari Ini</h2>
         <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4" role="list">
           {activities.map((a) => (
             <li key={a.id}>

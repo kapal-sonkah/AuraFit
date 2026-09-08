@@ -81,7 +81,7 @@ function SignupPage() {
     <main className="flex flex-col md:flex-row min-h-screen">
       <Link to="/" className="absolute top-0 left-0 ml-6 mt-6 sm:ml-10 sm:mt-10 z-20">
         <button className="py-2 px-1 w-20 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg">
-          Home
+          Beranda
         </button>
       </Link>
 

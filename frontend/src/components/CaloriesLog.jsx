@@ -18,6 +18,9 @@ function FoodItem({ food, consumed, onClick }) {
         <p className="text-gray-800 font-semibold text-sm leading-tight">{food.name}</p>
         <p className="text-gray-600 text-xs mt-0.5">{food.portion}</p>
         <p className="text-gray-500 text-xs mt-0.5">{food.kcal} kcal</p>
+        {consumed ? (
+          <p className="text-green-800 text-xs font-semibold mt-1">Sudah dicatat</p>
+        ) : null}
       </div>
     </button>
   );
@@ -28,8 +31,8 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume }) 
 
   return (
     <>
-      <section aria-label="Today Calories food log" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 flex-1 overflow-y-auto scrollbar-hide">
-        <h2 className="text-black font-bold text-lg text-center mb-4">Today Calories</h2>
+      <section aria-label="Makanan hari ini" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 flex-1 overflow-y-auto scrollbar-hide">
+        <h2 className="text-black font-bold text-lg text-center mb-4">Makanan Hari Ini</h2>
         <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" role="list">
           {foods.map((item) => (
             <li key={item.id}>
