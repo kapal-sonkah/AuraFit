@@ -8,11 +8,22 @@ function LoginPage({ loginSuccess }) {
 
   const [username_email, setUsernameEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [galat, setGalat] = React.useState('');
+  const [sedangKirim, setSedangKirim] = React.useState(false);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
-    const { error, data } = await login({username_email, password});
-    if (!error) loginSuccess(data);
+    setGalat('');
+    setSedangKirim(true);
+
+    const { error, data, message } = await login({ username_email, password });
+    setSedangKirim(false);
+
+    if (error) {
+      setGalat(message);
+      return;
+    }
+    loginSuccess(data);
   }
 
   return (
@@ -51,15 +62,24 @@ function LoginPage({ loginSuccess }) {
               className="border border-black px-2 py-1 rounded-lg shadow-md"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
+
+          {galat ? (
+            <p role="alert" className="w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              {galat}
+            </p>
+          ) : null}
 
           <div className="flex justify-center">
             <button
               type="submit"
-              className="mt-4 py-2 px-1 w-40 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg"
+              disabled={sedangKirim}
+              aria-busy={sedangKirim}
+              className="mt-4 py-2 px-1 w-40 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Log In
+              {sedangKirim ? 'Memproses…' : 'Masuk'}
             </button>
           </div>
         </form>
