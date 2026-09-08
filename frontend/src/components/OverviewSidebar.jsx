@@ -67,7 +67,7 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
         />
         
         <StatCard 
-          label="Aktivitas Hari Ini" 
+          label="Aktivitas Tercatat" 
           value={`${completedActivities} / 3`} 
           sub="selesai dari rencana"
           subColor={activitySubColor} 
