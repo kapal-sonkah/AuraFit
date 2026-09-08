@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Logo from '../assets/images/SFMonoLight.svg';
+import Logo from '../assets/images/aurafit-mark.svg';
 import { login } from '../utils/network-data';
 import React from "react";
 import { LATAR_AUTENTIKASI } from '../utils/backgrounds';
@@ -85,7 +85,7 @@ function LoginPage({ loginSuccess }) {
           </div>
 
           <div>
-            <img src={Logo} alt="AuraFit Logo" className="w-80 h-80" />
+            <img src={Logo} alt="" aria-hidden="true" className="w-56 h-56" />
           </div>
 
           <div>
