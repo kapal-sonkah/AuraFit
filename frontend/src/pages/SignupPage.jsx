@@ -17,26 +17,28 @@ function SignupPage() {
   const [height, setHeight] = React.useState('');
   const [goal, setGoal] = React.useState('');
 
+  // Pesan galat ditampilkan di dalam halaman, bukan lewat alert.
+  const [galat, setGalat] = React.useState('');
+  const [sedangKirim, setSedangKirim] = React.useState(false);
+
   const navigate = useNavigate();
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    setGalat('');
 
-    if (!sex) {
-      alert('Please select a gender');
-      return;
-    }
+    if (!sex) return setGalat('Pilih jenis kelamin terlebih dahulu.');
+    if (!goal) return setGalat('Pilih tujuan terlebih dahulu.');
 
-    if (!goal) {
-      alert('Please select a goal');
-      return;
-    }
-
+    setSedangKirim(true);
     const response = await register({ username, email, password, firstName, lastName, sex, weight, height, goal, age });
-    if (!response.error) {
-      alert('Registered Successfully');
-      navigate('/login');
+    setSedangKirim(false);
+
+    if (response.error) {
+      setGalat(response.message);
+      return;
     }
+    navigate('/login', { state: { baruMendaftar: true } });
   }
 
   return (
@@ -55,7 +57,7 @@ function SignupPage() {
 
         <form onSubmit={onSubmitHandler} className="w-full max-w-sm flex flex-col items-center justify-center space-y-3">
           <fieldset className="border-none p-0 m-0 space-y-3">
-            <legend className="text-xl font-montserrat font-bold mb-5 block">Credentials</legend>
+            <legend className="text-xl font-montserrat font-bold mb-5 block">Akun</legend>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full">
               <div className="flex flex-col flex-1">
@@ -121,8 +123,17 @@ function SignupPage() {
               />
             </div>
 
+          </fieldset>
+
+          <fieldset className="border-none p-0 mt-6 space-y-3">
+            <legend className="text-xl font-montserrat font-bold mb-2 mt-6 block">Data Tubuh</legend>
+            <p className="text-sm text-gray-600 mb-4">
+              Dipakai untuk menghitung BMI dan menyusun rencana harianmu. Data ini
+              hanya terlihat olehmu.
+            </p>
+
             <div className="flex flex-col">
-              <label htmlFor="signup-sex">Sex</label>
+              <label htmlFor="signup-sex">Jenis Kelamin</label>
               <select
                 id="signup-sex"
                 className="border border-black px-2 py-1 rounded-lg shadow-md"
@@ -130,36 +141,34 @@ function SignupPage() {
                 onChange={(e) => setSex(e.target.value)}
                 required
               >
-                <option value="" disabled>Select a gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="" disabled>Pilih jenis kelamin</option>
+                <option value="male">Laki-laki</option>
+                <option value="female">Perempuan</option>
               </select>
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="signup-age">Age</label>
+              <label htmlFor="signup-age">Umur (tahun)</label>
               <input
                 id="signup-age"
                 type="number"
-                placeholder="in years"
+                min={10}
+                max={120}
                 className="border border-black px-2 py-1 rounded-lg shadow-md"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
                 required
               />
             </div>
-          </fieldset>
-
-          <fieldset className="border-none p-0 mt-6 space-y-3">
-            <legend className="text-xl font-montserrat font-bold mb-5 mt-6 block">Health Info</legend>
 
             <div className="flex flex-col sm:flex-row gap-4 w-full">
               <div className="flex flex-col flex-1">
-                <label htmlFor="signup-weight">Weight</label>
+                <label htmlFor="signup-weight">Berat Badan (kg)</label>
                 <input
                   id="signup-weight"
                   type="number"
-                  placeholder="in kilograms"
+                  min={20}
+                  max={400}
                   className="border border-black px-2 py-1 rounded-lg shadow-md"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
@@ -167,11 +176,12 @@ function SignupPage() {
                 />
               </div>
               <div className="flex flex-col flex-1">
-                <label htmlFor="signup-height">Height</label>
+                <label htmlFor="signup-height">Tinggi Badan (cm)</label>
                 <input
                   id="signup-height"
                   type="number"
-                  placeholder="in centimeters"
+                  min={80}
+                  max={250}
                   className="border border-black px-2 py-1 rounded-lg shadow-md"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
@@ -181,7 +191,7 @@ function SignupPage() {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="signup-goal">Goal</label>
+              <label htmlFor="signup-goal">Tujuan</label>
               <select
                 id="signup-goal"
                 value={goal}
@@ -189,20 +199,28 @@ function SignupPage() {
                 className="border border-black px-2 py-1 rounded-lg shadow-md"
                 required
               >
-                <option value="" disabled>Select a goal</option>
-                <option value="lose_weight">Lose Weight</option>
-                <option value="maintain_weight">Maintain Weight</option>
-                <option value="gain_weight">Gain Weight</option>
+                <option value="" disabled>Pilih tujuan</option>
+                <option value="lose_weight">Menurunkan berat badan</option>
+                <option value="maintain_weight">Mempertahankan berat badan</option>
+                <option value="gain_weight">Menambah berat badan</option>
               </select>
             </div>
           </fieldset>
 
+          {galat ? (
+            <p role="alert" className="w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+              {galat}
+            </p>
+          ) : null}
+
           <div className="flex justify-center">
             <button
               type="submit"
-              className="mt-4 py-2 px-1 w-40 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg"
+              disabled={sedangKirim}
+              aria-busy={sedangKirim}
+              className="mt-4 py-2 px-1 w-40 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Sign Up
+              {sedangKirim ? 'Mendaftarkan…' : 'Daftar'}
             </button>
           </div>
         </form>
