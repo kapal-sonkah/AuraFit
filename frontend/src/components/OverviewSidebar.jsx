@@ -50,9 +50,9 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
   return (
     <aside className="w-full lg:w-72 shrink-0 overflow-hidden">
       <section aria-label="Overview" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 flex flex-col gap-3 h-full overflow-y-auto scrollbar-hide">
-        <h2 className="text-black text-center font-bold text-lg">Overview</h2>
+        <h2 className="text-black text-center font-bold text-lg">Ringkasan</h2>
         <StatCard 
-          label="Today Calories" 
+          label="Kalori Tercatat" 
           value={consumedCalories} 
           unit="kcal" 
           sub={calorieSub}
@@ -67,16 +67,16 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
         />
         
         <StatCard 
-          label="Today Activities" 
+          label="Aktivitas Hari Ini" 
           value={`${completedActivities} / 3`} 
-          sub="Completed"
+          sub="selesai dari rencana"
           subColor={activitySubColor} 
           right={<DonutChart completed={completedActivities} total={3} />} />
         
         <StatCard 
           label="Streak" 
           value={streak} 
-          sub="Completed" 
+          sub="hari berturut-turut" 
           subColor={streakSubColor}
           right={streakIcon} />
       </section>

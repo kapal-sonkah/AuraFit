@@ -32,30 +32,39 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
             <p className="text-black font-bold text-base leading-tight">{food.name}</p>
             <p className="text-gray-600 text-sm mt-1">{food.portion}</p>
             <p className="text-gray-600 text-sm">{food.kcal} kcal</p>
+            {consumed ? (
+              <p className="text-green-800 text-sm font-semibold mt-1">Sudah dicatat hari ini</p>
+            ) : null}
           </div>
 
           {/* Tombol centang */}
+        </div>
+
+        {/* Tombol aksi memakai teks, bukan hanya ikon centang. Ikon sendirian
+            tidak menjelaskan apakah artinya memilih, menandai sudah dimakan,
+            atau menutup detail. */}
+        <div className="mt-5 flex justify-end gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-black font-semibold cursor-pointer transition-colors"
+          >
+            Tutup
+          </button>
+
           {consumed ? (
             <button
               onClick={() => onConsume(food.id, false)}
-              className="w-12 h-12 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center cursor-pointer transition-colors shrink-0"
-              aria-label={`Batalkan catatan ${food.name}`}
-              title="Batalkan catatan"
+              className="px-5 py-2.5 rounded-xl bg-gray-600 hover:bg-gray-700 text-white font-semibold cursor-pointer transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              Batalkan catatan
             </button>
           ) : (
             <button
               onClick={() => onConsume(food.id, true)}
-              className="w-12 h-12 rounded-full bg-gray-100 hover:bg-white flex items-center justify-center cursor-pointer transition-colors shrink-0"
-              aria-label={`Catat ${food.name} sebagai dikonsumsi`}
-              title="Catat sebagai dikonsumsi"
+              className="px-5 py-2.5 rounded-xl bg-green-700 hover:bg-green-800 text-white font-semibold cursor-pointer transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              Catat sudah dimakan
             </button>
           )}
         </div>

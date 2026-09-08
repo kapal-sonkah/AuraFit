@@ -30,19 +30,19 @@ function LoginPage({ loginSuccess }) {
     <main className="flex flex-col md:flex-row min-h-screen">
       <Link to="/" className="absolute top-0 left-0 ml-6 mt-6 sm:ml-10 sm:mt-10 z-20">
         <button className="py-2 px-1 w-20 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg">
-          Home
+          Beranda
         </button>
       </Link>
 
       {/* form section */}
       <section className="flex flex-col justify-center items-center w-full md:w-3/5 px-6 py-24 sm:px-10 overflow-y-auto scrollbar-hide">
         <div className="flex items-center justify-center w-full max-w-xl mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-special-gothic-expanded-one">Log In</h1>
+          <h1 className="text-3xl sm:text-4xl font-special-gothic-expanded-one">Masuk</h1>
         </div>
 
         <form onSubmit={onSubmitHandler} className="w-full max-w-sm flex flex-col justify-center space-y-3">
           <div className="flex flex-col">
-            <label htmlFor="login-username">Username / Email</label>
+            <label htmlFor="login-username">Nama Pengguna atau Email</label>
             <input
               id="login-username"
               type="text"
@@ -54,11 +54,10 @@ function LoginPage({ loginSuccess }) {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="login-password">Password</label>
+            <label htmlFor="login-password">Kata Sandi</label>
             <input
               id="login-password"
               type="password"
-              placeholder="6 characters minimum"
               className="border border-black px-2 py-1 rounded-lg shadow-md"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -86,8 +85,8 @@ function LoginPage({ loginSuccess }) {
 
         {/* sign up link shown only on mobile (aside is hidden) */}
         <p className="mt-8 text-sm md:hidden">
-          Don't have an account yet?{" "}
-          <Link to="/signup" className="text-green-800 font-semibold hover:underline">Sign Up</Link>
+          Belum punya akun?{" "}
+          <Link to="/signup" className="text-green-800 font-semibold hover:underline">Daftar</Link>
         </p>
       </section>
 
@@ -109,8 +108,8 @@ function LoginPage({ loginSuccess }) {
           </div>
 
           <div>
-            <p>Don't have an account yet?{" "}
-              <Link to="/signup" className="text-yellow-400 font-semibold cursor-pointer hover:underline">Sign Up</Link>
+            <p>Belum punya akun?{" "}
+              <Link to="/signup" className="text-yellow-400 font-semibold cursor-pointer hover:underline">Daftar</Link>
             </p>
           </div>
         </div>
