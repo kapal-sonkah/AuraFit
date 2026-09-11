@@ -16,10 +16,6 @@
     {
       "path": "/cron/daily-reset",
       "schedule": "0 17 * * *"
-    },
-    {
-      "path": "/cron/password-hash-backfill",
-      "schedule": "1 17 * * *"
     }
   ]
 }
