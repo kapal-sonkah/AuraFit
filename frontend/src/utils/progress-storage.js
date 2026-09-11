@@ -33,12 +33,12 @@ export async function loadProgress() {
 //
 // Status HTTP diperiksa lebih dulu; tanpa itu tanggapan 401 atau 500 tetap
 // terbaca sebagai berhasil selama badannya dapat diurai.
-async function simpanProgres(jalur, muatan) {
+export async function savePlanItemProgress(itemId, completed) {
   try {
-    const res = await fetch(`${BASE_URL}${jalur}`, {
-      method: 'POST',
+    const res = await fetch(`${BASE_URL}/plan-items/${encodeURIComponent(itemId)}/progress`, {
+      method: 'PUT',
       headers: authHeader(),
-      body: JSON.stringify(muatan),
+      body: JSON.stringify({ completed }),
     });
 
     if (!res.ok) return { ok: false, streak: null };
@@ -50,12 +50,4 @@ async function simpanProgres(jalur, muatan) {
   } catch {
     return { ok: false, streak: null };
   }
-}
-
-export function saveActivityProgress(activityId, completed) {
-  return simpanProgres('/activity', { activity_id: activityId, completed });
-}
-
-export function saveFoodProgress(foodId, consumed) {
-  return simpanProgres('/food', { food_id: foodId, consumed });
 }

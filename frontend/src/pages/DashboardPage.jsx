@@ -3,9 +3,10 @@ import OverviewSidebar from "../components/OverviewSidebar";
 import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
 import ProfilePopup from "../components/ProfilePopUp";
-import { loadProgress, saveActivityProgress, saveFoodProgress } from '../utils/progress-storage';
+import { savePlanItemProgress } from '../utils/progress-storage';
 import { getAIRecommendations } from '../utils/network-data';
 import { LATAR_UTAMA } from '../utils/backgrounds';
+import '../dashboard.css';
 
 export default function DashboardPage({ onLogout, user }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,13 +28,13 @@ export default function DashboardPage({ onLogout, user }) {
   const [galatSimpan, setGalatSimpan] = useState('');
 
   const dailyCalorieTarget = useMemo(() =>
-    foods.reduce((total, food) => total + food.kcal, 0)
+    foods.reduce((total, food) => total + (Number(food.kcal) || 0), 0)
   , [foods]);
 
   const completedActivities = completedActivityIds.size;
   const consumedCalories = foods
     .filter(f => consumedFoodIds.has(f.id))
-    .reduce((total, f) => total + f.kcal, 0);
+    .reduce((total, f) => total + (Number(f.kcal) || 0), 0);
 
   // Penandaan diterapkan lebih dulu agar antarmuka terasa responsif, lalu
   // dikembalikan bila penyimpanan gagal. Tanpa pengembalian itu, kegagalan
@@ -44,41 +45,22 @@ export default function DashboardPage({ onLogout, user }) {
     return salinan;
   }
 
-  async function handleActivityToggle(activityId, selesai) {
-    const sebelum = completedActivityIds;
-    setCompletedActivityIds(ubahHimpunan(sebelum, activityId, selesai));
+  async function handlePlanItemToggle(itemId, selesai, jenis) {
+    const sebelum = jenis === 'activity' ? completedActivityIds : consumedFoodIds;
+    const setStatus = jenis === 'activity' ? setCompletedActivityIds : setConsumedFoodIds;
+    setStatus(ubahHimpunan(sebelum, itemId, selesai));
     setGalatSimpan('');
 
-    const { ok, streak: streakBaru } = await saveActivityProgress(activityId, selesai);
+    const { ok, streak: streakBaru } = await savePlanItemProgress(itemId, selesai);
     if (!ok) {
-      setCompletedActivityIds(sebelum);
-      setGalatSimpan('Perubahan aktivitas gagal disimpan. Periksa koneksi, lalu coba lagi.');
+      setStatus(sebelum);
+      setGalatSimpan(jenis === 'activity'
+        ? 'Perubahan aktivitas gagal disimpan. Periksa koneksi, lalu coba lagi.'
+        : 'Perubahan catatan makanan gagal disimpan. Periksa koneksi, lalu coba lagi.');
       return;
     }
     if (streakBaru !== null) setStreak(streakBaru);
   }
-
-  async function handleFoodToggle(foodId, dikonsumsi) {
-    const sebelum = consumedFoodIds;
-    setConsumedFoodIds(ubahHimpunan(sebelum, foodId, dikonsumsi));
-    setGalatSimpan('');
-
-    const { ok, streak: streakBaru } = await saveFoodProgress(foodId, dikonsumsi);
-    if (!ok) {
-      setConsumedFoodIds(sebelum);
-      setGalatSimpan('Perubahan catatan makanan gagal disimpan. Periksa koneksi, lalu coba lagi.');
-      return;
-    }
-    if (streakBaru !== null) setStreak(streakBaru);
-  }
-
-  useEffect(() => {
-    loadProgress().then(({ completedActivityIds, consumedFoodIds, streak }) => {
-      setCompletedActivityIds(new Set(completedActivityIds));
-      setConsumedFoodIds(new Set(consumedFoodIds));
-      setStreak(streak);
-    });
-  }, [user?.id]);
 
   // Pengambilan rencana dipisahkan agar dapat dipanggil ulang oleh tombol
   // coba lagi ketika pengambilan pertama gagal.
@@ -95,10 +77,16 @@ export default function DashboardPage({ onLogout, user }) {
 
     setActivities(data.activities ?? []);
     setFoods(data.foods ?? []);
+    setCompletedActivityIds(new Set((data.activities ?? []).filter((item) => item.completed).map((item) => item.id)));
+    setConsumedFoodIds(new Set((data.foods ?? []).filter((item) => item.completed).map((item) => item.id)));
+    setStreak(Number(data.streak) || 0);
     setStatusRencana('siap');
   }, [user]);
 
-  useEffect(() => { ambilRencana(); }, [ambilRencana]);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => { void ambilRencana(); });
+    return () => cancelAnimationFrame(frame);
+  }, [ambilRencana]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -135,14 +123,17 @@ export default function DashboardPage({ onLogout, user }) {
         </header>
 
         <main className="flex flex-col lg:flex-row gap-4 flex-1">
-          <OverviewSidebar
-            user={user}
-            completedActivities={completedActivities}
-            consumedCalories={consumedCalories}
-            streak={streak}
-            dailyCalorieTarget={dailyCalorieTarget}
-          />
-          <div className="flex flex-col gap-4 flex-1">
+          <div className="order-2 lg:order-1">
+            <OverviewSidebar
+              user={user}
+              completedActivities={completedActivities}
+              totalActivities={activities.length}
+              consumedCalories={consumedCalories}
+              streak={streak}
+              dailyCalorieTarget={dailyCalorieTarget}
+            />
+          </div>
+          <div className="order-1 lg:order-2 flex flex-col gap-4 flex-1">
             {galatSimpan ? (
               <div role="alert" className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
                 {galatSimpan}
@@ -150,8 +141,9 @@ export default function DashboardPage({ onLogout, user }) {
             ) : null}
 
             {statusRencana === 'memuat' ? (
-              <div className="rounded-2xl bg-white/70 backdrop-blur-sm p-8 text-center" aria-live="polite">
-                <p className="text-black font-semibold">Menyusun rencana hari ini…</p>
+              <div className="dashboard-lead" aria-live="polite">
+                <p className="dashboard-lead__eyebrow">Hari ini</p>
+                <p className="dashboard-lead__title">Menyusun rencana hari ini…</p>
               </div>
             ) : statusRencana === 'gagal' ? (
               <div role="alert" className="rounded-2xl bg-white/70 backdrop-blur-sm p-8 text-center flex flex-col items-center gap-3">
@@ -172,14 +164,21 @@ export default function DashboardPage({ onLogout, user }) {
               </div>
             ) : (
               <>
+                <section className="dashboard-lead" aria-labelledby="today-plan-title">
+                  <p className="dashboard-lead__eyebrow">Hari ini</p>
+                  <h2 id="today-plan-title" className="dashboard-lead__title">Pilih satu langkah untuk mulai.</h2>
+                  <p className="dashboard-lead__copy">
+                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. Buka kartu untuk melihat detail, lalu catat saat selesai atau dikonsumsi.
+                  </p>
+                </section>
                 <DailyActivities
                   activities={activities}
                   completedActivityIds={completedActivityIds}
-                  onDone={handleActivityToggle}
+                  onDone={(id, selesai) => handlePlanItemToggle(id, selesai, 'activity')}
                 />
                 <CaloriesLog
                   foods={foods}
-                  onConsume={handleFoodToggle}
+                  onConsume={(id, dikonsumsi) => handlePlanItemToggle(id, dikonsumsi, 'food')}
                   consumedFoodIds={consumedFoodIds}
                 />
               </>

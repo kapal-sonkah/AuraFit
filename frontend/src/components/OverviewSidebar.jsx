@@ -2,7 +2,7 @@ import DonutChart from "./DonutChart";
 
 function StatCard({ label, value, unit, sub, subColor, right }) {
   return (
-    <article className="bg-white hover:scale-105 hover:shadow-lg transition-all rounded-lg p-4 flex items-center justify-between shadow-sm">
+    <article className="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm">
       <div className="flex flex-col items-center flex-1">
         <p className="text-gray-400 text-sm font-medium">{label}</p>
         <p className="text-gray-800 text-3xl font-bold mt-1">
@@ -15,7 +15,7 @@ function StatCard({ label, value, unit, sub, subColor, right }) {
   );
 }
 
-export default function OverviewSidebar({ user, completedActivities = 0, consumedCalories = 0, dailyCalorieTarget = 0, streak = 0 }) {
+export default function OverviewSidebar({ user, completedActivities = 0, totalActivities = 0, consumedCalories = 0, dailyCalorieTarget = 0, streak = 0 }) {
 
   const calorieRatio = dailyCalorieTarget > 0 ? consumedCalories / dailyCalorieTarget : 0;
 
@@ -39,7 +39,7 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
   // Warna aktivitas
   const activitySubColor =
     completedActivities === 0 ? 'text-gray-600' :
-    completedActivities < 3   ? 'text-yellow-500' : 'text-green-500';
+    completedActivities < totalActivities ? 'text-yellow-500' : 'text-green-500';
     
   // Warna streak
   const streakSubColor = streak > 0 ? 'text-green-500' : 'text-gray-400';
@@ -68,10 +68,10 @@ export default function OverviewSidebar({ user, completedActivities = 0, consume
         
         <StatCard 
           label="Aktivitas Tercatat" 
-          value={`${completedActivities} / 3`} 
+          value={`${completedActivities} / ${totalActivities}`}
           sub="selesai dari rencana"
           subColor={activitySubColor} 
-          right={<DonutChart completed={completedActivities} total={3} />} />
+          right={<DonutChart completed={completedActivities} total={totalActivities || 1} />} />
         
         <StatCard 
           label="Streak" 

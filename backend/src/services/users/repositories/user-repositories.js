@@ -1,19 +1,10 @@
-import { Pool } from "pg";
 import { nanoid } from "nanoid";
+import { hashPassword, verifyPassword } from '../../../security/password.js';
+import pool from '../../../database/pool.js';
 
 class UserRepositories {
   constructor() {
-    const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:12345678@localhost:5432/aurafit';
-
-    const isCloudDB = dbUrl.includes('neon.tech') || process.env.NODE_ENV === 'production';
-
-    const poolConfig = {
-      connectionString: dbUrl,
-    };
-
-    if (isCloudDB) poolConfig.ssl = { rejectUnauthorized: false };
-
-    this.pool = new Pool(poolConfig);
+    this.pool = pool;
   }
 
   async createUser(username, email, password, first_name, last_name, gender, weight, height, goal, age) {
@@ -24,9 +15,13 @@ class UserRepositories {
       bmi < 25 ? 'Normal' :
       bmi < 30 ? 'Overweight' : 'Obese';
 
+    const passwordHash = await hashPassword(password);
     const query = {
-      text: 'INSERT INTO users VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING id',
-      values: [id, username, email, password, first_name, last_name, gender, weight, height, goal, bmi, bmi_category, age]
+      text: `INSERT INTO users
+        (id, username, email, password, password_hash, first_name, last_name, gender, weight_kg, height_cm, goal, bmi, bmi_category, age)
+        VALUES ($1, $2, $3, NULL, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+        RETURNING id`,
+      values: [id, username, email, passwordHash, first_name, last_name, gender, weight, height, goal, bmi, bmi_category, age]
     };
 
     const result = await this.pool.query(query);
@@ -44,15 +39,47 @@ class UserRepositories {
 
   async verifyUserCredential(username_email, password) {
     const query = {
-      text: `SELECT id FROM users 
-            WHERE (username = $1 OR email = $1) AND password = $2`,
-      values: [username_email, password]
+      text: `SELECT id, password, password_hash FROM users
+            WHERE username = $1 OR email = $1
+            LIMIT 1`,
+      values: [username_email]
     }
 
     const result = await this.pool.query(query);
     if (result.rows.length === 0) return null;
 
-    return result.rows[0].id;
+    const user = result.rows[0];
+    if (user.password_hash) {
+      return (await verifyPassword(password, user.password_hash)) ? user.id : null;
+    }
+
+    // Jalur sementara untuk akun lama. Setelah login yang sah, plaintext
+    // segera diganti dengan hash dan tidak dipakai lagi pada login berikutnya.
+    if (typeof user.password !== 'string' || user.password !== password) return null;
+    const passwordHash = await hashPassword(password, { allowShort: true });
+    await this.pool.query(
+      'UPDATE users SET password_hash = $2, password = NULL WHERE id = $1 AND password_hash IS NULL',
+      [user.id, passwordHash]
+    );
+    return user.id;
+  }
+
+  async getLegacyPasswordUsers(limit = 100) {
+    const result = await this.pool.query(
+      'SELECT id, password FROM users WHERE password_hash IS NULL AND password IS NOT NULL ORDER BY id LIMIT $1',
+      [limit]
+    );
+    return result.rows;
+  }
+
+  async replaceLegacyPassword(id, plaintextPassword, passwordHash) {
+    const result = await this.pool.query(
+      `UPDATE users
+       SET password_hash = $3, password = NULL
+       WHERE id = $1 AND password = $2 AND password_hash IS NULL`,
+      [id, plaintextPassword, passwordHash]
+    );
+    return result.rowCount === 1;
   }
 }
 

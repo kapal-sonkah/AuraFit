@@ -1,3 +1,5 @@
+@import "./tokens.css";
+
 @font-face {
   font-family: Montserrat;
   src: url(./assets/fonts/Montserrat-Variable.ttf) format("truetype");
@@ -36,6 +38,7 @@
 
 html, body {  
   overscroll-behavior: none; 
+  overflow-x: clip;
 }
 
 /* Cincin fokus.

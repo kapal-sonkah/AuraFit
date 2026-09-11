@@ -43,8 +43,8 @@ function SignupPage() {
       setGalat('Lengkapi seluruh isian pada langkah ini.');
       return;
     }
-    if (password.length < 6) {
-      setGalat('Kata sandi minimal 6 karakter.');
+    if (password.length < 8) {
+      setGalat('Kata sandi minimal 8 karakter.');
       return;
     }
     setLangkah(2);
@@ -165,11 +165,11 @@ function SignupPage() {
                   className={KELAS_INPUT}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  minLength={6}
+                  minLength={8}
                   required
                   aria-describedby="bantuan-sandi"
                 />
-                <p id="bantuan-sandi" className="text-xs text-gray-600 mt-1">Minimal 6 karakter.</p>
+                <p id="bantuan-sandi" className="text-xs text-gray-600 mt-1">Minimal 8 karakter.</p>
               </div>
             </fieldset>
           ) : (

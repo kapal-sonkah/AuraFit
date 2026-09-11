@@ -1,5 +1,5 @@
-import { Pool } from 'pg';
 import { nanoid } from 'nanoid';
+import pool from '../../database/pool.js';
 
 function toLocalDateStr(date = new Date()) {
   const y = date.getFullYear();
@@ -10,14 +10,7 @@ function toLocalDateStr(date = new Date()) {
 
 class PlanRepositories {
   constructor() {
-    const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:12345678@localhost:5432/aurafit';
-
-    const isCloudDB = dbUrl.includes('neon.tech') || process.env.NODE_ENV === 'production';
-
-    const poolConfig = { connectionString: dbUrl };
-    if (isCloudDB) poolConfig.ssl = { rejectUnauthorized: false };
-
-    this.pool = new Pool(poolConfig);
+    this.pool = pool;
   }
 
   /**
@@ -35,7 +28,8 @@ class PlanRepositories {
 
     const items = await this.pool.query(`
       SELECT i.id, i.item_type, i.position, i.source_ref, i.name,
-             i.description, i.image_url, i.video_url,
+             i.description, i.image_url AS image, i.video_url AS youtube_url,
+             i.portion, i.calorie_kcal AS kcal, i.emoji,
              COALESCE(p.completed, FALSE) AS completed
       FROM daily_plan_items i
       LEFT JOIN plan_item_progress p ON p.plan_item_id = i.id
@@ -91,12 +85,13 @@ class PlanRepositories {
       for (const [tipe, posisi, isi] of butir) {
         await client.query(`
           INSERT INTO daily_plan_items
-            (id, plan_id, item_type, position, source_ref, name, description, image_url, video_url)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            (id, plan_id, item_type, position, source_ref, name, description, image_url, video_url, portion, calorie_kcal, emoji)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
         `, [
           nanoid(16), planId, tipe, posisi,
           Number.isInteger(isi.id) ? isi.id : null,
           isi.name, isi.description ?? null, isi.image ?? null, isi.youtube_url ?? null,
+          isi.portion ?? null, Number.isFinite(isi.kcal) ? isi.kcal : null, isi.emoji ?? null,
         ]);
       }
 
@@ -120,13 +115,13 @@ class PlanRepositories {
    */
   async setItemProgress(userId, planItemId, completed) {
     const milik = await this.pool.query(`
-      SELECT i.id
+      SELECT i.id, p.plan_date
       FROM daily_plan_items i
       JOIN daily_plans p ON p.id = i.plan_id
       WHERE i.id = $1 AND p.user_id = $2
     `, [planItemId, userId]);
 
-    if (!milik.rows.length) return false;
+    if (!milik.rows.length) return { ok: false, streak: null };
 
     await this.pool.query(`
       INSERT INTO plan_item_progress (id, plan_item_id, completed, completed_at, updated_at)
@@ -137,7 +132,56 @@ class PlanRepositories {
             updated_at = NOW()
     `, [nanoid(16), planItemId, completed]);
 
-    return true;
+    return { ok: true, streak: await this.getStreak(userId) };
+  }
+
+  async getTodayProgress(userId, planDate = toLocalDateStr()) {
+    const plan = await this.getPlan(userId, planDate);
+    if (!plan) {
+      return { hasPlan: false, completedActivityIds: [], consumedFoodIds: [], streak: 0 };
+    }
+
+    return {
+      hasPlan: true,
+      completedActivityIds: plan.activities.filter((item) => item.completed).map((item) => item.id),
+      consumedFoodIds: plan.foods.filter((item) => item.completed).map((item) => item.id),
+      streak: await this.getStreak(userId, planDate),
+    };
+  }
+
+  /**
+   * Streak dihitung dari butir rencana tersimpan, sehingga membatalkan satu
+   * catatan langsung tercermin. Tidak ada cron yang menyimpan angka terpisah.
+   */
+  async getStreak(userId, sampaiTanggal = toLocalDateStr()) {
+    const result = await this.pool.query(`
+      SELECT p.plan_date,
+             COUNT(i.id)::int AS total,
+             COUNT(i.id) FILTER (WHERE pr.completed)::int AS selesai
+      FROM daily_plans p
+      JOIN daily_plan_items i ON i.plan_id = p.id
+      LEFT JOIN plan_item_progress pr ON pr.plan_item_id = i.id
+      WHERE p.user_id = $1 AND p.plan_date <= $2
+      GROUP BY p.plan_date
+      ORDER BY p.plan_date DESC
+    `, [userId, sampaiTanggal]);
+
+    const selesaiPenuh = new Set(
+      result.rows
+        .filter((row) => row.total > 0 && row.total === row.selesai)
+        .map((row) => {
+          if (typeof row.plan_date === 'string') return row.plan_date;
+          return row.plan_date.toISOString().slice(0, 10);
+        })
+    );
+
+    let tanggal = new Date(`${sampaiTanggal}T12:00:00`);
+    let streak = 0;
+    while (selesaiPenuh.has(toLocalDateStr(tanggal))) {
+      streak += 1;
+      tanggal.setDate(tanggal.getDate() - 1);
+    }
+    return streak;
   }
 
   /**

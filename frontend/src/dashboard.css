@@ -1,0 +1,49 @@
+/* Hallmark · pre-emit critique: P4 H5 E4 S5 R4 V5 */
+/* Hallmark · genre: playful · macrostructure: Workbench · theme: Hum · enrichment: none · nav: N1 · footer: none · contrast: pass (40–41) */
+.dashboard-lead {
+  background: var(--color-paper);
+  border: 1px solid var(--color-accent-line);
+  border-radius: var(--radius-card);
+  box-shadow: 0 12px 28px -20px var(--color-shadow);
+  color: var(--color-ink);
+  padding: clamp(var(--space-4), 3vw, var(--space-6));
+}
+
+.dashboard-lead__eyebrow {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.dashboard-lead__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  line-height: 1.15;
+  margin: var(--space-2) 0 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-lead__copy {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: var(--space-3) 0 0;
+  max-width: 52rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dashboard-lead {
+    animation: dashboard-lead-in var(--dur-fast) var(--ease-out) both;
+  }
+}
+
+@keyframes dashboard-lead-in {
+  from { opacity: 0; transform: translateY(0.25rem); }
+  to { opacity: 1; transform: translateY(0); }
+}

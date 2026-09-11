@@ -7,7 +7,9 @@
   "scripts": {
     "start:dev": "nodemon ./src/server.js",
     "start:prod": "node ./src/server.js",
-    "migrate": "node-pg-migrate"
+    "migrate": "node-pg-migrate",
+    "migrate:passwords": "node ./scripts/backfill-password-hashes.js",
+    "test": "node --test"
   },
   "author": "",
   "license": "ISC",

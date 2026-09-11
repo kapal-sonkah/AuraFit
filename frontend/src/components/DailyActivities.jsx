@@ -14,7 +14,7 @@ function ActivityCard({ activity, active, onClick }) {
     // dengan papan ketik.
     <button
       type="button"
-      className={`w-full text-left hover:scale-105 hover:shadow-lg transition-all rounded-lg p-3 flex flex-col gap-2 cursor-pointer ${active ? "bg-green-300/70 ring-2 ring-green-400" : "bg-white/80"}`}
+      className={`w-full text-left transition-shadow duration-200 hover:shadow-lg rounded-lg p-3 flex flex-col gap-2 cursor-pointer ${active ? "bg-green-300/70 ring-2 ring-green-400" : "bg-white/80"}`}
       onClick={onClick}
       aria-pressed={active}
     >
