@@ -2,11 +2,12 @@
 
 Dokumen ini menutup keputusan teknis yang masih terbuka pada SRS sebagai
 **baseline usulan untuk ditinjau tim dan dosen**. Isinya belum menggantikan
-persetujuan tertulis.
+persetujuan tertulis. Status penerapan teknis dicatat terpisah dari status
+persetujuan akademik.
 
 | ID | Keputusan | Baseline usulan | Dampak | Status |
 |---|---|---|---|---|
-| K-01 | Aturan tanggal dan zona waktu | Gunakan `Asia/Jakarta` untuk tanggal rencana, riwayat, ringkasan, dan batas pergantian hari | Backend, query tanggal, dan pengujian lintas hari harus memakai acuan yang sama | Menunggu pengesahan |
+| K-01 | Aturan tanggal dan zona waktu | Gunakan `Asia/Jakarta` untuk tanggal rencana, riwayat, ringkasan, dan batas pergantian hari | Backend, query tanggal, dan pengujian lintas hari harus memakai acuan yang sama | Diterapkan pada kode; menunggu pengesahan |
 | K-02 | Satuan tampilan | Energi dalam kilokalori, massa dalam gram, tinggi dalam sentimeter, durasi dalam menit | Label UI, data uji, dan ringkasan memakai satuan tersebut | Menunggu pengesahan |
 | K-03 | Rumus ringkasan mingguan | Tampilkan jumlah selesai dibanding jumlah rencana, terpisah untuk aktivitas dan makanan, pada tujuh tanggal terakhir | QA dapat menghitung hasil yang diharapkan secara manual | Menunggu pengesahan |
 | K-04 | Prioritas requirement | Fungsionalitas keamanan, kepemilikan data, persistensi, pencatatan, dan fallback menjadi `Must`; fitur profil, keyboard, dan streak tetap mengikuti SRS | Menjadi dasar pengurangan cakupan bila jadwal tertekan | Menunggu pengesahan |

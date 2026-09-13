@@ -1,16 +1,13 @@
 import PlanRepositories from '../plans/plan-repositories.js';
 import ClientError from '../../exceptions/client-error.js';
 import response from '../../utils/response.js';
+import { todayInJakarta } from '../../utils/date.js';
 
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 function toDateString(date) {
   return date.toISOString().slice(0, 10);
-}
-
-function todayInJakarta() {
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(new Date());
 }
 
 function parseDate(value) {

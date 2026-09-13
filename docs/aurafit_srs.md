@@ -5,7 +5,7 @@
 **Versi:** 0.5 draft untuk peninjauan tim
 **Tanggal:** 13 September 2026
 **Mata kuliah:** Proyek Perangkat Lunak
-**Dasar dokumen:** Project Charter AuraFit yang telah disetujui
+**Dasar dokumen:** Project Charter AuraFit
 
 MULAI-ISI
 
@@ -42,7 +42,7 @@ Tabel 1.1  Definisi istilah
 | Ringkasan mingguan | Rekapitulasi progres tujuh hari, dihitung dari data tersimpan |
 | Layanan rekomendasi | Komponen penyusun rencana harian dari aturan berbasis BMI dan tujuan pengguna |
 | Kondisi awal | Keadaan kode pada commit `f20c0ee`, tanggal 7 September 2026 |
-| Implementasi saat ini | Perubahan terverifikasi sampai commit `52021dd`, tanggal 13 September 2026 |
+| Implementasi saat ini | Perubahan terverifikasi sampai 13 September 2026, termasuk penyimpanan rencana, penyelarasan tanggal Asia/Jakarta, dan pembacaan fallback |
 
 ## 1.4 Metode Elisitasi
 
@@ -120,7 +120,9 @@ Tabel 2.2  Lingkungan operasi
    dan evaluasi model berada di luar cakupan.
 2. Basis data pada jenjang gratis dapat tidur ketika menganggur, sehingga
    permintaan pertama setelah menganggur memerlukan waktu lebih lama.
-3. Penjadwal pada lingkungan penerapan hanya dapat berjalan sekali sehari.
+3. Migrasi lama untuk tabel progres dan streak masih ada sebagai artefak basis
+   data, tetapi jalur runtime saat ini memakai tabel rencana baru. Retensi atau
+   penghapusannya belum diputuskan.
 4. Perhitungan rekomendasi bukan diagnosis atau konsultasi medis.
 
 # BAB III. USER STORY DAN KRITERIA PENERIMAAN
@@ -288,7 +290,7 @@ Tabel 6.2  Entitas utama
 | daily_plans | Rencana satu pengguna pada satu tanggal | Unik atas pasangan pengguna dan tanggal |
 | daily_plan_items | Butir rencana beserta isinya | Unik atas rencana, tipe, dan posisi |
 | plan_item_progress | Progres satu butir rencana | Satu lawan satu terhadap butir rencana |
-| authentications | Token penyegar yang masih berlaku | Tidak ada |
+| authentications | Token penyegar yang masih berlaku | Token unik |
 
 Kendala unik pada `daily_plans` adalah mekanisme yang menjamin F-11 dan F-12.
 Hubungan satu lawan satu pada `plan_item_progress` adalah mekanisme yang
@@ -325,13 +327,13 @@ Tabel 8.1  Keputusan terbuka
 
 | ID | Keputusan | Mengapa mendesak | Usulan |
 |---|---|---|---|
-| K-01 | Aturan tanggal dan zona waktu | Penyimpanan rencana memakai tanggal lokal server sedangkan penjadwal memakai Asia/Jakarta. Keduanya sudah berjalan dan dapat berbeda hari | Tetapkan Asia/Jakarta sebagai satu-satunya acuan, dan hitung batas hari di server |
+| K-01 | Aturan tanggal dan zona waktu | Sebelumnya beberapa jalur memakai tanggal lokal server; implementasi kini sudah memakai `Asia/Jakarta`, tetapi keputusan perlu dicatat sebagai aturan resmi | Tetapkan Asia/Jakarta sebagai satu-satunya acuan, dan hitung batas hari di server |
 | K-02 | Satuan yang ditampilkan | Ringkasan tidak dapat diverifikasi tanpa satuan yang disepakati | Kilokalori untuk energi, gram untuk massa, sentimeter untuk tinggi, menit untuk durasi |
 | K-03 | Cara menghitung ringkasan mingguan | Menentukan bentuk keluaran dan cara mengujinya | Jumlah butir selesai dibagi jumlah butir rencana, dihitung terpisah untuk aktivitas dan makanan |
 | K-04 | Prioritas Must, Should, dan Could | Piagam menyatakan pengurangan cakupan mendahulukan yang wajib | Pakai kolom prioritas pada Bab IV setelah ditinjau manajer proyek |
 | K-05 | Data tambahan yang dicatat per butir | Menentukan skema basis data | Cukup yang ada sekarang; penambahan memerlukan kebutuhan baru |
 | K-06 | Struktur navigasi | Menentukan pekerjaan antarmuka | Empat tujuan: Hari Ini, Riwayat, Progres, dan Profil |
-| K-07 | Apakah kebutuhan kalori personal dihitung | Label pada dashboard saat ini menyesatkan karena target diturunkan dari daftar rekomendasi | Tidak dihitung; ubah label agar menggambarkan sisa rencana hari ini |
+| K-07 | Apakah kebutuhan kalori personal dihitung | Sistem belum memiliki rumus kebutuhan kalori personal yang disepakati | Tidak dihitung pada baseline; label menggambarkan sisa rencana hari ini |
 | K-08 | Tanggal pelaksanaan dan peserta uji penerimaan | Menentukan jadwal dan bukti penerimaan | Menunggu kalender mata kuliah |
 
 ## Catatan Penyusunan

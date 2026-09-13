@@ -1,19 +1,9 @@
 import InvariantError from '../../exceptions/invariant-error.js';
 import response from '../../utils/response.js';
 import PlanRepositories from './plan-repositories.js';
+import { todayInJakarta } from '../../utils/date.js';
 
 const MAX_ITEMS_PER_TYPE = 10;
-
-function todayInJakarta() {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Jakarta',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).formatToParts(new Date());
-  const values = Object.fromEntries(parts.map(({ type, value }) => [type, value]));
-  return `${values.year}-${values.month}-${values.day}`;
-}
 
 function cleanText(value, field, { required = false, maxLength = 500 } = {}) {
   if (value === undefined || value === null || value === '') {

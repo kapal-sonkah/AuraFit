@@ -47,7 +47,7 @@ flowchart TB
   plan[Plan service\nrekomendasi dan manual]
   prog[Progress service]
   hist[History service]
-  rec[Recommendation service]
+  rec[Recommendation rules]
   postgres[(PostgreSQL)]
 
   browser --> api
@@ -69,41 +69,50 @@ erDiagram
   USERS ||--o{ DAILY_PLANS : owns
   DAILY_PLANS ||--o{ DAILY_PLAN_ITEMS : contains
   DAILY_PLAN_ITEMS ||--o| PLAN_ITEM_PROGRESS : has
-  USERS ||--o{ AUTHENTICATIONS : receives
 
   USERS {
-    uuid id PK
+    string id PK
     string username UK
-    string email UK
+    string email
+    string password
     string password_hash
     string gender
-    decimal weight
-    decimal height
+    decimal weight_kg
+    decimal height_cm
+    decimal bmi
+    string bmi_category
     int age
     string goal
   }
   DAILY_PLANS {
-    uuid id PK
-    uuid user_id FK
-    date plan_date UK
+    string id PK
+    string user_id FK
+    date plan_date
+    string source
   }
   DAILY_PLAN_ITEMS {
-    uuid id PK
-    uuid daily_plan_id FK
-    string type
+    string id PK
+    string plan_id FK
+    string item_type
     int position
+    int source_ref
     string name
     string description
+    string image_url
+    string video_url
+    string portion
+    decimal calorie_kcal
+    string emoji
   }
   PLAN_ITEM_PROGRESS {
-    uuid id PK
-    uuid plan_item_id FK
+    string id PK
+    string plan_item_id FK UK
     boolean completed
+    timestamp completed_at
+    timestamp updated_at
   }
   AUTHENTICATIONS {
-    uuid id PK
-    uuid user_id FK
-    string refresh_token
+    string token PK
   }
 ```
 
@@ -117,7 +126,7 @@ sequenceDiagram
   participant D as PostgreSQL
 
   U->>W: Tekan tandai selesai
-  W->>A: PATCH progres butir
+  W->>A: PUT progres butir
   A->>A: Validasi sesi dan kepemilikan
   A->>D: Upsert progres berdasarkan plan_item_id
   D-->>A: Hasil penyimpanan
@@ -144,6 +153,13 @@ flowchart TD
 
 - Diagram ini menggambarkan baseline desain, bukan bukti seluruh alur sudah
   diterima melalui UAT.
+- Migrasi lama untuk `activity_progress`, `food_progress`, dan `streaks` masih
+  ada di repositori, tetapi jalur runtime saat ini memakai tabel rencana baru.
+  Retensi atau penghapusannya perlu diputuskan dalam migrasi basis data
+  tersendiri sebelum rilis final.
+- Tabel `authentications` menyimpan token penyegar tanpa kolom `user_id`;
+  hubungan token ke pengguna berasal dari payload token dan belum menjadi
+  relasi basis data.
 - Aturan tanggal, satuan, ringkasan, dan navigasi mengikuti keputusan pada
   `decision-log-aurafit.md` setelah disahkan.
 - Perubahan skema atau aktor memerlukan pembaruan SRS, diagram, dan matriks

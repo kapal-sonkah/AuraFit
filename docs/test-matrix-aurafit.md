@@ -25,7 +25,7 @@ demo sebelumnya tidak otomatis menjadi bukti UAT.
 | TC-07 | F-10 | Minta rencana untuk profil dengan beberapa kategori BMI dan tujuan | Rencana mengikuti aturan BMI dan tujuan yang disepakati |  | Belum diuji formal |
 | TC-08 | F-11 | Minta rencana pengguna yang sama pada tanggal yang sama berulang kali | Hanya ada satu rencana; data awal tidak tertimpa |  | Belum diuji formal |
 | TC-09 | F-12 | Buka tanggal yang sama dari dua sesi atau perangkat | Rencana dan isi butir identik |  | Belum diuji formal |
-| TC-10 | F-13 | Layanan rekomendasi tidak dipanggil setelah rencana tersimpan | Rencana tersimpan tetap terbaca lengkap |  | Belum diuji formal |
+| TC-10 | F-13 | Buka hari yang sudah memiliki rencana tersimpan ketika layanan rekomendasi dibuat gagal | Rencana tersimpan tetap terbaca lengkap dan layanan rekomendasi tidak diperlukan |  | Belum diuji formal |
 | TC-11 | F-14 | Buat rencana manual ketika rekomendasi gagal | Rencana manual tersimpan dan dapat dicatat seperti rencana lain |  | Belum diuji formal |
 | TC-12 | F-15, N-03 | Muat normal, layanan gagal, dan tanggal tanpa rencana | Loading, error, dan empty state berbeda serta dapat dipahami |  | Belum diuji formal |
 | TC-13 | F-20 | Tandai aktivitas dan makanan selesai, lalu muat ulang halaman | Status tersimpan dan tetap tampil |  | Belum diuji formal |
@@ -60,7 +60,9 @@ secara tertulis.
 
 ## Bukti teknis yang sudah ada
 
-Commit `52021dd` telah memuat alur rencana manual, profil, dan koreksi riwayat,
+Commit `52021dd` telah memuat alur rencana manual, profil, dan koreksi riwayat.
+Perubahan lanjutan menyelaraskan zona waktu dan pembacaan rencana tersimpan
+sebelum kalkulasi rekomendasi
 serta sebelumnya telah melewati pemeriksaan lint, build, test backend, dan
 smoke check produksi. Daftar tersebut menjadi bukti teknis awal; status UAT pada
 tabel di atas tetap belum diisi sampai pengujian formal dilakukan dan buktinya

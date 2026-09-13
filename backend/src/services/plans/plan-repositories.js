@@ -1,11 +1,11 @@
 import { nanoid } from 'nanoid';
 import pool from '../../database/pool.js';
+import { todayInJakarta } from '../../utils/date.js';
 
-function toLocalDateStr(date = new Date()) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
+function previousDate(dateString) {
+  const date = new Date(`${dateString}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() - 1);
+  return date.toISOString().slice(0, 10);
 }
 
 class PlanRepositories {
@@ -17,7 +17,7 @@ class PlanRepositories {
    * Mengambil rencana pengguna untuk satu tanggal beserta status progresnya.
    * Mengembalikan null bila rencana untuk tanggal itu belum tersimpan.
    */
-  async getPlan(userId, planDate = toLocalDateStr()) {
+  async getPlan(userId, planDate = todayInJakarta()) {
     const plan = await this.pool.query(
       'SELECT id, plan_date, source FROM daily_plans WHERE user_id = $1 AND plan_date = $2',
       [userId, planDate]
@@ -55,7 +55,7 @@ class PlanRepositories {
    * adanya. Rencana yang sudah ada tidak pernah ditimpa, sehingga rencana
    * hari itu tetap sama meskipun dibuka dari perangkat lain.
    */
-  async createPlanIfAbsent(userId, { activities = [], foods = [], source = 'recommendation' } = {}, planDate = toLocalDateStr()) {
+  async createPlanIfAbsent(userId, { activities = [], foods = [], source = 'recommendation' } = {}, planDate = todayInJakarta()) {
     const existing = await this.getPlan(userId, planDate);
     if (existing) return existing;
 
@@ -135,7 +135,7 @@ class PlanRepositories {
     return { ok: true, streak: await this.getStreak(userId) };
   }
 
-  async getTodayProgress(userId, planDate = toLocalDateStr()) {
+  async getTodayProgress(userId, planDate = todayInJakarta()) {
     const plan = await this.getPlan(userId, planDate);
     if (!plan) {
       return { hasPlan: false, completedActivityIds: [], consumedFoodIds: [], streak: 0 };
@@ -153,7 +153,7 @@ class PlanRepositories {
    * Streak dihitung dari butir rencana tersimpan, sehingga membatalkan satu
    * catatan langsung tercermin. Tidak ada cron yang menyimpan angka terpisah.
    */
-  async getStreak(userId, sampaiTanggal = toLocalDateStr()) {
+  async getStreak(userId, sampaiTanggal = todayInJakarta()) {
     const result = await this.pool.query(`
       SELECT p.plan_date,
              COUNT(i.id)::int AS total,
@@ -175,11 +175,11 @@ class PlanRepositories {
         })
     );
 
-    let tanggal = new Date(`${sampaiTanggal}T12:00:00`);
+    let tanggal = sampaiTanggal;
     let streak = 0;
-    while (selesaiPenuh.has(toLocalDateStr(tanggal))) {
+    while (selesaiPenuh.has(tanggal)) {
       streak += 1;
-      tanggal.setDate(tanggal.getDate() - 1);
+      tanggal = previousDate(tanggal);
     }
     return streak;
   }
