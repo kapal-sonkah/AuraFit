@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
+import { Link } from 'react-router-dom';
 import OverviewSidebar from "../components/OverviewSidebar";
 import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
@@ -104,6 +105,7 @@ export default function DashboardPage({ onLogout, user }) {
             <span className="dashboard-brand__context">Rencana harian</span>
           </div>
           <nav aria-label="Navigasi utama">
+            <Link to="/history" className="dashboard-nav-link">Riwayat</Link>
             <button
               type="button"
               aria-label={menuOpen ? "Tutup menu" : "Buka menu"}

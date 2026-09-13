@@ -62,6 +62,8 @@ export default function ProfilePopup({ open, onClose, onLogout, user }) {
         </div>
 
         <div className="profile-menu__actions">
+          <Link to="/dashboard" className="profile-menu__button inline-flex items-center justify-center">Hari ini</Link>
+          <Link to="/history" className="profile-menu__button inline-flex items-center justify-center">Riwayat</Link>
           <Link to="/" className="profile-menu__button inline-flex items-center justify-center">Beranda</Link>
           <MenuButton variant="danger" onClick={handleLogout}>Keluar</MenuButton>
         </div>

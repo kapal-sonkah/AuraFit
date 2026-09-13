@@ -132,6 +132,38 @@ async function getAIRecommendations() {
   }
 }
 
+async function getHistory({ from, to }) {
+  const params = new URLSearchParams({ from, to });
+
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/history?${params.toString()}`);
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, data: null };
+    }
+
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null };
+  }
+}
+
+async function getPlanByDate(date) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/plans/${encodeURIComponent(date)}`);
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, data: null };
+    }
+
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null };
+  }
+}
+
 export {
   getAccessToken,
   putAccessToken, 
@@ -139,5 +171,7 @@ export {
   logout,
   register, 
   getUserLogged,
-  getAIRecommendations
+  getAIRecommendations,
+  getHistory,
+  getPlanByDate,
 }

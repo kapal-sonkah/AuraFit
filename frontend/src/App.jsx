@@ -3,6 +3,7 @@ import LandingPage from './pages/LandingPage';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import HistoryPage from './pages/HistoryPage';
 import React from 'react';
 import { getAccessToken, getUserLogged, putAccessToken, logout } from './utils/network-data';
 
@@ -55,6 +56,7 @@ function App() {
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage onLogout={onLogout} user={authedUser} />} />
+        <Route path='/history' element={<HistoryPage onLogout={onLogout} user={authedUser} />} />
         <Route path='*' element={<Navigate to='/dashboard' replace />} />
       </Routes>
     )
