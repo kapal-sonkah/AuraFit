@@ -11,11 +11,5 @@
       "src": "/(.*)",
       "dest": "src/server.js"
     }
-  ],
-  "crons": [
-    {
-      "path": "/cron/daily-reset",
-      "schedule": "0 17 * * *"
-    }
   ]
 }
