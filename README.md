@@ -108,3 +108,14 @@ memakai benih dari identitas pengguna dan tanggal, sehingga rencana satu hari
 tetap sama pada permintaan berulang dan dapat diuji.
 
 Sistem tidak memerlukan layanan model terpisah maupun Python.
+
+## Dokumentasi PPL
+
+Artefak analisis dan desain untuk mata kuliah Proyek Perangkat Lunak tersedia di `docs/`:
+
+- `docs/aurafit_srs.md` — spesifikasi kebutuhan perangkat lunak AuraFit.
+- `docs/decision-log-aurafit.md` — keputusan baseline yang masih menunggu pengesahan.
+- `docs/diagrams-aurafit.md` — batas sistem, use case, arsitektur, alur, dan model data.
+- `docs/test-matrix-aurafit.md` — rancangan functional test, non-functional test, dan UAT.
+
+Status pada dokumen tersebut membedakan rancangan, implementasi, dan pengujian formal.

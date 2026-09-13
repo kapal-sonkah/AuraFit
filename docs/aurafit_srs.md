@@ -68,6 +68,12 @@ penerimaan ditetapkan.
 
 [2] Audit Kondisi Awal AuraFit terhadap commit `f20c0ee`, 7 September 2026.
 
+[3] Decision Log AuraFit, baseline keputusan K-01 sampai K-08 untuk peninjauan tim dan dosen.
+
+[4] Diagram AuraFit, artefak desain batas sistem, arsitektur, model data, dan alur utama.
+
+[5] Matriks Test dan UAT AuraFit, rancangan verifikasi requirement dan kriteria penerimaan.
+
 # BAB II. DESKRIPSI UMUM
 
 ## 2.1 Perspektif Produk
