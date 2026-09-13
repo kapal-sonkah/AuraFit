@@ -7,20 +7,21 @@ function FoodItem({ food, consumed, onClick }) {
     // ketik. Diganti button agar dapat dibuka tanpa tetikus.
     <button
       type="button"
-      className={`w-full text-left rounded-lg p-3 flex items-center gap-3 transition-colors shadow-sm cursor-pointer ${ consumed ? "bg-green-300/70 ring-2 ring-green-400 hover:bg-green-300" : "bg-white/80 hover:bg-white/100" }`}
+      className={`food-card ${consumed ? 'food-card--done' : ''}`}
       onClick={onClick}
       aria-pressed={consumed}
     >
-      <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center shrink-0 text-2xl select-none" aria-hidden="true">
+      <div className="food-card__icon" aria-hidden="true">
         <span aria-hidden="true">{food.emoji}</span>
       </div>
-      <div>
-        <p className="text-gray-800 font-semibold text-sm leading-tight">{food.name}</p>
-        <p className="text-gray-600 text-xs mt-0.5">{food.portion}</p>
-        <p className="text-gray-500 text-xs mt-0.5">{food.kcal} kcal</p>
+      <div className="food-card__body">
+        <p className="food-card__name">{food.name}</p>
+        <p className="food-card__meta">{food.portion} · {food.kcal} kcal</p>
         {consumed ? (
-          <p className="text-green-800 text-xs font-semibold mt-1">Sudah dicatat</p>
-        ) : null}
+          <span className="food-card__status food-card__status--done">Sudah dicatat</span>
+        ) : (
+          <span className="food-card__status">Belum dicatat</span>
+        )}
       </div>
     </button>
   );
@@ -31,9 +32,15 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume }) 
 
   return (
     <>
-      <section aria-label="Makanan hari ini" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 flex-1 overflow-y-auto scrollbar-hide">
-        <h2 className="text-black font-bold text-lg text-center mb-4">Makanan Hari Ini</h2>
-        <ul className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3" role="list">
+      <section id="makanan-hari-ini" aria-label="Makanan hari ini" className="dashboard-section">
+        <div className="dashboard-section__head">
+          <div>
+            <p className="section-kicker">Asupan hari ini</p>
+            <h2 className="dashboard-section__title">Makanan Hari Ini</h2>
+          </div>
+          <p className="dashboard-section__count">{foods.length} pilihan</p>
+        </div>
+        <ul className="dashboard-list dashboard-list--foods" role="list">
           {foods.map((item) => (
             <li key={item.id}>
               <FoodItem 

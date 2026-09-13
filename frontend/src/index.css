@@ -36,9 +36,17 @@
   }
 }
 
-html, body {  
-  overscroll-behavior: none; 
+html, body {
+  overscroll-behavior: none;
   overflow-x: clip;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}
+
+body {
+  min-width: 320px;
+  text-rendering: optimizeLegibility;
 }
 
 /* Cincin fokus.
@@ -49,7 +57,7 @@ html, body {
  * bukan setiap kali tombol diklik dengan tetikus. */
 @layer base {
   :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-    outline: 2px solid #34d399;
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
     border-radius: 4px;
   }

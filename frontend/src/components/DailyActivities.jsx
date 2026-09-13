@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import ActivityPopup from './ActivityPopup';
 
-const CHECKER = {
-  backgroundImage: "repeating-linear-gradient(45deg,#ccc 0,#ccc 1px,transparent 0,transparent 50%),repeating-linear-gradient(-45deg,#ccc 0,#ccc 1px,transparent 0,transparent 50%)",
-  backgroundSize: "20px 20px",
-};
-
 function ActivityCard({ activity, active, onClick }) {
   return (
     // Elemen article tidak menerima fokus papan ketik dan tidak menanggapi
@@ -14,26 +9,29 @@ function ActivityCard({ activity, active, onClick }) {
     // dengan papan ketik.
     <button
       type="button"
-      className={`w-full text-left transition-shadow duration-200 hover:shadow-lg rounded-lg p-3 flex flex-col gap-2 cursor-pointer ${active ? "bg-green-300/70 ring-2 ring-green-400" : "bg-white/80"}`}
+      className={`activity-card ${active ? 'activity-card--done' : ''}`}
       onClick={onClick}
       aria-pressed={active}
     >
-      <p className="text-gray-700 font-semibold text-sm text-center">{activity.name}</p>
-      {active ? (
-        <p className="text-green-800 text-xs font-semibold text-center">Sudah selesai</p>
-      ) : null}
+      <div className="activity-card__head">
+        <p className="activity-card__name">{activity.name}</p>
+        <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
+          {active ? 'Selesai' : 'Belum dimulai'}
+        </span>
+      </div>
       {activity.image ? (
         <img 
           src={activity.image} 
           alt={activity.name}
-          className="w-full h-32 rounded-lg object-cover"
+          className="activity-card__media"
           onError={(e) => {
             e.target.style.display = 'none';
             e.target.nextSibling.style.display = 'block';
           }} 
         />
       ) : null}
-      <div className="w-full h-32 rounded-lg bg-gray-200" style={{ ...CHECKER, display: activity.image ? 'none' : 'block' }} role="img" aria-label="Activity image placeholder" />
+      <div className="activity-card__media activity-card__media--empty" style={{ display: activity.image ? 'none' : 'block' }} role="img" aria-label="Placeholder gambar aktivitas" />
+      <p className="activity-card__hint">Lihat detail →</p>
     </button>
   );
 }
@@ -43,9 +41,15 @@ export default function DailyActivities({ activities = [], completedActivityIds,
 
   return (
     <>
-      <section aria-label="Aktivitas hari ini" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4">
-        <h2 className="text-black font-bold text-lg text-center mb-4">Aktivitas Hari Ini</h2>
-        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4" role="list">
+      <section id="aktivitas-hari-ini" aria-label="Aktivitas hari ini" className="dashboard-section">
+        <div className="dashboard-section__head">
+          <div>
+            <p className="section-kicker">Gerak hari ini</p>
+            <h2 className="dashboard-section__title">Aktivitas Hari Ini</h2>
+          </div>
+          <p className="dashboard-section__count">{activities.length} pilihan</p>
+        </div>
+        <ul className="dashboard-list dashboard-list--activities" role="list">
           {activities.map((a) => (
             <li key={a.id}>
               <ActivityCard 

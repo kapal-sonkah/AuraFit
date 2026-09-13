@@ -5,7 +5,6 @@ import CaloriesLog from "../components/CaloriesLog";
 import ProfilePopup from "../components/ProfilePopUp";
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { getAIRecommendations } from '../utils/network-data';
-import { LATAR_UTAMA } from '../utils/backgrounds';
 import '../dashboard.css';
 
 export default function DashboardPage({ onLogout, user }) {
@@ -32,6 +31,8 @@ export default function DashboardPage({ onLogout, user }) {
   , [foods]);
 
   const completedActivities = completedActivityIds.size;
+  const completedItems = completedActivityIds.size + consumedFoodIds.size;
+  const totalItems = activities.length + foods.length;
   const consumedCalories = foods
     .filter(f => consumedFoodIds.has(f.id))
     .reduce((total, f) => total + (Number(f.kcal) || 0), 0);
@@ -95,35 +96,30 @@ export default function DashboardPage({ onLogout, user }) {
   }, []);
 
   return (
-    <div className="min-h-screen">
-
-      {/* fixed background layers */}
-      <div
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat pointer-events-none"
-        style={{ backgroundImage: LATAR_UTAMA, backgroundColor: "#0b1f16" }}
-      />
-      <div className="fixed inset-0 bg-green-900/50 pointer-events-none" />
-
-      {/* scroll container */}
-      <div className="relative z-10 min-h-screen flex flex-col p-4 gap-4">
-
-        <header className={`sticky top-0 z-20 flex items-center justify-between py-2 -mx-4 px-4 transition-colors duration-300 ${scrolled ? 'bg-green-900/80 backdrop-blur-md shadow-lg' : 'bg-transparent'}`}>
-          <h1 className="text-white text-3xl tracking-wide font-special-gothic-expanded-one select-none">
-            AuraFit
-          </h1>
-          <nav aria-label="Main navigation">
+    <div className="dashboard-shell">
+      <div className="dashboard-frame">
+        <header className={`dashboard-header ${scrolled ? 'dashboard-header--scrolled' : ''}`}>
+          <div className="dashboard-brand">
+            <h1 className="dashboard-brand__name">AuraFit</h1>
+            <span className="dashboard-brand__context">Rencana harian</span>
+          </div>
+          <nav aria-label="Navigasi utama">
             <button
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              className="flex flex-col items-center justify-center gap-1.5 min-w-11 min-h-11 rounded-md hover:bg-white/10 transition-colors cursor-pointer"
+              type="button"
+              aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
+              aria-expanded={menuOpen}
+              className="menu-trigger"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {[0, 1, 2].map((i) => <span key={i} className="block w-6 h-0.5 bg-white rounded" />)}
+              <span className="menu-trigger__lines" aria-hidden="true">
+                {[0, 1, 2].map((i) => <span key={i} />)}
+              </span>
             </button>
           </nav>
         </header>
 
-        <main className="flex flex-col lg:flex-row gap-4 flex-1">
-          <div className="order-2 lg:order-1">
+        <main className="dashboard-layout">
+          <div className="dashboard-summary">
             <OverviewSidebar
               user={user}
               completedActivities={completedActivities}
@@ -133,43 +129,50 @@ export default function DashboardPage({ onLogout, user }) {
               dailyCalorieTarget={dailyCalorieTarget}
             />
           </div>
-          <div className="order-1 lg:order-2 flex flex-col gap-4 flex-1">
+          <div className="dashboard-content">
             {galatSimpan ? (
-              <div role="alert" className="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+              <div role="alert" className="dashboard-alert">
                 {galatSimpan}
               </div>
             ) : null}
 
             {statusRencana === 'memuat' ? (
-              <div className="dashboard-lead" aria-live="polite">
-                <p className="dashboard-lead__eyebrow">Hari ini</p>
-                <p className="dashboard-lead__title">Menyusun rencana hari ini…</p>
+              <div className="dashboard-state" aria-live="polite">
+                <p className="dashboard-state__title">Menyusun rencana hari ini…</p>
               </div>
             ) : statusRencana === 'gagal' ? (
-              <div role="alert" className="rounded-2xl bg-white/70 backdrop-blur-sm p-8 text-center flex flex-col items-center gap-3">
-                <p className="text-black font-semibold">Rencana hari ini gagal dimuat.</p>
-                <p className="text-gray-700 text-sm max-w-md">
+              <div role="alert" className="dashboard-state">
+                <p className="dashboard-state__title">Rencana hari ini gagal dimuat.</p>
+                <p className="dashboard-state__copy">
                   Catatan yang sudah tersimpan tidak hilang. Periksa koneksi, lalu coba lagi.
                 </p>
                 <button
                   onClick={ambilRencana}
-                  className="rounded-lg px-6 py-2.5 bg-green-900 hover:bg-green-800 text-white font-semibold transition-colors cursor-pointer"
+                  className="dashboard-button"
                 >
                   Coba lagi
                 </button>
               </div>
             ) : activities.length === 0 && foods.length === 0 ? (
-              <div className="rounded-2xl bg-white/70 backdrop-blur-sm p-8 text-center">
-                <p className="text-black font-semibold">Belum ada rencana untuk hari ini.</p>
+              <div className="dashboard-state">
+                <p className="dashboard-state__title">Belum ada rencana untuk hari ini.</p>
               </div>
             ) : (
               <>
-                <section className="dashboard-lead" aria-labelledby="today-plan-title">
-                  <p className="dashboard-lead__eyebrow">Hari ini</p>
-                  <h2 id="today-plan-title" className="dashboard-lead__title">Pilih satu langkah untuk mulai.</h2>
-                  <p className="dashboard-lead__copy">
+                <section className="dashboard-hero" aria-labelledby="today-plan-title">
+                  <div>
+                    <p className="dashboard-hero__eyebrow">Hari ini</p>
+                    <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
+                    <p className="dashboard-hero__copy">
                     Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. Buka kartu untuk melihat detail, lalu catat saat selesai atau dikonsumsi.
-                  </p>
+                    </p>
+                  </div>
+                  <div className="dashboard-progress" aria-label={`Progres hari ini: ${completedItems} dari ${totalItems} item selesai`}>
+                    <span className="dashboard-progress__label">Progres hari ini</span>
+                    <span className="dashboard-progress__value">{completedItems}/{totalItems}</span>
+                    <span className="dashboard-progress__hint">item selesai</span>
+                  </div>
+                  <a className="dashboard-hero__action" href="#aktivitas-hari-ini">Mulai aktivitas</a>
                 </section>
                 <DailyActivities
                   activities={activities}
@@ -187,7 +190,6 @@ export default function DashboardPage({ onLogout, user }) {
         </main>
 
       </div>
-
       <ProfilePopup open={menuOpen} onClose={() => setMenuOpen(false)} onLogout={onLogout} user={user} />
     </div>
   );

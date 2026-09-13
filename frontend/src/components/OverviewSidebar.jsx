@@ -2,15 +2,15 @@ import DonutChart from "./DonutChart";
 
 function StatCard({ label, value, unit, sub, subColor, right }) {
   return (
-    <article className="bg-white rounded-lg p-4 flex items-center justify-between shadow-sm">
-      <div className="flex flex-col items-center flex-1">
-        <p className="text-gray-400 text-sm font-medium">{label}</p>
-        <p className="text-gray-800 text-3xl font-bold mt-1">
-          {value} {unit && <span className="text-xl font-semibold text-gray-600">{unit}</span>}
+    <article className="stat-card">
+      <div>
+        <p className="stat-card__label">{label}</p>
+        <p className="stat-card__value">
+          {value} {unit && <span className="stat-card__unit">{unit}</span>}
         </p>
-        <p className={`text-sm font-semibold mt-0.5 ${subColor}`}>{sub}</p>
+        <p className={`stat-card__sub ${subColor}`}>{sub}</p>
       </div>
-      {right && <div className="ml-2">{right}</div>}
+      {right && <div className="stat-card__visual">{right}</div>}
     </article>
   );
 }
@@ -26,31 +26,31 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
   // Merah tidak dipakai untuk progres nol. Belum mencatat apa pun pada pagi
   // hari adalah keadaan normal, bukan peringatan.
   const calorieSubColor =
-    calorieRatio >= 1 ? 'text-green-600' :
-    calorieRatio > 0 ? 'text-yellow-600' : 'text-gray-600';
+    calorieRatio >= 1 ? 'stat-card__sub--positive' :
+    calorieRatio > 0 ? 'stat-card__sub--warning' : 'stat-card__sub--muted';
 
   const calorieSub = `${Math.max(dailyCalorieTarget - consumedCalories, 0)} kcal tersisa dari rencana hari ini`;
 
   // Warna BMI
   const bmiSubColor =
-    user?.bmi_category === 'Normal'      ? 'text-green-500' :
-    user?.bmi_category === 'Overweight'  ? 'text-yellow-500' : 'text-red-500';
+    user?.bmi_category === 'Normal'      ? 'stat-card__sub--positive' :
+    user?.bmi_category === 'Overweight'  ? 'stat-card__sub--warning' : 'stat-card__sub--muted';
 
   // Warna aktivitas
   const activitySubColor =
-    completedActivities === 0 ? 'text-gray-600' :
-    completedActivities < totalActivities ? 'text-yellow-500' : 'text-green-500';
+    completedActivities === 0 ? 'stat-card__sub--muted' :
+    completedActivities < totalActivities ? 'stat-card__sub--warning' : 'stat-card__sub--positive';
     
   // Warna streak
-  const streakSubColor = streak > 0 ? 'text-green-500' : 'text-gray-400';
-  const streakIcon = streak > 0
-    ? <span className="text-5xl select-none" role="img" aria-label="fire streak">🔥</span>
-    : <span className="text-5xl select-none grayscale" role="img" aria-label="no streak">🔥</span>;
+  const streakSubColor = streak > 0 ? 'stat-card__sub--positive' : 'stat-card__sub--muted';
 
   return (
-    <aside className="w-full lg:w-72 shrink-0 overflow-hidden">
-      <section aria-label="Overview" className="bg-white/70 backdrop-blur-sm rounded-2xl p-4 flex flex-col gap-3 h-full overflow-y-auto scrollbar-hide">
-        <h2 className="text-black text-center font-bold text-lg">Ringkasan</h2>
+    <aside className="w-full shrink-0 overflow-hidden">
+      <section aria-label="Ringkasan" className="overview-card">
+        <div className="overview-card__head">
+          <h2 className="overview-card__title">Ringkasan</h2>
+          <p className="overview-card__hint">Pantauan singkat</p>
+        </div>
         <StatCard 
           label="Kalori Tercatat" 
           value={consumedCalories} 
@@ -78,7 +78,7 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
           value={streak} 
           sub="hari berturut-turut" 
           subColor={streakSubColor}
-          right={streakIcon} />
+          right={null} />
       </section>
     </aside>
   );

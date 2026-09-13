@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from '../assets/images/aurafit-mark.svg';
 import { login } from '../utils/network-data';
 import React from "react";
-import { LATAR_AUTENTIKASI } from '../utils/backgrounds';
+import '../auth.css';
 
 function LoginPage({ loginSuccess }) {
 
@@ -27,38 +27,35 @@ function LoginPage({ loginSuccess }) {
   }
 
   return (
-    <main className="flex flex-col md:flex-row min-h-screen">
-      <Link to="/" className="absolute top-0 left-0 ml-6 mt-6 sm:ml-10 sm:mt-10 z-20">
-        <button className="py-2 px-1 w-20 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg">
-          Beranda
-        </button>
-      </Link>
+    <main className="auth-shell">
+      <section className="auth-panel auth-panel--form">
+        <Link to="/" className="auth-back">← Beranda</Link>
+        <div className="auth-content">
+          <p className="auth-kicker">Selamat datang kembali</p>
+          <h1 className="auth-title">Masuk ke AuraFit</h1>
+          <p className="auth-intro">Lanjutkan rencana aktivitas dan asupan harianmu dari perangkat mana pun.</p>
 
-      {/* form section */}
-      <section className="flex flex-col justify-center items-center w-full md:w-3/5 px-6 py-24 sm:px-10 overflow-y-auto scrollbar-hide">
-        <div className="flex items-center justify-center w-full max-w-xl mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-special-gothic-expanded-one">Masuk</h1>
-        </div>
-
-        <form onSubmit={onSubmitHandler} className="w-full max-w-sm flex flex-col justify-center space-y-3">
-          <div className="flex flex-col">
-            <label htmlFor="login-username">Nama Pengguna atau Email</label>
+          <form onSubmit={onSubmitHandler} className="auth-form">
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="login-username">Nama pengguna atau email</label>
             <input
               id="login-username"
               type="text"
-              className="border border-black px-2 py-1 rounded-lg shadow-md"
+              className="auth-input"
+              autoComplete="username"
               value={username_email}
               onChange={(e) => setUsernameEmail(e.target.value)}
               required
             />
           </div>
 
-          <div className="flex flex-col">
-            <label htmlFor="login-password">Kata Sandi</label>
+          <div className="auth-field">
+            <label className="auth-label" htmlFor="login-password">Kata sandi</label>
             <input
               id="login-password"
               type="password"
-              className="border border-black px-2 py-1 rounded-lg shadow-md"
+              className="auth-input"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -66,53 +63,32 @@ function LoginPage({ loginSuccess }) {
           </div>
 
           {galat ? (
-            <p role="alert" className="w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+            <p role="alert" className="auth-error">
               {galat}
             </p>
           ) : null}
 
-          <div className="flex justify-center">
             <button
               type="submit"
               disabled={sedangKirim}
               aria-busy={sedangKirim}
-              className="mt-4 py-2 px-1 w-40 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+              className="auth-submit"
             >
               {sedangKirim ? 'Memproses…' : 'Masuk'}
             </button>
-          </div>
-        </form>
+          </form>
 
-        {/* sign up link shown only on mobile (aside is hidden) */}
-        <p className="mt-8 text-sm md:hidden">
-          Belum punya akun?{" "}
-          <Link to="/signup" className="text-green-800 font-semibold hover:underline">Daftar</Link>
-        </p>
+          <p className="auth-switch">Belum punya akun? <Link to="/signup">Daftar sekarang</Link></p>
+        </div>
       </section>
 
-      {/* decorative aside — hidden on mobile */}
-      <aside
-        className="hidden md:flex w-2/5 flex-col h-screen bg-cover bg-center justify-center items-center text-center text-white sticky top-0"
-        style={{ backgroundImage: LATAR_AUTENTIKASI }}
-      >
-        <div className="absolute inset-0 bg-green-700/60 backdrop-blur-xs" aria-hidden="true" />
-
-        <div className="relative z-10 h-full flex flex-col items-center justify-between py-10 px-8 text-white text-center">
-          <div>
-            <h2 className="text-5xl font-special-gothic-expanded-one">AuraFit</h2>
-            <p className="font-montserrat">Your Personal Digital Health Coach.</p>
-          </div>
-
-          <div>
-            <img src={Logo} alt="" aria-hidden="true" className="w-56 h-56" />
-          </div>
-
-          <div>
-            <p>Belum punya akun?{" "}
-              <Link to="/signup" className="text-yellow-400 font-semibold cursor-pointer hover:underline">Daftar</Link>
-            </p>
-          </div>
+      <aside className="auth-brand-panel">
+        <div className="auth-brand-panel__content">
+          <h2 className="auth-brand-panel__name">AuraFit</h2>
+          <p className="auth-brand-panel__tagline">Rencana harian yang terasa lebih mudah untuk dijalani.</p>
         </div>
+        <img src={Logo} alt="" aria-hidden="true" className="auth-brand-panel__mark" />
+        <p className="auth-brand-panel__footer">Personal digital health coach</p>
       </aside>
     </main>
   );

@@ -3,9 +3,9 @@ import Logo from '../assets/images/aurafit-mark.svg';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/network-data";
-import { LATAR_AUTENTIKASI } from '../utils/backgrounds';
+import '../auth.css';
 
-const KELAS_INPUT = "border border-black px-2 py-1 rounded-lg shadow-md";
+const KELAS_INPUT = "auth-input";
 
 // Pendaftaran dibagi menjadi dua langkah.
 //
@@ -78,37 +78,34 @@ function SignupPage() {
   }
 
   return (
-    <main className="flex flex-col md:flex-row min-h-screen">
-      <Link to="/" className="absolute top-0 left-0 ml-6 mt-6 sm:ml-10 sm:mt-10 z-20">
-        <button className="py-2 px-1 w-20 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg">
-          Beranda
-        </button>
-      </Link>
-
-      {/* form section */}
-      <section className="flex flex-col w-full md:w-3/5 items-center pt-24 pb-12 px-6 sm:px-10 overflow-y-auto scrollbar-hide">
-        <div className="flex flex-col items-center justify-center w-full max-w-xl mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl font-special-gothic-expanded-one">Buat Akun</h1>
-          <p className="mt-2 text-sm text-gray-600">Langkah {langkah} dari 2</p>
-          <div className="mt-3 flex gap-2 w-40" aria-hidden="true">
-            <span className="h-1.5 flex-1 rounded-full bg-[#293F2A]" />
-            <span className={`h-1.5 flex-1 rounded-full ${langkah === 2 ? 'bg-[#293F2A]' : 'bg-gray-300'}`} />
+    <main className="auth-shell">
+      <section className="auth-panel auth-panel--form">
+        <Link to="/" className="auth-back">← Beranda</Link>
+        <div className="auth-content">
+          <p className="auth-kicker">Mulai dengan langkah sederhana</p>
+          <h1 className="auth-title">Buat akun AuraFit</h1>
+          <p className="auth-intro">Isi data akun, lalu lengkapi profil agar rencana harianmu lebih sesuai.</p>
+          <div className="auth-progress" aria-label={`Langkah ${langkah} dari 2`}>
+            <span className="auth-progress__label">Langkah {langkah} dari 2</span>
+            <div className="auth-progress__track" aria-hidden="true">
+              <span className="auth-progress__step auth-progress__step--active" />
+              <span className={`auth-progress__step ${langkah === 2 ? 'auth-progress__step--active' : ''}`} />
+            </div>
           </div>
-        </div>
 
         <form
           onSubmit={langkah === 1 ? keLangkahDua : onSubmitHandler}
-          className="w-full max-w-sm flex flex-col space-y-3"
+          className="auth-form"
         >
           {langkah === 1 ? (
-            <fieldset className="border-none p-0 m-0 space-y-3">
-              <legend className="text-xl font-montserrat font-bold mb-2 block">Akun</legend>
-              <p className="text-sm text-gray-600 mb-4">
+            <fieldset className="auth-fieldset">
+              <legend className="auth-legend">Akun</legend>
+              <p className="auth-help">
                 Dipakai untuk masuk ke AuraFit.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <div className="flex flex-col flex-1">
+              <div className="auth-grid-2">
+                <div className="auth-field">
                   <label htmlFor="signup-firstname">Nama Depan</label>
                   <input
                     id="signup-firstname"
@@ -119,7 +116,7 @@ function SignupPage() {
                     required
                   />
                 </div>
-                <div className="flex flex-col flex-1">
+                <div className="auth-field">
                   <label htmlFor="signup-lastname">Nama Belakang</label>
                   <input
                     id="signup-lastname"
@@ -132,7 +129,7 @@ function SignupPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col">
+              <div className="auth-field">
                 <label htmlFor="signup-username">Nama Pengguna</label>
                 <input
                   id="signup-username"
@@ -144,7 +141,7 @@ function SignupPage() {
                 />
               </div>
 
-              <div className="flex flex-col">
+              <div className="auth-field">
                 <label htmlFor="signup-email">Email</label>
                 <input
                   id="signup-email"
@@ -157,7 +154,7 @@ function SignupPage() {
                 />
               </div>
 
-              <div className="flex flex-col">
+              <div className="auth-field">
                 <label htmlFor="signup-password">Kata Sandi</label>
                 <input
                   id="signup-password"
@@ -173,14 +170,14 @@ function SignupPage() {
               </div>
             </fieldset>
           ) : (
-            <fieldset className="border-none p-0 m-0 space-y-3">
-              <legend className="text-xl font-montserrat font-bold mb-2 block">Data Tubuh</legend>
-              <p className="text-sm text-gray-600 mb-4">
+            <fieldset className="auth-fieldset">
+              <legend className="auth-legend">Data tubuh</legend>
+              <p className="auth-help">
                 Dipakai untuk menghitung BMI dan menyusun rencana harianmu. Data ini
                 hanya terlihat olehmu.
               </p>
 
-              <div className="flex flex-col">
+              <div className="auth-field">
                 <label htmlFor="signup-sex">Jenis Kelamin</label>
                 <select
                   id="signup-sex"
@@ -195,7 +192,7 @@ function SignupPage() {
                 </select>
               </div>
 
-              <div className="flex flex-col">
+              <div className="auth-field">
                 <label htmlFor="signup-age">Umur (tahun)</label>
                 <input
                   id="signup-age"
@@ -209,8 +206,8 @@ function SignupPage() {
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <div className="flex flex-col flex-1">
+              <div className="auth-grid-2">
+                <div className="auth-field">
                   <label htmlFor="signup-weight">Berat Badan (kg)</label>
                   <input
                     id="signup-weight"
@@ -223,7 +220,7 @@ function SignupPage() {
                     required
                   />
                 </div>
-                <div className="flex flex-col flex-1">
+                <div className="auth-field">
                   <label htmlFor="signup-height">Tinggi Badan (cm)</label>
                   <input
                     id="signup-height"
@@ -238,7 +235,7 @@ function SignupPage() {
                 </div>
               </div>
 
-              <div className="flex flex-col">
+              <div className="auth-field">
                 <label htmlFor="signup-goal">Tujuan</label>
                 <select
                   id="signup-goal"
@@ -257,17 +254,17 @@ function SignupPage() {
           )}
 
           {galat ? (
-            <p role="alert" className="w-full rounded-lg border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-800">
+            <p role="alert" className="auth-error">
               {galat}
             </p>
           ) : null}
 
-          <div className="flex justify-center gap-3">
+          <div className="auth-actions">
             {langkah === 2 ? (
               <button
                 type="button"
                 onClick={kembali}
-                className="mt-4 py-2 px-1 w-32 rounded-lg bg-gray-200 hover:bg-gray-300 text-black font-semibold cursor-pointer transition-all duration-300"
+                className="auth-secondary"
               >
                 Kembali
               </button>
@@ -277,43 +274,24 @@ function SignupPage() {
               type="submit"
               disabled={sedangKirim}
               aria-busy={sedangKirim}
-              className="mt-4 py-2 px-1 w-40 rounded-lg bg-[#293F2A] text-white font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+              className="auth-submit"
             >
               {langkah === 1 ? 'Lanjut' : sedangKirim ? 'Mendaftarkan…' : 'Daftar'}
             </button>
           </div>
         </form>
 
-        {/* login link shown only on mobile */}
-        <p className="mt-8 text-sm md:hidden">
-          Sudah punya akun?{" "}
-          <Link to="/login" className="text-green-800 font-semibold hover:underline">Masuk</Link>
-        </p>
+        <p className="auth-switch">Sudah punya akun? <Link to="/login">Masuk</Link></p>
+        </div>
       </section>
 
-      {/* decorative aside — hidden on mobile */}
-      <aside
-        className="hidden md:flex w-2/5 flex-col h-screen bg-cover bg-center relative justify-center items-center text-center text-white sticky top-0"
-        style={{ backgroundImage: LATAR_AUTENTIKASI }}
-      >
-        <div className="absolute inset-0 bg-green-700/60 backdrop-blur-xs" aria-hidden="true" />
-
-        <div className="relative z-10 h-full flex flex-col items-center justify-between py-10 px-8 text-white text-center">
-          <div>
-            <h2 className="text-5xl font-special-gothic-expanded-one">AuraFit</h2>
-            <p className="font-montserrat">Your Personal Digital Health Coach.</p>
-          </div>
-
-          <div>
-            <img src={Logo} alt="" aria-hidden="true" className="w-56 h-56" />
-          </div>
-
-          <div>
-            <p>Sudah punya akun?{" "}
-              <Link to="/login" className="text-yellow-400 font-semibold cursor-pointer hover:underline">Masuk</Link>
-            </p>
-          </div>
+      <aside className="auth-brand-panel">
+        <div className="auth-brand-panel__content">
+          <h2 className="auth-brand-panel__name">AuraFit</h2>
+          <p className="auth-brand-panel__tagline">Profil yang lebih lengkap, rencana yang lebih mudah dipahami.</p>
         </div>
+        <img src={Logo} alt="" aria-hidden="true" className="auth-brand-panel__mark" />
+        <p className="auth-brand-panel__footer">Personal digital health coach</p>
       </aside>
     </main>
   );

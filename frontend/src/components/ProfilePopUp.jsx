@@ -2,13 +2,13 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
 function MenuButton({ onClick, children, variant = "default" }) {
-  const base = "w-full py-3 px-3 rounded-lg text-sm font-bold transition-all duration-150 active:scale-95";
+  const base = "profile-menu__button";
   const styles = {
-    default: `${base} bg-white/0 border text-black hover:bg-black/5`,
-    danger:  `${base} bg-red-500 text-white hover:bg-red-600 shadow-md`,
+    default: base,
+    danger:  `${base} profile-menu__button--danger`,
   };
   return (
-    <button className={styles[variant]} onClick={onClick}>
+    <button type="button" className={styles[variant]} onClick={onClick}>
       {children}
     </button>
   );
@@ -42,41 +42,30 @@ export default function ProfilePopup({ open, onClose, onLogout, user }) {
 
   return (
     /* Backdrop */
-    <div className="fixed inset-0 z-50 flex items-start justify-end p-4 pt-16">
+    <div className="modal-backdrop modal-backdrop--profile" onClick={onClose}>
       {/* Dimmed backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
+      <div className="absolute inset-0" aria-hidden="true" />
 
       {/* Popup card */}
       <div
         ref={ref}
         role="dialog"
         aria-modal="true"
-        aria-label="Profile menu"
-        className="relative z-10 w-80 bg-white/70 backdrop-blur-sm rounded-2xl p-5 flex flex-col gap-3 shadow-2xl animate-[fadeSlideIn_0.18s_ease-out]"
-        style={{ animationFillMode: "both" }}
+        aria-label="Menu profil"
+        className="profile-menu"
+        onClick={(event) => event.stopPropagation()}
       >
         {/* User info */}
-        <div className="flex flex-col items-center pb-1">
-          <p className="text-black text-1xl font-bold">{user?.first_name} {user?.last_name}</p>
-          <p className="text-gray-500 text-base">@{user?.username}</p>
+        <div className="profile-menu__identity">
+          <p className="profile-menu__name">{user?.first_name} {user?.last_name}</p>
+          <p className="profile-menu__username">@{user?.username}</p>
         </div>
 
-        {/* About */}
-        <Link to="/">
-          <MenuButton>About</MenuButton>
-        </Link>
-
-        <MenuButton variant="danger" onClick={handleLogout}>
-          Log Out
-        </MenuButton>
+        <div className="profile-menu__actions">
+          <Link to="/" className="profile-menu__button inline-flex items-center justify-center">Beranda</Link>
+          <MenuButton variant="danger" onClick={handleLogout}>Keluar</MenuButton>
+        </div>
       </div>
-
-      <style>{`
-        @keyframes fadeSlideIn {
-          from { opacity: 0; transform: translateY(-10px) scale(0.97); }
-          to   { opacity: 1; transform: translateY(0)     scale(1);    }
-        }
-      `}</style>
     </div>
   );
 }

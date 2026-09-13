@@ -5,14 +5,13 @@ export default function DonutChart({ completed, total }) {
   const circumference = 2 * Math.PI * normalizedRadius;
   const strokeDashoffset = circumference * (1 - completed / total);
 
-  const strokeColor = 
-    completed === 0 ? 'transparent' :
-    completed === total ? '#22c55e' : '#eab308';
+  const strokeColor = completed === 0 ? 'transparent' : 'var(--color-accent)';
 
   return (
-    <svg width={radius * 2} height={radius * 2} className="rotate-90">
-      <circle cx={radius} cy={radius} r={normalizedRadius} fill="none" stroke="#e5e7eb" strokeWidth={stroke} />
+    <svg width={radius * 2} height={radius * 2} className="donut-chart rotate-90" aria-hidden="true">
+      <circle className="donut-chart__track" cx={radius} cy={radius} r={normalizedRadius} fill="none" strokeWidth={stroke} />
       <circle
+        className="donut-chart__value"
         cx={radius} cy={radius} r={normalizedRadius} fill="none"
         stroke={strokeColor} strokeWidth={stroke} strokeLinecap="round"
         strokeDasharray={circumference} strokeDashoffset={strokeDashoffset}
