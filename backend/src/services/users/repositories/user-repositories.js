@@ -37,6 +37,33 @@ class UserRepositories {
     return user.rows[0];
   }
 
+  async updateProfile(id, { first_name, last_name, gender, weight, height, goal, age }) {
+    const bmi = weight / ((height / 100) ** 2);
+    const bmi_category =
+      bmi < 18.5 ? 'Underweight' :
+      bmi < 25 ? 'Normal' :
+      bmi < 30 ? 'Overweight' : 'Obese';
+
+    const result = await this.pool.query({
+      text: `UPDATE users
+             SET first_name = $2,
+                 last_name = $3,
+                 gender = $4,
+                 weight_kg = $5,
+                 height_cm = $6,
+                 goal = $7,
+                 bmi = $8,
+                 bmi_category = $9,
+                 age = $10
+             WHERE id = $1
+             RETURNING id`,
+      values: [id, first_name, last_name, gender, weight, height, goal, bmi, bmi_category, age],
+    });
+
+    if (!result.rows.length) return null;
+    return this.getUserById(id);
+  }
+
   async verifyUserCredential(username_email, password) {
     const query = {
       text: `SELECT id, password, password_hash FROM users

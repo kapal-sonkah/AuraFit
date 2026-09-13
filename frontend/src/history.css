@@ -52,7 +52,11 @@
 .history-plan-item__meta { margin: 0.25rem 0 0; overflow-wrap: anywhere; color: var(--color-muted); font-size: 0.7rem; }
 .history-plan-item__status { margin-left: auto; flex: 0 0 auto; color: var(--color-muted); font-size: 0.68rem; font-weight: 700; }
 .history-plan-item--done .history-plan-item__status { color: var(--color-positive); }
+.history-plan-item__actions { display: grid; flex: 0 0 auto; justify-items: end; gap: 0.35rem; }
+.history-plan-item__toggle { min-height: 2rem; padding: 0 0.65rem; border: 1px solid var(--color-accent-line); border-radius: var(--radius-pill); background: transparent; color: var(--color-ink); font-size: 0.66rem; font-weight: 800; cursor: pointer; }
+.history-plan-item__toggle:hover { background: var(--color-paper-soft); }
+.history-plan-item__toggle:disabled { cursor: wait; opacity: 0.6; }
 
 @media (max-width: 56rem) { .history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } .history-days { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 42rem) { .history-frame { padding: var(--space-3); } .history-header { margin-bottom: var(--space-4); } .history-brand__context, .history-nav__link:first-child { display: none; } .history-hero { align-items: stretch; flex-direction: column; gap: var(--space-4); } .history-date-picker input { width: 100%; } .history-panel__head { align-items: start; flex-direction: column; gap: var(--space-1); } .history-days { grid-template-columns: repeat(2, minmax(0, 1fr)); } .history-plan__columns { grid-template-columns: 1fr; } }
+@media (max-width: 42rem) { .history-frame { padding: var(--space-3); } .history-header { margin-bottom: var(--space-4); } .history-brand__context, .history-nav__link:first-child { display: none; } .history-hero { align-items: stretch; flex-direction: column; gap: var(--space-4); } .history-date-picker input { width: 100%; } .history-panel__head { align-items: start; flex-direction: column; gap: var(--space-1); } .history-days { grid-template-columns: repeat(2, minmax(0, 1fr)); } .history-plan__columns { grid-template-columns: 1fr; } .history-plan-item { align-items: start; } .history-plan-item__actions { margin-left: auto; text-align: right; } }
 @media (prefers-reduced-motion: reduce) { .history-day { transition-duration: 0.01ms; } }

@@ -4,6 +4,7 @@ import OverviewSidebar from "../components/OverviewSidebar";
 import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
 import ProfilePopup from "../components/ProfilePopUp";
+import ManualPlanForm from '../components/ManualPlanForm';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { getAIRecommendations } from '../utils/network-data';
 import '../dashboard.css';
@@ -23,9 +24,19 @@ export default function DashboardPage({ onLogout, user }) {
   // Sebelumnya hanya ada penanda boolean yang tidak pernah dibaca, sehingga
   // ketiganya tampil sama, yaitu dashboard tanpa isi.
   const [statusRencana, setStatusRencana] = useState('memuat');
+  const [showManualForm, setShowManualForm] = useState(false);
 
   // Pesan kegagalan penyimpanan. Kosong berarti tidak ada kegagalan tertunda.
   const [galatSimpan, setGalatSimpan] = useState('');
+
+  function terapkanRencana(data) {
+    setActivities(data.activities ?? []);
+    setFoods(data.foods ?? []);
+    setCompletedActivityIds(new Set((data.activities ?? []).filter((item) => item.completed).map((item) => item.id)));
+    setConsumedFoodIds(new Set((data.foods ?? []).filter((item) => item.completed).map((item) => item.id)));
+    setStreak(Number(data.streak) || 0);
+    setStatusRencana('siap');
+  }
 
   const dailyCalorieTarget = useMemo(() =>
     foods.reduce((total, food) => total + (Number(food.kcal) || 0), 0)
@@ -77,13 +88,13 @@ export default function DashboardPage({ onLogout, user }) {
       return;
     }
 
-    setActivities(data.activities ?? []);
-    setFoods(data.foods ?? []);
-    setCompletedActivityIds(new Set((data.activities ?? []).filter((item) => item.completed).map((item) => item.id)));
-    setConsumedFoodIds(new Set((data.foods ?? []).filter((item) => item.completed).map((item) => item.id)));
-    setStreak(Number(data.streak) || 0);
-    setStatusRencana('siap');
+    terapkanRencana(data);
   }, [user]);
+
+  function simpanRencanaManual(data) {
+    setShowManualForm(false);
+    terapkanRencana(data);
+  }
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => { void ambilRencana(); });
@@ -143,18 +154,23 @@ export default function DashboardPage({ onLogout, user }) {
                 <p className="dashboard-state__title">Menyusun rencana hari ini…</p>
               </div>
             ) : statusRencana === 'gagal' ? (
-              <div role="alert" className="dashboard-state">
-                <p className="dashboard-state__title">Rencana hari ini gagal dimuat.</p>
-                <p className="dashboard-state__copy">
-                  Catatan yang sudah tersimpan tidak hilang. Periksa koneksi, lalu coba lagi.
-                </p>
-                <button
-                  onClick={ambilRencana}
-                  className="dashboard-button"
-                >
-                  Coba lagi
-                </button>
-              </div>
+              showManualForm ? (
+                <ManualPlanForm
+                  onCancel={() => setShowManualForm(false)}
+                  onSaved={simpanRencanaManual}
+                />
+              ) : (
+                <div role="alert" className="dashboard-state">
+                  <p className="dashboard-state__title">Rencana hari ini gagal dimuat.</p>
+                  <p className="dashboard-state__copy">
+                    Catatan yang sudah tersimpan tidak hilang. Coba lagi atau susun rencana sendiri untuk hari ini.
+                  </p>
+                  <div className="dashboard-state__actions">
+                    <button type="button" onClick={ambilRencana} className="dashboard-button dashboard-button--secondary">Coba lagi</button>
+                    <button type="button" onClick={() => setShowManualForm(true)} className="dashboard-button">Buat rencana manual</button>
+                  </div>
+                </div>
+              )
             ) : activities.length === 0 && foods.length === 0 ? (
               <div className="dashboard-state">
                 <p className="dashboard-state__title">Belum ada rencana untuk hari ini.</p>

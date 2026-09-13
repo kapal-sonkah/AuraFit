@@ -4,6 +4,7 @@ import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
+import ProfilePage from './pages/ProfilePage';
 import React from 'react';
 import { getAccessToken, getUserLogged, putAccessToken, logout } from './utils/network-data';
 
@@ -57,6 +58,7 @@ function App() {
         <Route path='/' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage onLogout={onLogout} user={authedUser} />} />
         <Route path='/history' element={<HistoryPage onLogout={onLogout} user={authedUser} />} />
+        <Route path='/profile' element={<ProfilePage onLogout={onLogout} user={authedUser} onUserUpdated={setAuthedUser} />} />
         <Route path='*' element={<Navigate to='/dashboard' replace />} />
       </Routes>
     )

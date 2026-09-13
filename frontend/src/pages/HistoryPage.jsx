@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProfilePopup from '../components/ProfilePopUp';
 import { getHistory, getPlanByDate } from '../utils/network-data';
+import { savePlanItemProgress } from '../utils/progress-storage';
 import '../history.css';
 
 function localDateString(date = new Date()) {
@@ -40,7 +41,7 @@ function SummaryCard({ label, value, hint }) {
   );
 }
 
-function PlanItem({ item, type }) {
+function PlanItem({ item, type, onToggle, saving }) {
   return (
     <article className={`history-plan-item ${item.completed ? 'history-plan-item--done' : ''}`}>
       <div className="history-plan-item__icon" aria-hidden="true">
@@ -52,7 +53,18 @@ function PlanItem({ item, type }) {
           {item.portion || item.description || 'Bagian dari rencana harian'}
         </p>
       </div>
-      <span className="history-plan-item__status">{itemStatus(item, type)}</span>
+      <div className="history-plan-item__actions">
+        <span className="history-plan-item__status">{itemStatus(item, type)}</span>
+        <button
+          type="button"
+          className="history-plan-item__toggle"
+          onClick={() => onToggle(item.id, !item.completed)}
+          disabled={saving}
+          aria-pressed={item.completed}
+        >
+          {saving ? 'Menyimpan…' : item.completed ? 'Batalkan' : 'Tandai selesai'}
+        </button>
+      </div>
     </article>
   );
 }
@@ -64,6 +76,8 @@ export default function HistoryPage({ onLogout, user }) {
   const [selectedDate, setSelectedDate] = useState(today);
   const [historyState, setHistoryState] = useState({ status: 'loading', data: null });
   const [planState, setPlanState] = useState({ status: 'loading', data: null });
+  const [savingItemId, setSavingItemId] = useState(null);
+  const [editError, setEditError] = useState('');
 
   const loadHistory = useCallback(async () => {
     setHistoryState({ status: 'loading', data: null });
@@ -76,6 +90,32 @@ export default function HistoryPage({ onLogout, user }) {
     const { error, data } = await getPlanByDate(date);
     setPlanState({ status: error ? 'error' : 'ready', data: error ? null : data });
   }, []);
+
+  async function handlePlanItemToggle(itemId, completed) {
+    const previous = planState.data;
+    if (!previous) return;
+    setEditError('');
+    setSavingItemId(itemId);
+    setPlanState((current) => ({
+      ...current,
+      data: {
+        ...current.data,
+        activities: current.data.activities.map((item) => item.id === itemId ? { ...item, completed } : item),
+        foods: current.data.foods.map((item) => item.id === itemId ? { ...item, completed } : item),
+      },
+    }));
+
+    const result = await savePlanItemProgress(itemId, completed);
+    if (!result.ok) {
+      setPlanState((current) => ({ ...current, data: previous }));
+      setEditError('Perubahan catatan belum tersimpan. Periksa koneksi, lalu coba lagi.');
+      setSavingItemId(null);
+      return;
+    }
+
+    await loadHistory();
+    setSavingItemId(null);
+  }
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => { void loadHistory(); });
@@ -198,7 +238,7 @@ export default function HistoryPage({ onLogout, user }) {
                 <p className="history-panel__eyebrow">Rincian tanggal</p>
                 <h2 id="history-detail-title" className="history-panel__title">{formatDate(selectedDate, { weekday: 'long', year: 'numeric' })}</h2>
               </div>
-              <p className="history-panel__hint">Data tersimpan read-only.</p>
+              <p className="history-panel__hint">Kamu dapat mengoreksi status catatan.</p>
             </div>
 
             {planState.status === 'loading' ? (
@@ -216,17 +256,18 @@ export default function HistoryPage({ onLogout, user }) {
                   <span>{selectedDay?.completed ?? 0}/{selectedDay?.total ?? 0} item selesai</span>
                   <span>{planState.data.source === 'manual' ? 'Rencana manual' : 'Rekomendasi AuraFit'}</span>
                 </div>
+                {editError ? <div className="history-alert" role="alert">{editError}</div> : null}
                 <div className="history-plan__columns">
                   <div>
                     <h3 className="history-plan__heading">Aktivitas</h3>
                     <div className="history-plan__list">
-                      {planState.data.activities.map((item) => <PlanItem key={item.id} item={item} type="activity" />)}
+                      {planState.data.activities.map((item) => <PlanItem key={item.id} item={item} type="activity" onToggle={handlePlanItemToggle} saving={savingItemId === item.id} />)}
                     </div>
                   </div>
                   <div>
                     <h3 className="history-plan__heading">Makanan</h3>
                     <div className="history-plan__list">
-                      {planState.data.foods.map((item) => <PlanItem key={item.id} item={item} type="food" />)}
+                      {planState.data.foods.map((item) => <PlanItem key={item.id} item={item} type="food" onToggle={handlePlanItemToggle} saving={savingItemId === item.id} />)}
                     </div>
                   </div>
                 </div>

@@ -164,6 +164,44 @@ async function getPlanByDate(date) {
   }
 }
 
+async function createManualPlan({ activities, foods }) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/plans/manual`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ activities, foods }),
+    });
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, data: null, message: responseJson.message || 'Rencana manual belum dapat disimpan.' };
+    }
+
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null, message: 'Tidak dapat menyimpan rencana. Periksa koneksi, lalu coba lagi.' };
+  }
+}
+
+async function updateUserProfile(profile) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/users/me`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(profile),
+    });
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, data: null, message: responseJson.message || 'Profil belum dapat diperbarui.' };
+    }
+
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null, message: 'Tidak dapat menyimpan profil. Periksa koneksi, lalu coba lagi.' };
+  }
+}
+
 export {
   getAccessToken,
   putAccessToken, 
@@ -174,4 +212,6 @@ export {
   getAIRecommendations,
   getHistory,
   getPlanByDate,
+  createManualPlan,
+  updateUserProfile,
 }
