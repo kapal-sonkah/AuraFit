@@ -152,9 +152,10 @@ export default function HistoryPage({ onLogout, user }) {
             <Link to="/" className="history-brand__name">AuraFit</Link>
             <span className="history-brand__context">Rencana harian</span>
           </div>
-          <nav className="history-nav" aria-label="Navigasi utama">
+            <nav className="history-nav" aria-label="Navigasi utama">
             <Link to="/dashboard" className="history-nav__link">Hari ini</Link>
-            <span className="history-nav__link history-nav__link--active" aria-current="page">Riwayat</span>
+            <Link to="/history" className="history-nav__link history-nav__link--active" aria-current="page">Riwayat</Link>
+            <Link to="/profile" className="history-nav__link history-nav__link--profile">Profil</Link>
             <button
               type="button"
               aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
@@ -199,7 +200,7 @@ export default function HistoryPage({ onLogout, user }) {
 
           <section className="history-summary" aria-label="Ringkasan tujuh hari">
             <SummaryCard label="Item selesai" value={`${summary.completed}/${summary.total}`} hint={`${summary.rate}% dari rencana`} />
-            <SummaryCard label="Hari aktif" value={summary.activeDays} hint="dengan rencana tersimpan" />
+            <SummaryCard label="Hari dengan rencana" value={summary.activeDays} hint="tanggal dengan rencana tersimpan" />
             <SummaryCard label="Aktivitas" value={summary.activities} hint="item dalam periode ini" />
             <SummaryCard label="Makanan" value={summary.foods} hint="item dalam periode ini" />
           </section>
@@ -207,8 +208,8 @@ export default function HistoryPage({ onLogout, user }) {
           <section className="history-panel" aria-labelledby="history-week-title">
             <div className="history-panel__head">
               <div>
-                <p className="history-panel__eyebrow">Progress</p>
-                <h2 id="history-week-title" className="history-panel__title">Minggu ini</h2>
+                <p className="history-panel__eyebrow">Progres tujuh hari</p>
+                <h2 id="history-week-title" className="history-panel__title">Tujuh hari terakhir</h2>
               </div>
               <p className="history-panel__hint">Pilih hari untuk melihat rinciannya.</p>
             </div>

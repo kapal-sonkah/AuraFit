@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
   try {
@@ -11,6 +13,25 @@ function getYouTubeEmbedUrl(url) {
 }
 
 export default function ActivityPopup({ activity, completed, onClose, onDone }) {
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!activity) return undefined;
+    const previousFocus = document.activeElement;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    closeButtonRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocus?.focus?.();
+    };
+  }, [activity, onClose]);
+
   if (!activity) return null;
 
   const embedUrl = getYouTubeEmbedUrl(activity.youtube_url);
@@ -23,10 +44,10 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
         aria-hidden="true"
       />
 
-      <div className="modal-card" onClick={(event) => event.stopPropagation()}>
+      <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="activity-dialog-title" aria-describedby="activity-dialog-description" onClick={(event) => event.stopPropagation()}>
         <div className="modal-card__head">
-          <h2 className="modal-card__title">{activity.name}</h2>
-          <button type="button" className="modal-close" onClick={onClose} aria-label="Tutup detail">×</button>
+          <h2 id="activity-dialog-title" className="modal-card__title">{activity.name}</h2>
+          <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Tutup detail">×</button>
         </div>
 
         <div className="modal-content">
@@ -60,7 +81,7 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
             />
           )}
 
-          <p className="modal-content__copy">
+          <p id="activity-dialog-description" className="modal-content__copy">
             {activity.description}
           </p>
         </div>

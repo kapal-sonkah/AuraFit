@@ -42,7 +42,14 @@ function App() {
     checkAuth();
   }, []);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <main className="app-loading" aria-live="polite">
+        <div className="app-loading__mark" aria-hidden="true">A</div>
+        <p className="app-loading__label">Menyiapkan AuraFit…</p>
+      </main>
+    );
+  }
   
   return (
     authedUser === null ? (

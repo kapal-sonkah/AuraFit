@@ -47,7 +47,7 @@ export default function DailyActivities({ activities = [], completedActivityIds,
             <p className="section-kicker">Gerak hari ini</p>
             <h2 className="dashboard-section__title">Aktivitas Hari Ini</h2>
           </div>
-          <p className="dashboard-section__count">{activities.length} pilihan</p>
+          <p className="dashboard-section__count">{activities.length} aktivitas</p>
         </div>
         <ul className="dashboard-list dashboard-list--activities" role="list">
           {activities.map((a) => (

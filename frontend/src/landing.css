@@ -1,4 +1,4 @@
-/* Hallmark · genre: playful · macrostructure: Bento Grid · theme: AuraFit sage */
+/* Hallmark · genre: playful · tone: calm and task-focused · palette: AuraFit sage · structural fingerprint: Bento Grid · design-system: design.md · designed-as-app */
 
 .landing-shell { min-height: 100vh; background: var(--color-surface-dark); color: var(--color-accent-ink); }
 .landing-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); width: min(100%, 92rem); margin: 0 auto; padding: var(--space-5) var(--space-4); }
@@ -45,3 +45,40 @@
 @media (max-width: 48rem) { .landing-hero { grid-template-columns: 1fr; } .landing-hero__main { min-height: 26rem; } .landing-team { grid-template-columns: repeat(2, minmax(0, 1fr)); } .landing-section__head { align-items: start; flex-direction: column; } }
 @media (max-width: 34rem) { .landing-header { align-items: start; flex-direction: column; } .landing-nav { justify-content: start; } .landing-team { grid-template-columns: 1fr; } .landing-hero__actions { display: grid; grid-template-columns: 1fr; } .landing-button { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .landing-button, .landing-contributor { transition-duration: 0.01ms; } }
+
+/* System pass: the public page carries the same paper, type, and action
+ * language as the authenticated app while keeping the dark brand panel as a
+ * clear visual anchor. */
+.landing-shell { background: var(--color-paper); color: var(--color-ink); }
+.landing-header { width: min(100%, 84rem); padding-block: var(--space-4); border-bottom: 1px solid var(--color-card-line); }
+.landing-wordmark { color: var(--color-ink); }
+.landing-button { white-space: nowrap; }
+.landing-button--secondary { border-color: var(--color-card-line); color: var(--color-ink); }
+.landing-button--secondary:hover { background: var(--color-paper-strong); }
+.landing-hero { grid-template-columns: 1fr; width: min(100%, 84rem); padding-block: var(--space-8) var(--space-12); }
+.landing-hero__main { min-height: auto; border: 1px solid var(--color-card-line); box-shadow: var(--shadow-raised); }
+.landing-hero__title { font-size: clamp(2.4rem, 7vw, 5.2rem); line-height: 1; min-width: 0; }
+.landing-hero__copy { max-width: 52ch; }
+.landing-hero__side { color: var(--color-on-dark); }
+.landing-tile { border: 1px solid var(--color-dark-line); color: var(--color-on-dark); }
+.landing-tile--accent { color: var(--color-accent-ink); }
+.landing-section { width: min(100%, 84rem); }
+.landing-section__panel { border-color: var(--color-dark-line); background: var(--color-surface-dark); color: var(--color-on-dark); }
+.landing-section__title { min-width: 0; overflow-wrap: anywhere; line-height: 1.05; }
+.landing-contributor { border-color: var(--color-card-line); }
+.landing-footer { border-color: var(--color-card-line); color: var(--color-muted); }
+
+@media (min-width: 48rem) {
+  .landing-hero { grid-template-columns: minmax(0, 1.25fr) minmax(15rem, 0.75fr); }
+  .landing-hero__main { min-height: 31rem; }
+  .landing-team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 64rem) {
+  .landing-team { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 34rem) {
+  .landing-header { padding-inline: var(--space-3); }
+  .landing-hero, .landing-section { padding-inline: var(--space-3); }
+}

@@ -1,4 +1,4 @@
-/* Hallmark · genre: playful · macrostructure: Bento Grid · theme: AuraFit sage */
+/* Hallmark · genre: playful · tone: calm and task-focused · palette: AuraFit sage · structural fingerprint: Workbench · design-system: design.md · designed-as-app */
 
 .history-shell { min-height: 100vh; background: radial-gradient(circle at 8% 0%, var(--color-highlight), transparent 32rem), linear-gradient(145deg, var(--color-surface-dark) 0%, var(--color-surface-dark-2) 52%, var(--color-accent-strong) 100%); }
 .history-frame { position: relative; z-index: 1; width: min(100%, 92rem); min-height: 100vh; margin: 0 auto; padding: var(--space-4); }
@@ -60,3 +60,39 @@
 @media (max-width: 56rem) { .history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } .history-days { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 42rem) { .history-frame { padding: var(--space-3); } .history-header { margin-bottom: var(--space-4); } .history-brand__context, .history-nav__link:first-child { display: none; } .history-hero { align-items: stretch; flex-direction: column; gap: var(--space-4); } .history-date-picker input { width: 100%; } .history-panel__head { align-items: start; flex-direction: column; gap: var(--space-1); } .history-days { grid-template-columns: repeat(2, minmax(0, 1fr)); } .history-plan__columns { grid-template-columns: 1fr; } .history-plan-item { align-items: start; } .history-plan-item__actions { margin-left: auto; text-align: right; } }
 @media (prefers-reduced-motion: reduce) { .history-day { transition-duration: 0.01ms; } }
+
+.history-shell { background: var(--color-paper); color: var(--color-ink); }
+.history-frame { width: min(100%, 84rem); padding-block: var(--space-3) var(--space-12); }
+.history-header { position: sticky; top: 0; z-index: 10; min-height: 3.75rem; margin-bottom: var(--space-6); border-bottom: 1px solid var(--color-card-line); background: var(--color-paper); }
+.history-brand__name { color: var(--color-ink); }
+.history-brand__context { color: var(--color-muted); }
+.history-nav { gap: var(--space-2); }
+.history-nav__link { display: inline-flex; min-height: 2.75rem; align-items: center; padding-inline: var(--space-3); border-radius: var(--radius-pill); color: var(--color-muted); white-space: nowrap; }
+.history-nav__link:hover, .history-nav__link--active { color: var(--color-accent-strong); }
+.history-nav__link--active { background: var(--color-accent-soft); }
+.history-nav .menu-trigger { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); }
+.history-hero { border-color: var(--color-card-line); background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.history-panel { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); box-shadow: var(--shadow-soft); }
+.history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.history-summary__card { border-color: var(--color-card-line); background: var(--color-paper); box-shadow: none; }
+.history-days { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.history-day { border-color: var(--color-card-line); background: var(--color-paper); }
+.history-day--selected { border-color: var(--color-accent); background: var(--color-accent-soft); }
+.history-state { border: 1px solid var(--color-card-line); background: var(--color-paper); }
+.history-plan-item { border-color: var(--color-card-line); background: var(--color-paper); }
+.history-plan-item__toggle { min-height: 2.75rem; white-space: nowrap; }
+
+@media (min-width: 40rem) {
+  .history-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .history-days { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 60rem) {
+  .history-days { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+}
+
+@media (max-width: 42rem) {
+  .history-frame { padding-inline: var(--space-3); }
+  .history-nav__link--profile { display: none; }
+  .history-nav__link:first-child { display: inline-flex; }
+}

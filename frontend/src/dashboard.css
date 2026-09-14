@@ -1,4 +1,4 @@
-/* Hallmark · genre: playful · macrostructure: Bento Grid · theme: AuraFit sage · enrichment: none · designed-as-app */
+/* Hallmark · genre: playful · tone: calm and task-focused · palette: AuraFit sage · structural fingerprint: Workbench · design-system: design.md · designed-as-app */
 .dashboard-lead {
   background: var(--color-paper);
   border: 1px solid var(--color-accent-line);
@@ -228,4 +228,39 @@
 
 @media (prefers-reduced-motion: reduce) {
   .menu-trigger, .dashboard-hero__action, .activity-card, .food-card, .dashboard-button, .modal-action { transition-duration: 0.01ms; }
+}
+
+/* System pass: the workbench uses a quiet paper canvas so progress, actions,
+ * and errors carry the hierarchy instead of the background treatment. */
+.dashboard-shell { background: var(--color-paper); color: var(--color-ink); }
+.dashboard-shell::before { display: none; }
+.dashboard-frame { width: min(100%, 84rem); padding-block: var(--space-3) var(--space-12); }
+.dashboard-header { position: sticky; top: 0; z-index: 10; min-height: 3.75rem; margin-bottom: var(--space-6); border-bottom: 1px solid var(--color-card-line); background: var(--color-paper); }
+.dashboard-brand { color: var(--color-ink); }
+.dashboard-brand__context { color: var(--color-muted); }
+.dashboard-header > nav { display: flex; align-items: center; gap: var(--space-2); }
+.dashboard-nav-link { display: inline-flex; min-height: 2.75rem; align-items: center; margin-right: 0; padding-inline: var(--space-3); border-radius: var(--radius-pill); color: var(--color-muted); white-space: nowrap; }
+.dashboard-nav-link:hover { color: var(--color-ink); }
+.dashboard-nav-link--active { background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.menu-trigger { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); }
+.menu-trigger:hover { background: var(--color-paper-strong); }
+.dashboard-layout { gap: var(--space-6); }
+.dashboard-hero { border-color: var(--color-card-line); background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.dashboard-section { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); box-shadow: var(--shadow-soft); }
+.dashboard-section__title, .dashboard-hero__title { min-width: 0; overflow-wrap: anywhere; }
+.dashboard-progress { background: var(--color-paper-strong); }
+.overview-card { border: 1px solid var(--color-card-line); background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.stat-card { border-color: var(--color-paper-soft); background: var(--color-paper); }
+.activity-card, .food-card { border-color: var(--color-card-line); background: var(--color-paper); }
+.activity-card:hover, .food-card:hover { border-color: var(--color-accent-line); }
+.dashboard-state { border: 1px solid var(--color-card-line); background: var(--color-surface); color: var(--color-ink); box-shadow: var(--shadow-soft); }
+.manual-plan-form { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); }
+.modal-card, .profile-menu { border-color: var(--color-card-line); background: var(--color-surface); }
+.profile-menu__button { border-color: var(--color-card-line); }
+.profile-menu__button:hover { background: var(--color-paper-strong); }
+.dashboard-button, .modal-action, .profile-menu__button, .manual-plan-form__primary { white-space: nowrap; }
+
+@media (max-width: 42rem) {
+  .dashboard-frame { padding-inline: var(--space-3); }
+  .dashboard-nav-link--profile { display: none; }
 }

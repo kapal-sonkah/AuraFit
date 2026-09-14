@@ -38,7 +38,7 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume }) 
             <p className="section-kicker">Asupan hari ini</p>
             <h2 className="dashboard-section__title">Makanan Hari Ini</h2>
           </div>
-          <p className="dashboard-section__count">{foods.length} pilihan</p>
+          <p className="dashboard-section__count">{foods.length} rekomendasi</p>
         </div>
         <ul className="dashboard-list dashboard-list--foods" role="list">
           {foods.map((item) => (

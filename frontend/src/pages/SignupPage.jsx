@@ -39,8 +39,10 @@ function SignupPage() {
     event.preventDefault();
     setGalat('');
 
-    if (!firstName || !username || !email || !password) {
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
       setGalat('Lengkapi seluruh isian pada langkah ini.');
+      form.querySelector(':invalid')?.focus();
       return;
     }
     if (password.length < 8) {
@@ -58,6 +60,13 @@ function SignupPage() {
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     setGalat('');
+
+    const form = event.currentTarget;
+    if (!form.checkValidity()) {
+      setGalat('Lengkapi seluruh isian pada langkah ini.');
+      form.querySelector(':invalid')?.focus();
+      return;
+    }
 
     if (!sex) return setGalat('Pilih jenis kelamin terlebih dahulu.');
     if (!goal) return setGalat('Pilih tujuan terlebih dahulu.');
@@ -94,6 +103,7 @@ function SignupPage() {
           </div>
 
         <form
+          noValidate
           onSubmit={langkah === 1 ? keLangkahDua : onSubmitHandler}
           className="auth-form"
         >
@@ -259,7 +269,7 @@ function SignupPage() {
             </p>
           ) : null}
 
-          <div className="auth-actions">
+          <div className={langkah === 1 ? "auth-actions auth-actions--single" : "auth-actions"}>
             {langkah === 2 ? (
               <button
                 type="button"
@@ -276,7 +286,7 @@ function SignupPage() {
               aria-busy={sedangKirim}
               className="auth-submit"
             >
-              {langkah === 1 ? 'Lanjut' : sedangKirim ? 'Mendaftarkan…' : 'Daftar'}
+              {langkah === 1 ? 'Lanjut ke data tubuh' : sedangKirim ? 'Mendaftarkan…' : 'Daftar'}
             </button>
           </div>
         </form>

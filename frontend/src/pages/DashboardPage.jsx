@@ -116,7 +116,9 @@ export default function DashboardPage({ onLogout, user }) {
             <span className="dashboard-brand__context">Rencana harian</span>
           </div>
           <nav aria-label="Navigasi utama">
+            <Link to="/dashboard" className="dashboard-nav-link dashboard-nav-link--active" aria-current="page">Hari ini</Link>
             <Link to="/history" className="dashboard-nav-link">Riwayat</Link>
+            <Link to="/profile" className="dashboard-nav-link dashboard-nav-link--profile">Profil</Link>
             <button
               type="button"
               aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
@@ -182,13 +184,13 @@ export default function DashboardPage({ onLogout, user }) {
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
                     <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
                     <p className="dashboard-hero__copy">
-                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. Buka kartu untuk melihat detail, lalu catat saat selesai atau dikonsumsi.
+                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. Selesaikan aktivitas dan catat makanan yang sudah dikonsumsi.
                     </p>
                   </div>
-                  <div className="dashboard-progress" aria-label={`Progres hari ini: ${completedItems} dari ${totalItems} item selesai`}>
+                  <div className="dashboard-progress" aria-label={`Progres hari ini: ${completedItems} dari ${totalItems} item tercatat`}>
                     <span className="dashboard-progress__label">Progres hari ini</span>
                     <span className="dashboard-progress__value">{completedItems}/{totalItems}</span>
-                    <span className="dashboard-progress__hint">item selesai</span>
+                    <span className="dashboard-progress__hint">item tercatat</span>
                   </div>
                   <a className="dashboard-hero__action" href="#aktivitas-hari-ini">Mulai aktivitas</a>
                 </section>

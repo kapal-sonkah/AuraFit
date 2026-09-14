@@ -1,4 +1,25 @@
+import { useEffect, useRef } from 'react';
+
 export default function FoodPopup({ food, consumed, onClose, onConsume }) {
+  const closeButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (!food) return undefined;
+    const previousFocus = document.activeElement;
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    closeButtonRef.current?.focus();
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      previousFocus?.focus?.();
+    };
+  }, [food, onClose]);
+
   if (!food) return null;
 
   return (
@@ -8,11 +29,11 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
       <div className="absolute inset-0" aria-hidden="true" />
 
       {/* Card - Scales and slides up slightly */}
-      <div className="modal-card modal-card--food" onClick={(event) => event.stopPropagation()}>
+      <div className="modal-card modal-card--food" role="dialog" aria-modal="true" aria-labelledby="food-dialog-title" aria-describedby="food-dialog-description" onClick={(event) => event.stopPropagation()}>
 
         <div className="modal-card__head">
-          <h2 className="modal-card__title">Detail makanan</h2>
-          <button type="button" className="modal-close" onClick={onClose} aria-label="Tutup detail">×</button>
+          <h2 id="food-dialog-title" className="modal-card__title">Detail makanan</h2>
+          <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Tutup detail">×</button>
         </div>
 
         <div className="food-detail flex items-center gap-4 mt-5">
@@ -23,7 +44,7 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
 
           {/* Info makanan */}
           <div className="food-card__body">
-            <p className="food-card__name">{food.name}</p>
+            <p id="food-dialog-description" className="food-card__name">{food.name}</p>
             <p className="food-card__meta">{food.portion} · {food.kcal} kcal</p>
             {consumed ? (
               <p className="food-card__status food-card__status--done">Sudah dicatat hari ini</p>
