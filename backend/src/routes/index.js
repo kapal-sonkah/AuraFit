@@ -5,6 +5,7 @@ import progress from '../services/progress/route.js';
 import recommendations from '../services/recommendations/route.js';
 import history from '../services/history/route.js';
 import manualPlans from '../services/plans/manual-plan-route.js';
+import aura from '../services/aura/route.js';
 
 const router = Router();
 
@@ -14,5 +15,6 @@ router.use('/', progress);
 router.use('/', recommendations);
 router.use('/', history);
 router.use('/', manualPlans);
+router.use('/', aura);
 
 export default router;

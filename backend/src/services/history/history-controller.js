@@ -1,4 +1,5 @@
 import PlanRepositories from '../plans/plan-repositories.js';
+import AuraRepository from '../aura/aura-repository.js';
 import ClientError from '../../exceptions/client-error.js';
 import response from '../../utils/response.js';
 import { todayInJakarta } from '../../utils/date.js';
@@ -45,7 +46,7 @@ function emptyDay(date) {
   };
 }
 
-function buildDays(fromDate, toDate, rows) {
+function buildDays(fromDate, toDate, rows, auraRows) {
   const days = [];
   const byDate = new Map();
   const start = parseDate(fromDate);
@@ -65,6 +66,11 @@ function buildDays(fromDate, toDate, rows) {
     bucket.total = Number(row.total) || 0;
     bucket.completed = Number(row.selesai) || 0;
     day.hasPlan = true;
+  }
+
+  for (const row of auraRows) {
+    const day = byDate.get(storedDateString(row.aura_date));
+    if (day) day.aura = row.aura;
   }
 
   for (const day of days) {
@@ -100,11 +106,14 @@ export const getHistory = async (req, res, next) => {
       return next(new ClientError('Rentang riwayat maksimal 31 hari'));
     }
 
-    const rows = await PlanRepositories.getHistory(req.user.id, fromDate, toDate);
+    const [rows, auraRows] = await Promise.all([
+      PlanRepositories.getHistory(req.user.id, fromDate, toDate),
+      AuraRepository.getRange(req.user.id, fromDate, toDate),
+    ]);
     return response(res, 200, 'Riwayat rencana diambil', {
       from: fromDate,
       to: toDate,
-      days: buildDays(fromDate, toDate, rows),
+      days: buildDays(fromDate, toDate, rows, auraRows),
     });
   } catch (err) {
     next(err);

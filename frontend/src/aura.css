@@ -1,0 +1,40 @@
+.aura-checkin { display: grid; gap: var(--space-4); padding: clamp(var(--space-4), 3vw, var(--space-5)); border: 1px solid var(--color-card-line); border-radius: var(--radius-panel); background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.aura-checkin__head { display: flex; align-items: end; justify-content: space-between; gap: var(--space-4); }
+.aura-checkin__eyebrow { margin: 0; color: var(--color-accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+.aura-checkin__title { margin: var(--space-1) 0 0; color: var(--color-ink); font-family: var(--font-display); font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.1; }
+.aura-checkin__hint, .aura-checkin__status { margin: 0; color: var(--color-muted); font-size: 0.78rem; line-height: 1.5; }
+.aura-checkin__hint { max-width: 15rem; text-align: right; }
+.aura-checkin__status strong { color: var(--color-ink); }
+.aura-checkin__error { margin: 0; color: var(--color-danger); font-size: 0.78rem; font-weight: 700; }
+.aura-checkin__options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); }
+.aura-option { display: grid; min-width: 0; min-height: 8rem; place-content: center; gap: 0.35rem; padding: var(--space-3); border: 1px solid var(--color-card-line); border-radius: var(--radius-card); background: var(--color-paper); color: var(--color-muted); font: inherit; text-align: center; cursor: pointer; transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
+.aura-option:hover:not(:disabled) { border-color: currentColor; background: var(--color-paper-strong); transform: translateY(-1px); }
+.aura-option:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.aura-option:disabled { cursor: wait; opacity: 0.62; }
+.aura-option--selected { border-color: currentColor; background: color-mix(in oklch, currentColor 12%, var(--color-paper)); box-shadow: inset 0 0 0 1px currentColor; }
+.aura-option__label { overflow: hidden; color: var(--color-ink); font-size: 0.78rem; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+.aura-option__detail { overflow: hidden; font-size: 0.66rem; text-overflow: ellipsis; white-space: nowrap; }
+.aura-glyph { width: 2.35rem; height: 2.35rem; margin: 0 auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
+.aura-glyph__halo { fill: currentColor; stroke: none; opacity: 0.12; }
+.aura-glyph__arc { opacity: 0.68; }
+.aura-glyph__core { stroke-width: 2.2; }
+.aura-glyph__spark { fill: currentColor; stroke: none; }
+.aura-glyph__fade { opacity: 0.45; }
+.aura-option[data-aura="redup"], .history-day__aura[data-aura="redup"] { color: #64748b; }
+.aura-option[data-aura="tenang"], .history-day__aura[data-aura="tenang"] { color: #2563a8; }
+.aura-option[data-aura="seimbang"], .history-day__aura[data-aura="seimbang"] { color: var(--color-accent-strong); }
+.aura-option[data-aura="bersemangat"], .history-day__aura[data-aura="bersemangat"] { color: #a16207; }
+.aura-option[data-aura="menyala"], .history-day__aura[data-aura="menyala"] { color: #c2410c; }
+.history-day__aura { display: inline-flex; align-items: center; gap: 0.25rem; margin-top: auto; font-size: 0.66rem; font-weight: 800; }
+.history-day__aura .aura-glyph { width: 1rem; height: 1rem; margin: 0; }
+
+@media (max-width: 42rem) {
+  .aura-checkin__head { align-items: start; flex-direction: column; gap: var(--space-2); }
+  .aura-checkin__hint { max-width: none; text-align: left; }
+  .aura-checkin__options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .aura-option:last-child { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aura-option { transition-duration: 0.01ms; }
+}

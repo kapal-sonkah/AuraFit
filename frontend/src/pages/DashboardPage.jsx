@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import OverviewSidebar from "../components/OverviewSidebar";
 import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
+import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
 import { savePlanItemProgress } from '../utils/progress-storage';
-import { getAIRecommendations } from '../utils/network-data';
+import { getAIRecommendations, getAuraToday, saveAuraToday } from '../utils/network-data';
 import '../dashboard.css';
 
 export default function DashboardPage({ onLogout, user }) {
@@ -26,6 +27,7 @@ export default function DashboardPage({ onLogout, user }) {
 
   // Pesan kegagalan penyimpanan. Kosong berarti tidak ada kegagalan tertunda.
   const [galatSimpan, setGalatSimpan] = useState('');
+  const [auraState, setAuraState] = useState({ status: 'loading', value: null, error: '' });
 
   function terapkanRencana(data) {
     setActivities(data.activities ?? []);
@@ -96,10 +98,37 @@ export default function DashboardPage({ onLogout, user }) {
     terapkanRencana(data);
   }
 
+  const ambilAura = useCallback(async () => {
+    if (!user) return;
+    setAuraState({ status: 'loading', value: null, error: '' });
+    const { error, data } = await getAuraToday();
+    setAuraState({
+      status: error ? 'error' : 'ready',
+      value: error ? null : data?.aura ?? null,
+      error: error ? 'Aura belum dapat dimuat. Kamu masih bisa mencoba memilihnya lagi.' : '',
+    });
+  }, [user]);
+
+  async function ubahAura(value) {
+    const previous = auraState.value;
+    setAuraState({ status: 'saving', value, error: '' });
+    const { error, data } = await saveAuraToday(value);
+    if (error) {
+      setAuraState({ status: 'ready', value: previous, error: 'Aura belum tersimpan. Periksa koneksi, lalu coba lagi.' });
+      return;
+    }
+    setAuraState({ status: 'ready', value: data?.aura ?? value, error: '' });
+  }
+
   useEffect(() => {
     const frame = requestAnimationFrame(() => { void ambilRencana(); });
     return () => cancelAnimationFrame(frame);
   }, [ambilRencana]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => { void ambilAura(); });
+    return () => cancelAnimationFrame(frame);
+  }, [ambilAura]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -113,6 +142,7 @@ export default function DashboardPage({ onLogout, user }) {
         <header className={`dashboard-header ${scrolled ? 'dashboard-header--scrolled' : ''}`}>
           <div className="dashboard-brand">
             <Link to="/" className="dashboard-brand__name">AuraFit</Link>
+            <span className="dashboard-brand__context">Rencana harian</span>
           </div>
           <nav aria-label="Navigasi utama">
             <Link to="/dashboard" className="dashboard-nav-link dashboard-nav-link--active" aria-current="page">Hari ini</Link>
@@ -204,6 +234,13 @@ export default function DashboardPage({ onLogout, user }) {
                     </div>
                   </div>
                 </section>
+                <AuraCheckIn
+                  aura={auraState.value}
+                  loading={auraState.status === 'loading'}
+                  saving={auraState.status === 'saving'}
+                  error={auraState.error}
+                  onChange={ubahAura}
+                />
                 <DailyActivities
                   activities={activities}
                   completedActivityIds={completedActivityIds}

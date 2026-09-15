@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { getHistory, getPlanByDate } from '../utils/network-data';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { presentActivity, presentFood } from '../utils/presentation';
+import AuraGlyph from '../components/AuraGlyph';
+import { getAuraOption } from '../utils/aura';
 import '../history.css';
 
 function localDateString(date = new Date()) {
@@ -276,6 +278,7 @@ export default function HistoryPage({ onLogout }) {
         <header className="history-header">
           <div className="history-brand">
             <Link to="/" className="history-brand__name">AuraFit</Link>
+            <span className="history-brand__context">Rencana harian</span>
           </div>
             <nav className="history-nav" aria-label="Navigasi utama">
             <Link to="/dashboard" className="history-nav__link">Hari ini</Link>
@@ -330,8 +333,10 @@ export default function HistoryPage({ onLogout }) {
                   <span className="history-loading-bar" />
                   <span className="history-loading-bar history-loading-bar--short" />
                 </div>
-              )) : days.slice().reverse().map((day) => (
-                <button
+              )) : days.slice().reverse().map((day) => {
+                const aura = getAuraOption(day.aura);
+                return (
+                  <button
                   type="button"
                   key={day.date}
                   className={`history-day ${day.date === selectedDate ? 'history-day--selected' : ''}`}
@@ -344,8 +349,10 @@ export default function HistoryPage({ onLogout }) {
                     <span className="history-day__fill" style={{ width: `${day.completionRate}%` }} />
                   </span>
                   <span className="history-day__count">{day.hasPlan ? `${day.completed}/${day.total} selesai` : 'Tanpa rencana'}</span>
+                  {aura ? <span className="history-day__aura" data-aura={aura.value}><AuraGlyph aura={aura.value} />{aura.label}</span> : null}
                 </button>
-              ))}
+                );
+              })}
             </div>
           </section>
 

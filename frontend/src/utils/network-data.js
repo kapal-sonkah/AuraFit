@@ -149,6 +149,32 @@ async function getHistory({ from, to }) {
   }
 }
 
+async function getAuraToday() {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/aura/today`);
+    const responseJson = await response.json();
+    if (!response.ok || responseJson.status !== 'success') return { error: true, data: null };
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null };
+  }
+}
+
+async function saveAuraToday(aura) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/aura/today`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ aura }),
+    });
+    const responseJson = await response.json();
+    if (!response.ok || responseJson.status !== 'success') return { error: true, data: null };
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null };
+  }
+}
+
 async function getPlanByDate(date) {
   try {
     const response = await fetchWithToken(`${BASE_URL}/plans/${encodeURIComponent(date)}`);
@@ -214,4 +240,6 @@ export {
   getPlanByDate,
   createManualPlan,
   updateUserProfile,
+  getAuraToday,
+  saveAuraToday,
 }
