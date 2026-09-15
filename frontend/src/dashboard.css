@@ -90,7 +90,7 @@
 .dashboard-progress__label { color: var(--color-muted); font-size: 0.72rem; font-weight: 700; }
 .dashboard-progress__percentage { color: var(--color-accent-strong); font-family: var(--font-display); font-size: 1.1rem; line-height: 1; }
 .dashboard-progress__track { width: 100%; height: 0.6rem; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-accent-line); }
-.dashboard-progress__bar { display: block; height: 100%; min-width: 0.2rem; border-radius: inherit; background: var(--color-accent); transition: width var(--dur-normal) var(--ease-out); }
+.dashboard-progress__bar { display: block; height: 100%; border-radius: inherit; background: var(--color-accent); transition: width var(--dur-normal) var(--ease-out); }
 .dashboard-progress__value { font-family: var(--font-display); font-size: 1.65rem; line-height: 1; }
 .dashboard-progress__hint { color: var(--color-muted); font-size: 0.72rem; }
 
