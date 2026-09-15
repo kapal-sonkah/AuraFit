@@ -71,10 +71,12 @@
 .auth-actions--single .auth-submit { width: 100%; }
 
 .auth-password { position: relative; min-width: 0; }
-.auth-password .auth-input { padding-inline-end: 7rem; }
-.auth-password__toggle { position: absolute; top: 50%; right: var(--space-2); min-height: 2rem; padding: 0 var(--space-2); border: 0; border-radius: var(--radius-pill); background: var(--color-paper-strong); color: var(--color-accent-strong); font: inherit; font-size: 0.68rem; font-weight: 800; cursor: pointer; transform: translateY(-50%); }
+.auth-password .auth-input { padding-inline-end: 3.5rem; }
+.auth-password__toggle { position: absolute; top: 50%; right: var(--space-2); display: grid; width: 2.25rem; height: 2.25rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--color-accent-strong); cursor: pointer; transform: translateY(-50%); }
+.auth-password__toggle svg { width: 1.15rem; height: 1.15rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 .auth-password__toggle:hover { background: var(--color-accent-soft); }
+.auth-password__toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 @media (max-width: 34rem) {
-  .auth-password .auth-input { padding-inline-end: 6.5rem; }
+  .auth-password .auth-input { padding-inline-end: 3.5rem; }
 }

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from '../assets/images/aurafit-mark.svg';
+import PasswordVisibilityIcon from '../components/PasswordVisibilityIcon';
 import { login } from '../utils/network-data';
 import React from "react";
 import '../auth.css';
@@ -63,7 +64,7 @@ function LoginPage({ loginSuccess }) {
                 required
               />
               <button type="button" className="auth-password__toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'} aria-pressed={showPassword}>
-                {showPassword ? 'Sembunyikan' : 'Tampilkan'}
+                <PasswordVisibilityIcon visible={showPassword} />
               </button>
             </div>
           </div>

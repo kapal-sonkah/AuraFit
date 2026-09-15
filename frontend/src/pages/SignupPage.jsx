@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Logo from '../assets/images/aurafit-mark.svg';
+import PasswordVisibilityIcon from '../components/PasswordVisibilityIcon';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/network-data";
@@ -179,7 +180,7 @@ function SignupPage() {
                       aria-describedby="bantuan-sandi"
                     />
                     <button type="button" className="auth-password__toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'} aria-pressed={showPassword}>
-                      {showPassword ? 'Sembunyikan' : 'Tampilkan'}
+                      <PasswordVisibilityIcon visible={showPassword} />
                     </button>
                   </div>
                 <p id="bantuan-sandi" className="text-xs text-gray-600 mt-1">Minimal 8 karakter.</p>
