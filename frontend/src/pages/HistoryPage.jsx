@@ -276,7 +276,6 @@ export default function HistoryPage({ onLogout }) {
         <header className="history-header">
           <div className="history-brand">
             <Link to="/" className="history-brand__name">AuraFit</Link>
-            <span className="history-brand__context">Rencana harian</span>
           </div>
             <nav className="history-nav" aria-label="Navigasi utama">
             <Link to="/dashboard" className="history-nav__link">Hari ini</Link>
