@@ -113,7 +113,6 @@ export default function DashboardPage({ onLogout, user }) {
         <header className={`dashboard-header ${scrolled ? 'dashboard-header--scrolled' : ''}`}>
           <div className="dashboard-brand">
             <Link to="/" className="dashboard-brand__name">AuraFit</Link>
-            <span className="dashboard-brand__context">Rencana harian</span>
           </div>
           <nav aria-label="Navigasi utama">
             <Link to="/dashboard" className="dashboard-nav-link dashboard-nav-link--active" aria-current="page">Hari ini</Link>
