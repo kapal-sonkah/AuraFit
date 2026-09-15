@@ -66,7 +66,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
       <div className="profile-frame">
         <header className="profile-header">
           <div className="profile-brand">
-            <Link to="/dashboard" className="profile-brand__name">AuraFit</Link>
+            <Link to="/" className="profile-brand__name">AuraFit</Link>
             <span className="profile-brand__context">Profil pengguna</span>
           </div>
           <nav className="profile-nav" aria-label="Navigasi utama">

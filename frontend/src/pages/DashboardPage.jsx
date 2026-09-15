@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import OverviewSidebar from "../components/OverviewSidebar";
 import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
-import ProfilePopup from "../components/ProfilePopUp";
 import ManualPlanForm from '../components/ManualPlanForm';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { getAIRecommendations } from '../utils/network-data';
 import '../dashboard.css';
 
 export default function DashboardPage({ onLogout, user }) {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const [completedActivityIds, setCompletedActivityIds] = useState(new Set());
@@ -114,24 +112,14 @@ export default function DashboardPage({ onLogout, user }) {
       <div className="dashboard-frame">
         <header className={`dashboard-header ${scrolled ? 'dashboard-header--scrolled' : ''}`}>
           <div className="dashboard-brand">
-            <h1 className="dashboard-brand__name">AuraFit</h1>
+            <Link to="/" className="dashboard-brand__name">AuraFit</Link>
             <span className="dashboard-brand__context">Rencana harian</span>
           </div>
           <nav aria-label="Navigasi utama">
             <Link to="/dashboard" className="dashboard-nav-link dashboard-nav-link--active" aria-current="page">Hari ini</Link>
             <Link to="/history" className="dashboard-nav-link">Riwayat</Link>
             <Link to="/profile" className="dashboard-nav-link dashboard-nav-link--profile">Profil</Link>
-            <button
-              type="button"
-              aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
-              aria-expanded={menuOpen}
-              className="menu-trigger"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <span className="menu-trigger__lines" aria-hidden="true">
-                {[0, 1, 2].map((i) => <span key={i} />)}
-              </span>
-            </button>
+            <button type="button" className="dashboard-nav-logout" onClick={onLogout}>Keluar</button>
           </nav>
         </header>
 
@@ -233,7 +221,6 @@ export default function DashboardPage({ onLogout, user }) {
         </main>
 
       </div>
-      <ProfilePopup open={menuOpen} onClose={() => setMenuOpen(false)} onLogout={onLogout} user={user} />
     </div>
   );
 }

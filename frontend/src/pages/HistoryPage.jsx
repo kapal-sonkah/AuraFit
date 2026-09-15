@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProfilePopup from '../components/ProfilePopUp';
 import { getHistory, getPlanByDate } from '../utils/network-data';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { presentActivity, presentFood } from '../utils/presentation';
@@ -190,10 +189,9 @@ function PlanItem({ item, type, onToggle, saving }) {
   );
 }
 
-export default function HistoryPage({ onLogout, user }) {
+export default function HistoryPage({ onLogout }) {
   const today = useMemo(() => localDateString(), []);
   const weekStart = useMemo(() => shiftDate(today, -6), [today]);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(today);
   const [historyState, setHistoryState] = useState({ status: 'loading', data: null });
   const [planState, setPlanState] = useState({ status: 'loading', data: null });
@@ -284,17 +282,7 @@ export default function HistoryPage({ onLogout, user }) {
             <Link to="/dashboard" className="history-nav__link">Hari ini</Link>
             <Link to="/history" className="history-nav__link history-nav__link--active" aria-current="page">Riwayat</Link>
             <Link to="/profile" className="history-nav__link history-nav__link--profile">Profil</Link>
-            <button
-              type="button"
-              aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
-              aria-expanded={menuOpen}
-              className="menu-trigger"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              <span className="menu-trigger__lines" aria-hidden="true">
-                {[0, 1, 2].map((i) => <span key={i} />)}
-              </span>
-            </button>
+            <button type="button" className="history-nav__logout" onClick={onLogout}>Keluar</button>
           </nav>
         </header>
 
@@ -406,7 +394,6 @@ export default function HistoryPage({ onLogout, user }) {
           </section>
         </main>
       </div>
-      <ProfilePopup open={menuOpen} onClose={() => setMenuOpen(false)} onLogout={onLogout} user={user} />
     </div>
   );
 }
