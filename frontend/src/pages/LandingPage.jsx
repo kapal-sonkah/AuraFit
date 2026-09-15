@@ -100,7 +100,6 @@ function LandingPage() {
           </p>
           <div className="landing-hero__actions">
             <Link to="/signup" className="landing-button landing-button--primary">Buat akun</Link>
-            <Link to="/login" className="landing-button landing-button--secondary">Sudah punya akun</Link>
           </div>
         </div>
         <div className="landing-hero__side" aria-label="Cara kerja AuraFit">

@@ -85,11 +85,12 @@
 .dashboard-hero__eyebrow, .section-kicker { margin: 0; color: var(--color-accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 .dashboard-hero__title { max-width: 34rem; margin: var(--space-2) 0 0; color: var(--color-ink); font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 2.2rem); line-height: 1.1; overflow-wrap: anywhere; }
 .dashboard-hero__copy { max-width: 42rem; margin: var(--space-3) 0 0; color: var(--color-muted); font-size: 0.9rem; line-height: 1.6; }
-.dashboard-hero__action { display: inline-flex; flex: 0 0 auto; align-items: center; min-height: 2.75rem; padding: 0 var(--space-4); border: 1px solid var(--color-accent); border-radius: var(--radius-pill); color: var(--color-accent-strong); font-size: 0.8rem; font-weight: 800; text-decoration: none; white-space: nowrap; transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
-.dashboard-hero__action:hover { background: var(--color-accent); color: var(--color-accent-ink); transform: translateY(-1px); }
-.dashboard-hero__action:active { transform: translateY(1px); }
-.dashboard-progress { display: flex; flex: 0 0 auto; flex-direction: column; gap: var(--space-1); min-width: 8rem; padding: var(--space-4); border-radius: var(--radius-card); background: var(--color-paper-strong); color: var(--color-ink); }
+.dashboard-progress { display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; padding: var(--space-4); border-radius: var(--radius-card); background: var(--color-paper-strong); color: var(--color-ink); }
+.dashboard-progress__head, .dashboard-progress__summary { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
 .dashboard-progress__label { color: var(--color-muted); font-size: 0.72rem; font-weight: 700; }
+.dashboard-progress__percentage { color: var(--color-accent-strong); font-family: var(--font-display); font-size: 1.1rem; line-height: 1; }
+.dashboard-progress__track { width: 100%; height: 0.6rem; overflow: hidden; border-radius: var(--radius-pill); background: var(--color-accent-line); }
+.dashboard-progress__bar { display: block; height: 100%; min-width: 0.2rem; border-radius: inherit; background: var(--color-accent); transition: width var(--dur-normal) var(--ease-out); }
 .dashboard-progress__value { font-family: var(--font-display); font-size: 1.65rem; line-height: 1; }
 .dashboard-progress__hint { color: var(--color-muted); font-size: 0.72rem; }
 
@@ -211,7 +212,6 @@
   .dashboard-nav-link { margin-right: var(--space-2); }
   .dashboard-hero { align-items: stretch; flex-direction: column; gap: var(--space-4); }
   .dashboard-progress { min-width: 0; }
-  .dashboard-hero__action { justify-content: center; }
   .dashboard-section { padding: var(--space-4); }
   .dashboard-section__head { align-items: start; flex-direction: column; gap: var(--space-1); }
   .dashboard-list--activities, .dashboard-list--foods { grid-template-columns: 1fr; }
@@ -227,7 +227,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .menu-trigger, .dashboard-hero__action, .activity-card, .food-card, .dashboard-button, .modal-action { transition-duration: 0.01ms; }
+  .menu-trigger, .activity-card, .food-card, .dashboard-button, .modal-action { transition-duration: 0.01ms; }
 }
 
 /* System pass: the workbench uses a quiet paper canvas so progress, actions,
@@ -272,11 +272,10 @@
 .overview-card__head { grid-column: 1 / -1; }
 .dashboard-hero { display: grid; grid-template-columns: minmax(0, 1fr); align-items: stretch; }
 .dashboard-hero__copyblock { min-width: 0; }
-.dashboard-hero__metrics { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: var(--space-3); max-width: 34rem; }
+.dashboard-hero__metrics { min-width: 0; max-width: none; }
 .dashboard-progress { min-width: 0; }
 .dashboard-progress__breakdown { display: grid; gap: var(--space-1); margin-top: var(--space-2); padding-top: var(--space-2); border-top: 1px solid var(--color-card-line); color: var(--color-muted); font-size: 0.68rem; font-weight: 700; }
 .dashboard-progress__breakdown span { display: flex; justify-content: space-between; gap: var(--space-2); }
-.dashboard-hero__action { align-self: end; justify-content: center; }
 .dashboard-list--activities { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .activity-card, .food-card { cursor: default; }
 .activity-card { display: grid; gap: var(--space-3); }
@@ -302,8 +301,6 @@
   .dashboard-summary { position: sticky; top: calc(3.75rem + var(--space-6)); }
   .overview-card { grid-template-columns: 1fr; }
   .overview-card__head { grid-column: auto; }
-  .dashboard-hero { grid-template-columns: minmax(0, 1fr) auto; }
-  .dashboard-hero__metrics { grid-template-columns: minmax(9rem, 11rem) auto; align-self: end; }
   .dashboard-list--activities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
@@ -313,8 +310,6 @@
   .dashboard-nav-link { min-height: 2.5rem; padding-inline: var(--space-2); font-size: 0.72rem; }
   .dashboard-nav-link--profile { display: inline-flex; }
   .overview-card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .dashboard-hero__metrics { grid-template-columns: 1fr; max-width: none; }
-  .dashboard-hero__action { width: 100%; }
   .activity-card__head { grid-template-columns: 1fr; gap: var(--space-1); }
   .activity-card__status { max-width: none; text-align: left; }
 }

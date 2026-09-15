@@ -46,6 +46,7 @@ export default function DashboardPage({ onLogout, user }) {
   const completedFoods = consumedFoodIds.size;
   const completedItems = completedActivityIds.size + consumedFoodIds.size;
   const totalItems = activities.length + foods.length;
+  const completionPercentage = totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100);
   const consumedCalories = foods
     .filter(f => consumedFoodIds.has(f.id))
     .reduce((total, f) => total + (Number(f.kcal) || 0), 0);
@@ -189,16 +190,31 @@ export default function DashboardPage({ onLogout, user }) {
                     </p>
                   </div>
                   <div className="dashboard-hero__metrics">
-                    <div className="dashboard-progress" aria-label={`Progres hari ini: ${completedItems} dari ${totalItems} item tercatat`}>
-                      <span className="dashboard-progress__label">Progres hari ini</span>
-                      <span className="dashboard-progress__value">{completedItems}/{totalItems}</span>
-                      <span className="dashboard-progress__hint">item tercatat</span>
+                    <div className="dashboard-progress">
+                      <div className="dashboard-progress__head">
+                        <span className="dashboard-progress__label">Progres hari ini</span>
+                        <span className="dashboard-progress__percentage">{completionPercentage}%</span>
+                      </div>
+                      <div
+                        className="dashboard-progress__track"
+                        role="progressbar"
+                        aria-label="Progres rencana hari ini"
+                        aria-valuemin={0}
+                        aria-valuemax={totalItems}
+                        aria-valuenow={completedItems}
+                        aria-valuetext={`${completedItems} dari ${totalItems} item tercatat`}
+                      >
+                        <span className="dashboard-progress__bar" style={{ width: `${completionPercentage}%` }} />
+                      </div>
+                      <div className="dashboard-progress__summary">
+                        <span className="dashboard-progress__value">{completedItems}/{totalItems}</span>
+                        <span className="dashboard-progress__hint">item tercatat</span>
+                      </div>
                       <div className="dashboard-progress__breakdown" aria-label="Rincian progres">
                         <span>{completedActivities}/{activities.length} aktivitas</span>
                         <span>{completedFoods}/{foods.length} makanan</span>
                       </div>
                     </div>
-                    <a className="dashboard-hero__action" href="#aktivitas-hari-ini">Mulai aktivitas</a>
                   </div>
                 </section>
                 <DailyActivities
