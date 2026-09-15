@@ -69,3 +69,12 @@
 .auth-submit { width: 100%; padding-inline: var(--space-4); }
 .auth-actions--single { grid-template-columns: minmax(0, 1fr); }
 .auth-actions--single .auth-submit { width: 100%; }
+
+.auth-password { position: relative; min-width: 0; }
+.auth-password .auth-input { padding-inline-end: 7rem; }
+.auth-password__toggle { position: absolute; top: 50%; right: var(--space-2); min-height: 2rem; padding: 0 var(--space-2); border: 0; border-radius: var(--radius-pill); background: var(--color-paper-strong); color: var(--color-accent-strong); font: inherit; font-size: 0.68rem; font-weight: 800; cursor: pointer; transform: translateY(-50%); }
+.auth-password__toggle:hover { background: var(--color-accent-soft); }
+
+@media (max-width: 34rem) {
+  .auth-password .auth-input { padding-inline-end: 6.5rem; }
+}

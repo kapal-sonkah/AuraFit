@@ -9,8 +9,8 @@ const GOALS = [
   ['gain_weight', 'Menambah berat badan'],
 ];
 
-export default function ProfilePage({ onLogout, user, onUserUpdated }) {
-  const [form, setForm] = useState({
+function profileForm(user) {
+  return {
     first_name: user?.first_name || '',
     last_name: user?.last_name || '',
     gender: user?.gender || '',
@@ -18,12 +18,28 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
     height: user?.height_cm || '',
     goal: user?.goal || '',
     age: user?.age || '',
-  });
+  };
+}
+
+function sameProfile(left, right) {
+  return Object.keys(left).every((field) => String(left[field]) === String(right[field]));
+}
+
+export default function ProfilePage({ onLogout, user, onUserUpdated }) {
+  const [form, setForm] = useState(() => profileForm(user));
+  const [savedForm, setSavedForm] = useState(() => profileForm(user));
   const [status, setStatus] = useState({ type: '', message: '' });
   const [saving, setSaving] = useState(false);
+  const isDirty = !sameProfile(form, savedForm);
 
   function setField(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
+    if (status.message) setStatus({ type: '', message: '' });
+  }
+
+  function resetChanges() {
+    setForm(savedForm);
+    setStatus({ type: '', message: '' });
   }
 
   async function handleSubmit(event) {
@@ -38,16 +54,10 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
       return;
     }
 
+    const nextForm = profileForm(result.data);
     onUserUpdated(result.data);
-    setForm({
-      first_name: result.data.first_name,
-      last_name: result.data.last_name,
-      gender: result.data.gender,
-      weight: result.data.weight_kg,
-      height: result.data.height_cm,
-      goal: result.data.goal,
-      age: result.data.age,
-    });
+    setForm(nextForm);
+    setSavedForm(nextForm);
     setStatus({ type: 'success', message: 'Profil berhasil diperbarui. Rekomendasi berikutnya akan memakai data baru ini.' });
   }
 
@@ -62,7 +72,8 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
           <nav className="profile-nav" aria-label="Navigasi utama">
             <Link to="/dashboard">Hari ini</Link>
             <Link to="/history">Riwayat</Link>
-            <button type="button" onClick={onLogout}>Keluar</button>
+            <Link to="/profile" className="profile-nav__link--active" aria-current="page">Profil</Link>
+            <button type="button" className="profile-nav__logout" onClick={onLogout}>Keluar</button>
           </nav>
         </header>
 
@@ -96,10 +107,20 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
             </div>
 
             {status.message ? <p className={`profile-message profile-message--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p> : null}
-            <div className="profile-actions">
-              <Link to="/dashboard" className="profile-action profile-action--secondary">Batal</Link>
-              <button type="submit" className="profile-action profile-action--primary" disabled={saving} aria-busy={saving}>{saving ? 'Menyimpan…' : 'Simpan perubahan'}</button>
-            </div>
+            {status.type === 'success' && !isDirty ? (
+              <div className="profile-actions profile-actions--saved">
+                <Link to="/dashboard" className="profile-action profile-action--primary">Kembali ke Hari ini</Link>
+              </div>
+            ) : (
+              <div className="profile-actions">
+                {isDirty ? (
+                  <button type="button" className="profile-action profile-action--secondary" onClick={resetChanges}>Batalkan perubahan</button>
+                ) : (
+                  <Link to="/dashboard" className="profile-action profile-action--secondary">Kembali</Link>
+                )}
+                <button type="submit" className="profile-action profile-action--primary" disabled={saving || !isDirty} aria-busy={saving}>{saving ? 'Menyimpan…' : 'Simpan perubahan'}</button>
+              </div>
+            )}
           </form>
         </main>
       </div>

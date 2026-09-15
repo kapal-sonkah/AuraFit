@@ -24,6 +24,7 @@ function SignupPage() {
   const [username, setUsername] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const [age, setAge] = React.useState('');
   const [sex, setSex] = React.useState('');
   const [weight, setWeight] = React.useState('');
@@ -166,16 +167,21 @@ function SignupPage() {
 
               <div className="auth-field">
                 <label htmlFor="signup-password">Kata Sandi</label>
-                <input
-                  id="signup-password"
-                  type="password"
-                  className={KELAS_INPUT}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  minLength={8}
-                  required
-                  aria-describedby="bantuan-sandi"
-                />
+                  <div className="auth-password">
+                    <input
+                      id="signup-password"
+                      type={showPassword ? 'text' : 'password'}
+                      className={KELAS_INPUT}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      minLength={8}
+                      required
+                      aria-describedby="bantuan-sandi"
+                    />
+                    <button type="button" className="auth-password__toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'} aria-pressed={showPassword}>
+                      {showPassword ? 'Sembunyikan' : 'Tampilkan'}
+                    </button>
+                  </div>
                 <p id="bantuan-sandi" className="text-xs text-gray-600 mt-1">Minimal 8 karakter.</p>
               </div>
             </fieldset>

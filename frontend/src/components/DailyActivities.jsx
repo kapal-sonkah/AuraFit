@@ -1,38 +1,45 @@
 import { useState } from 'react';
 import ActivityPopup from './ActivityPopup';
+import { presentActivity } from '../utils/presentation';
 
-function ActivityCard({ activity, active, onClick }) {
+function ActivityCard({ activity, active, onClick, onDone }) {
   return (
-    // Elemen article tidak menerima fokus papan ketik dan tidak menanggapi
-    // Enter maupun Spasi, sehingga kartu sebelumnya hanya dapat dibuka dengan
-    // tetikus. Diganti button agar seluruh alur pencatatan dapat diselesaikan
-    // dengan papan ketik.
-    <button
-      type="button"
-      className={`activity-card ${active ? 'activity-card--done' : ''}`}
-      onClick={onClick}
-      aria-pressed={active}
-    >
-      <div className="activity-card__head">
-        <p className="activity-card__name">{activity.name}</p>
-        <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
-          {active ? 'Selesai' : 'Belum dimulai'}
+    <article className={`activity-card ${active ? 'activity-card--done' : ''}`}>
+      <button
+        type="button"
+        className="activity-card__detail"
+        onClick={onClick}
+        aria-label={`Lihat detail ${activity.name}`}
+      >
+        <span className="activity-card__head">
+          <span className="activity-card__name">{activity.name}</span>
+          <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
+            {active ? 'Selesai' : 'Belum dimulai'}
+          </span>
         </span>
-      </div>
-      {activity.image ? (
-        <img 
-          src={activity.image} 
-          alt={activity.name}
-          className="activity-card__media"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'block';
-          }} 
-        />
-      ) : null}
-      <div className="activity-card__media activity-card__media--empty" style={{ display: activity.image ? 'none' : 'block' }} role="img" aria-label="Placeholder gambar aktivitas" />
-      <p className="activity-card__hint">Lihat detail →</p>
-    </button>
+        {activity.image ? (
+          <img
+            src={activity.image}
+            alt=""
+            className="activity-card__media"
+            onError={(event) => {
+              event.currentTarget.hidden = true;
+              if (event.currentTarget.nextElementSibling) event.currentTarget.nextElementSibling.hidden = false;
+            }}
+          />
+        ) : null}
+        <span className="activity-card__media activity-card__media--empty" hidden={Boolean(activity.image)} role="img" aria-label="Placeholder gambar aktivitas" />
+        <span className="activity-card__hint">Lihat detail →</span>
+      </button>
+      <button
+        type="button"
+        className={`activity-card__action ${active ? 'activity-card__action--done' : ''}`}
+        onClick={() => onDone(activity.id, !active)}
+        aria-pressed={active}
+      >
+        {active ? 'Batalkan selesai' : 'Tandai selesai'}
+      </button>
+    </article>
   );
 }
 
@@ -50,15 +57,19 @@ export default function DailyActivities({ activities = [], completedActivityIds,
           <p className="dashboard-section__count">{activities.length} aktivitas</p>
         </div>
         <ul className="dashboard-list dashboard-list--activities" role="list">
-          {activities.map((a) => (
+          {activities.map((a) => {
+            const activity = presentActivity(a);
+            return (
             <li key={a.id}>
               <ActivityCard 
-                activity={a}
+                activity={activity}
                 active={completedActivityIds.has(a.id)}
-                onClick={() => setSelected(a)} 
+                onClick={() => setSelected(activity)}
+                onDone={onDone}
               />
             </li>
-          ))}
+            );
+          })}
         </ul>
       </section>
 

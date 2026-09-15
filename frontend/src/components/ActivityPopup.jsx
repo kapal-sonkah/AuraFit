@@ -60,6 +60,7 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
                 title={activity.name}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                tabIndex="-1"
                 className="w-full h-full"
               />
             </div>

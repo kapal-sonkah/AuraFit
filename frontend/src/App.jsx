@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import SignupPage from './pages/SignupPage';
 import LoginPage from './pages/LoginPage';
@@ -7,6 +7,16 @@ import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
 import React from 'react';
 import { getAccessToken, getUserLogged, putAccessToken, logout } from './utils/network-data';
+
+function RouteScrollReset() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [location.pathname]);
+
+  return null;
+}
 
 function App() {
   const [authedUser, setAuthedUser] = React.useState(null);
@@ -52,7 +62,9 @@ function App() {
   }
   
   return (
-    authedUser === null ? (
+    <>
+      <RouteScrollReset />
+      {authedUser === null ? (
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/signup' element={<SignupPage />}/>
@@ -60,7 +72,7 @@ function App() {
         {/* <Route path='/dashboard' element={<DashboardPage />}/> */}
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
-    ) : (
+      ) : (
       <Routes>
         <Route path='/' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage onLogout={onLogout} user={authedUser} />} />
@@ -68,7 +80,8 @@ function App() {
         <Route path='/profile' element={<ProfilePage onLogout={onLogout} user={authedUser} onUserUpdated={setAuthedUser} />} />
         <Route path='*' element={<Navigate to='/dashboard' replace />} />
       </Routes>
-    )
+      )}
+    </>
   )
 }
 

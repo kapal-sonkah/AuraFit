@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProfilePopup from '../components/ProfilePopUp';
 import { getHistory, getPlanByDate } from '../utils/network-data';
 import { savePlanItemProgress } from '../utils/progress-storage';
+import { presentActivity, presentFood } from '../utils/presentation';
 import '../history.css';
 
 function localDateString(date = new Date()) {
@@ -26,6 +27,119 @@ function formatDate(dateString, options = {}) {
   }).format(new Date(`${dateString}T12:00:00`));
 }
 
+function formatWeekday(dateString) {
+  return new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(new Date(`${dateString}T12:00:00`));
+}
+
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 3v3M17 3v3M4.5 9h15M6 5h12a2 2 0 0 1 2 2v12H4V7a2 2 0 0 1 2-2Z" />
+      <path d="M8 13h2M14 13h2M8 16h2M14 16h2" />
+    </svg>
+  );
+}
+
+function ActivityIcon({ name }) {
+  const normalized = name.toLowerCase();
+
+  if (normalized.includes('renang')) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="16" cy="7" r="2" />
+        <path d="m5 12 4-3 4 3 3-2 3 2M3 16c1.5 0 1.5 1 3 1s1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1M3 20c1.5 0 1.5 1 3 1s1.5-1 3-1 1.5 1 3 1 1.5-1 3-1 1.5 1 3 1 1.5-1 3-1" />
+      </svg>
+    );
+  }
+
+  if (normalized.includes('zumba') || normalized.includes('aerobik')) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="5" r="2" />
+        <path d="m8 11 4-3 4 3M12 8v6m0 0-4 6m4-6 5 5M7 10l-3 3m13-3 3 3" />
+      </svg>
+    );
+  }
+
+  if (normalized.includes('lari') || normalized.includes('jog') || normalized.includes('jalan')) {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="15" cy="4" r="2" />
+        <path d="m8 10 4-3 3 3 4 1M12 7l-2 6 4 2 2 5m-6-7-4 6" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 9v6M7 7v10M17 7v10M20 9v6M7 12h10" />
+    </svg>
+  );
+}
+
+function HistoryDatePicker({ value, min, max, onChange }) {
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef(null);
+  const dates = useMemo(() => Array.from({ length: 7 }, (_, index) => shiftDate(max, index - 6)), [max]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    function handlePointerDown(event) {
+      if (!rootRef.current?.contains(event.target)) setOpen(false);
+    }
+
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') setOpen(false);
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div className="history-date-picker" ref={rootRef}>
+      <span className="history-date-picker__label">Pilih tanggal</span>
+      <button
+        type="button"
+        className="history-date-picker__trigger"
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span>{formatDate(value, { weekday: 'short', year: 'numeric' })}</span>
+        <CalendarIcon />
+      </button>
+      {open ? (
+        <div className="history-date-picker__popover" role="dialog" aria-label="Pilih tanggal riwayat">
+          <div className="history-date-picker__head">
+            <span>7 hari terakhir</span>
+            <strong>{formatDate(min)}–{formatDate(max, { year: 'numeric' })}</strong>
+          </div>
+          <div className="history-date-picker__options">
+            {dates.map((date) => (
+              <button
+                type="button"
+                className={`history-date-option ${date === value ? 'history-date-option--selected' : ''}`}
+                key={date}
+                aria-pressed={date === value}
+                onClick={() => { onChange(date); setOpen(false); }}
+              >
+                <span>{formatWeekday(date)}</span>
+                <strong>{new Date(`${date}T12:00:00`).getDate()}</strong>
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function itemStatus(item, type) {
   if (item.completed) return type === 'activity' ? 'Selesai' : 'Sudah dicatat';
   return type === 'activity' ? 'Belum dimulai' : 'Belum dicatat';
@@ -42,15 +156,22 @@ function SummaryCard({ label, value, hint }) {
 }
 
 function PlanItem({ item, type, onToggle, saving }) {
+  const presented = type === 'activity' ? presentActivity(item) : presentFood(item);
+  const actionLabel = saving
+    ? 'Menyimpan…'
+    : item.completed
+      ? type === 'activity' ? 'Batalkan selesai' : 'Batalkan catatan'
+      : type === 'activity' ? 'Tandai selesai' : 'Catat sudah dimakan';
+
   return (
     <article className={`history-plan-item ${item.completed ? 'history-plan-item--done' : ''}`}>
       <div className="history-plan-item__icon" aria-hidden="true">
-        {type === 'activity' ? '↗' : item.emoji || '•'}
+        {type === 'activity' ? <ActivityIcon name={presented.name} /> : presented.emoji || '•'}
       </div>
       <div className="history-plan-item__body">
-        <p className="history-plan-item__name">{item.name}</p>
+        <p className="history-plan-item__name">{presented.name}</p>
         <p className="history-plan-item__meta">
-          {item.portion || item.description || 'Bagian dari rencana harian'}
+          {presented.portion || presented.description || 'Bagian dari rencana harian'}
         </p>
       </div>
       <div className="history-plan-item__actions">
@@ -62,7 +183,7 @@ function PlanItem({ item, type, onToggle, saving }) {
           disabled={saving}
           aria-pressed={item.completed}
         >
-          {saving ? 'Menyimpan…' : item.completed ? 'Batalkan' : 'Tandai selesai'}
+          {actionLabel}
         </button>
       </div>
     </article>
@@ -144,6 +265,13 @@ export default function HistoryPage({ onLogout, user }) {
     };
   }, [days]);
 
+  const summaryCards = [
+    ['Item selesai', `${summary.completed}/${summary.total}`, `${summary.rate}% dari rencana`],
+    ['Hari dengan rencana', summary.activeDays, 'tanggal dengan rencana tersimpan'],
+    ['Aktivitas', summary.activities, 'rencana olahraga tersimpan'],
+    ['Makanan', summary.foods, 'rekomendasi makanan tersimpan'],
+  ];
+
   return (
     <div className="history-shell">
       <div className="history-frame">
@@ -179,16 +307,7 @@ export default function HistoryPage({ onLogout, user }) {
                 Baca kembali rencana dan progres yang sudah tersimpan untuk melihat pola tanpa harus mengingat semuanya.
               </p>
             </div>
-            <label className="history-date-picker">
-              <span>Pilih tanggal</span>
-              <input
-                type="date"
-                value={selectedDate}
-                min={weekStart}
-                max={today}
-                onChange={(event) => setSelectedDate(event.target.value)}
-              />
-            </label>
+            <HistoryDatePicker value={selectedDate} min={weekStart} max={today} onChange={setSelectedDate} />
           </section>
 
           {historyState.status === 'error' ? (
@@ -198,12 +317,15 @@ export default function HistoryPage({ onLogout, user }) {
             </div>
           ) : null}
 
-          <section className="history-summary" aria-label="Ringkasan tujuh hari">
-            <SummaryCard label="Item selesai" value={`${summary.completed}/${summary.total}`} hint={`${summary.rate}% dari rencana`} />
-            <SummaryCard label="Hari dengan rencana" value={summary.activeDays} hint="tanggal dengan rencana tersimpan" />
-            <SummaryCard label="Aktivitas" value={summary.activities} hint="item dalam periode ini" />
-            <SummaryCard label="Makanan" value={summary.foods} hint="item dalam periode ini" />
-          </section>
+          {historyState.status === 'loading' ? (
+            <section className="history-summary history-summary--loading" aria-label="Memuat ringkasan tujuh hari" aria-busy="true">
+              {summaryCards.map(([label], index) => <SummaryCard key={label} label={label} value={<span className="history-loading-bar" aria-hidden="true" />} hint={index === 0 ? 'Menyiapkan data…' : 'Menyiapkan ringkasan…'} />)}
+            </section>
+          ) : (
+            <section className="history-summary" aria-label="Ringkasan tujuh hari">
+              {summaryCards.map(([label, value, hint]) => <SummaryCard key={label} label={label} value={value} hint={hint} />)}
+            </section>
+          )}
 
           <section className="history-panel" aria-labelledby="history-week-title">
             <div className="history-panel__head">
@@ -213,8 +335,15 @@ export default function HistoryPage({ onLogout, user }) {
               </div>
               <p className="history-panel__hint">Pilih hari untuk melihat rinciannya.</p>
             </div>
-            <div className="history-days">
-              {days.slice().reverse().map((day) => (
+            <div className={`history-days ${historyState.status === 'loading' ? 'history-days--loading' : ''}`} aria-busy={historyState.status === 'loading'}>
+              {historyState.status === 'loading' ? Array.from({ length: 7 }, (_, index) => (
+                <div className="history-day history-day--placeholder" key={`loading-${index}`} aria-hidden="true">
+                  <span className="history-loading-bar" />
+                  <strong className="history-loading-bar history-loading-bar--large" />
+                  <span className="history-loading-bar" />
+                  <span className="history-loading-bar history-loading-bar--short" />
+                </div>
+              )) : days.slice().reverse().map((day) => (
                 <button
                   type="button"
                   key={day.date}

@@ -8,6 +8,7 @@ function LoginPage({ loginSuccess }) {
 
   const [username_email, setUsernameEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [showPassword, setShowPassword] = React.useState(false);
   const [galat, setGalat] = React.useState('');
   const [sedangKirim, setSedangKirim] = React.useState(false);
 
@@ -51,15 +52,20 @@ function LoginPage({ loginSuccess }) {
 
           <div className="auth-field">
             <label className="auth-label" htmlFor="login-password">Kata sandi</label>
-            <input
-              id="login-password"
-              type="password"
-              className="auth-input"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="auth-password">
+              <input
+                id="login-password"
+                type={showPassword ? 'text' : 'password'}
+                className="auth-input"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button type="button" className="auth-password__toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'} aria-pressed={showPassword}>
+                {showPassword ? 'Sembunyikan' : 'Tampilkan'}
+              </button>
+            </div>
           </div>
 
           {galat ? (
