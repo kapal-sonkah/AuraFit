@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
+import AuraFitMark from './assets/images/aurafit-mark.svg';
 import React from 'react';
 import { getAccessToken, getUserLogged, putAccessToken, logout } from './utils/network-data';
 
@@ -55,7 +56,9 @@ function App() {
   if (loading) {
     return (
       <main className="app-loading" aria-live="polite">
-        <div className="app-loading__mark" aria-hidden="true">A</div>
+        <div className="app-loading__mark" aria-hidden="true">
+          <img src={AuraFitMark} alt="" />
+        </div>
         <p className="app-loading__label">Menyiapkan AuraFit…</p>
       </main>
     );

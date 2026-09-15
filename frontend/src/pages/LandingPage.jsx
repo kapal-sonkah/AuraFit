@@ -82,12 +82,7 @@ function LandingPage() {
       <header className="landing-header">
         <Link to="/" className="landing-wordmark">AuraFit</Link>
         <nav className="landing-nav" aria-label="Navigasi utama">
-          <Link to="/signup">
-            <span className="landing-button landing-button--secondary">Daftar</span>
-          </Link>
-          <Link to="/login">
-            <span className="landing-button landing-button--secondary">Masuk</span>
-          </Link>
+          <Link to="/login" className="landing-button landing-button--primary">Masuk</Link>
         </nav>
       </header>
 
@@ -98,9 +93,6 @@ function LandingPage() {
           <p className="landing-hero__copy">
             Rencana aktivitas dan asupan harian yang disesuaikan dengan profil tubuhmu, tersimpan rapi dan dapat ditelusuri.
           </p>
-          <div className="landing-hero__actions">
-            <Link to="/signup" className="landing-button landing-button--primary">Buat akun</Link>
-          </div>
         </div>
         <div className="landing-hero__side" aria-label="Cara kerja AuraFit">
           <article className="landing-tile landing-tile--accent">

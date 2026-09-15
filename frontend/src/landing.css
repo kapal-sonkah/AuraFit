@@ -18,7 +18,6 @@
 .landing-hero__kicker { margin: 0; color: var(--color-accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
 .landing-hero__title { max-width: 42rem; margin: var(--space-3) 0 0; font-family: var(--font-display); font-size: clamp(2.6rem, 8vw, 6.4rem); line-height: 0.96; letter-spacing: -0.035em; overflow-wrap: anywhere; }
 .landing-hero__copy { max-width: 38rem; margin: var(--space-5) 0 0; color: var(--color-muted); font-size: clamp(0.95rem, 2vw, 1.1rem); line-height: 1.6; }
-.landing-hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-6); }
 .landing-hero__side { display: grid; gap: var(--space-4); }
 .landing-tile { display: flex; min-height: 14rem; flex-direction: column; justify-content: space-between; padding: var(--space-5); border-radius: var(--radius-panel); background: var(--color-surface-dark-2); }
 .landing-tile--accent { background: var(--color-accent); color: var(--color-accent-ink); }
@@ -43,7 +42,7 @@
 .landing-contributor__link { margin-top: auto; color: var(--color-accent-strong); font-size: 0.76rem; font-weight: 800; text-decoration: none; }
 .landing-footer { padding: var(--space-5) var(--space-4); border-top: 1px solid var(--color-section-line); color: var(--color-subtle); font-size: 0.75rem; text-align: center; }
 @media (max-width: 48rem) { .landing-hero { grid-template-columns: 1fr; } .landing-hero__main { min-height: 26rem; } .landing-team { grid-template-columns: repeat(2, minmax(0, 1fr)); } .landing-section__head { align-items: start; flex-direction: column; } }
-@media (max-width: 34rem) { .landing-header { align-items: start; flex-direction: column; } .landing-nav { justify-content: start; } .landing-team { grid-template-columns: 1fr; } .landing-hero__actions { display: grid; grid-template-columns: 1fr; } .landing-button { width: 100%; } }
+@media (max-width: 34rem) { .landing-header { align-items: start; flex-direction: column; } .landing-nav { justify-content: start; } .landing-team { grid-template-columns: 1fr; } .landing-button { width: 100%; } }
 @media (prefers-reduced-motion: reduce) { .landing-button, .landing-contributor { transition-duration: 0.01ms; } }
 
 /* System pass: the public page carries the same paper, type, and action
