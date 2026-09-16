@@ -7,6 +7,7 @@ import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { getAIRecommendations, getAuraToday, saveAuraToday } from '../utils/network-data';
+import { getAuraOption } from '../utils/aura';
 import '../dashboard.css';
 
 export default function DashboardPage({ onLogout, user }) {
@@ -24,6 +25,7 @@ export default function DashboardPage({ onLogout, user }) {
   // ketiganya tampil sama, yaitu dashboard tanpa isi.
   const [statusRencana, setStatusRencana] = useState('memuat');
   const [showManualForm, setShowManualForm] = useState(false);
+  const [manualPlanMode, setManualPlanMode] = useState('default');
 
   // Pesan kegagalan penyimpanan. Kosong berarti tidak ada kegagalan tertunda.
   const [galatSimpan, setGalatSimpan] = useState('');
@@ -47,6 +49,7 @@ export default function DashboardPage({ onLogout, user }) {
   const completedItems = completedActivityIds.size + consumedFoodIds.size;
   const totalItems = activities.length + foods.length;
   const completionPercentage = totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100);
+  const auraOption = getAuraOption(auraState.value);
   const consumedCalories = foods
     .filter(f => consumedFoodIds.has(f.id))
     .reduce((total, f) => total + (Number(f.kcal) || 0), 0);
@@ -95,7 +98,13 @@ export default function DashboardPage({ onLogout, user }) {
 
   function simpanRencanaManual(data) {
     setShowManualForm(false);
+    setManualPlanMode('default');
     terapkanRencana(data);
+  }
+
+  function bukaPenyesuaianAura() {
+    setManualPlanMode('aura');
+    setShowManualForm(true);
   }
 
   const ambilAura = useCallback(async () => {
@@ -137,12 +146,11 @@ export default function DashboardPage({ onLogout, user }) {
   }, []);
 
   return (
-    <div className="dashboard-shell">
+    <div className="dashboard-shell" data-aura={auraState.value || 'none'}>
       <div className="dashboard-frame">
         <header className={`dashboard-header ${scrolled ? 'dashboard-header--scrolled' : ''}`}>
           <div className="dashboard-brand">
             <Link to="/" className="dashboard-brand__name">AuraFit</Link>
-            <span className="dashboard-brand__context">Rencana harian</span>
           </div>
           <nav aria-label="Navigasi utama">
             <Link to="/dashboard" className="dashboard-nav-link dashboard-nav-link--active" aria-current="page">Hari ini</Link>
@@ -177,7 +185,8 @@ export default function DashboardPage({ onLogout, user }) {
             ) : statusRencana === 'gagal' ? (
               showManualForm ? (
                 <ManualPlanForm
-                  onCancel={() => setShowManualForm(false)}
+                  auraLabel={manualPlanMode === 'aura' ? auraOption?.label : null}
+                  onCancel={() => { setShowManualForm(false); setManualPlanMode('default'); }}
                   onSaved={simpanRencanaManual}
                 />
               ) : (
@@ -192,6 +201,12 @@ export default function DashboardPage({ onLogout, user }) {
                   </div>
                 </div>
               )
+            ) : showManualForm ? (
+              <ManualPlanForm
+                auraLabel={manualPlanMode === 'aura' ? auraOption?.label : null}
+                onCancel={() => { setShowManualForm(false); setManualPlanMode('default'); }}
+                onSaved={simpanRencanaManual}
+              />
             ) : activities.length === 0 && foods.length === 0 ? (
               <div className="dashboard-state">
                 <p className="dashboard-state__title">Belum ada rencana untuk hari ini.</p>
@@ -203,7 +218,7 @@ export default function DashboardPage({ onLogout, user }) {
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
                     <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
                     <p className="dashboard-hero__copy">
-                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. Selesaikan aktivitas dan catat makanan yang sudah dikonsumsi.
+                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {auraOption ? `Mode ${auraOption.label} aktif—ikuti ritme yang terasa tepat untukmu.` : 'Pilih Aura untuk memberi konteks pada ritmemu hari ini.'}
                     </p>
                   </div>
                   <div className="dashboard-hero__metrics">
@@ -232,18 +247,20 @@ export default function DashboardPage({ onLogout, user }) {
                         <span>{completedFoods}/{foods.length} makanan</span>
                       </div>
                     </div>
+                    <AuraCheckIn
+                      aura={auraState.value}
+                      loading={auraState.status === 'loading'}
+                      saving={auraState.status === 'saving'}
+                      error={auraState.error}
+                      onChange={ubahAura}
+                      onAdjust={bukaPenyesuaianAura}
+                    />
                   </div>
                 </section>
-                <AuraCheckIn
-                  aura={auraState.value}
-                  loading={auraState.status === 'loading'}
-                  saving={auraState.status === 'saving'}
-                  error={auraState.error}
-                  onChange={ubahAura}
-                />
                 <DailyActivities
                   activities={activities}
                   completedActivityIds={completedActivityIds}
+                  aura={auraState.value}
                   onDone={(id, selesai) => handlePlanItemToggle(id, selesai, 'activity')}
                 />
                 <CaloriesLog

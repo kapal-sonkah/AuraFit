@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import AuraGlyph from './AuraGlyph';
+import { getAuraOption } from '../utils/aura';
 import ActivityPopup from './ActivityPopup';
 import { presentActivity } from '../utils/presentation';
 
@@ -43,8 +45,9 @@ function ActivityCard({ activity, active, onClick, onDone }) {
   );
 }
 
-export default function DailyActivities({ activities = [], completedActivityIds, onDone }) {
+export default function DailyActivities({ activities = [], completedActivityIds, aura, onDone }) {
   const [selected, setSelected] = useState(null);
+  const auraOption = getAuraOption(aura);
 
   return (
     <>
@@ -54,7 +57,10 @@ export default function DailyActivities({ activities = [], completedActivityIds,
             <p className="section-kicker">Gerak hari ini</p>
             <h2 className="dashboard-section__title">Aktivitas Hari Ini</h2>
           </div>
-          <p className="dashboard-section__count">{activities.length} aktivitas</p>
+          <div className="dashboard-section__head-side">
+            {auraOption ? <p className="activity-aura-context"><AuraGlyph aura={auraOption.value} /><span><strong>Mode {auraOption.label}</strong> · {auraOption.suggestion}</span></p> : null}
+            <p className="dashboard-section__count">{activities.length} aktivitas</p>
+          </div>
         </div>
         <ul className="dashboard-list dashboard-list--activities" role="list">
           {activities.map((a) => {

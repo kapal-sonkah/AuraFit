@@ -299,3 +299,13 @@
   .activity-card__head { grid-template-columns: 1fr; gap: var(--space-1); }
   .activity-card__status { max-width: none; text-align: left; }
 }
+
+/* Aura mode: place the daily state beside progress and keep the selected state compact. */
+.dashboard-hero__metrics { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(15rem, 0.9fr); gap: var(--space-3); align-items: stretch; }
+.dashboard-hero__metrics .aura-checkin { min-width: 0; }
+.dashboard-section__head-side { display: grid; justify-items: end; gap: var(--space-2); min-width: min(100%, 24rem); }
+.activity-aura-context { display: inline-flex; align-items: start; gap: var(--space-2); margin: 0; color: var(--color-muted); font-size: 0.72rem; line-height: 1.4; text-align: right; }
+.activity-aura-context .aura-glyph { width: 1.15rem; height: 1.15rem; flex: 0 0 auto; margin: 0.1rem 0 0; }
+.activity-aura-context strong { color: var(--color-ink); }
+@media (max-width: 56rem) { .dashboard-hero__metrics { grid-template-columns: 1fr; } .dashboard-section__head-side { justify-items: start; min-width: 0; } .activity-aura-context { text-align: left; } }
+@media (max-width: 42rem) { .dashboard-hero__metrics { gap: var(--space-4); } }

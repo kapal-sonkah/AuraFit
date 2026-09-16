@@ -18,7 +18,7 @@ function Field({ label, value, onChange, ...props }) {
   );
 }
 
-export default function ManualPlanForm({ onCancel, onSaved }) {
+export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) {
   const [activities, setActivities] = useState([emptyActivity()]);
   const [foods, setFoods] = useState([emptyFood()]);
   const [error, setError] = useState('');
@@ -65,9 +65,9 @@ export default function ManualPlanForm({ onCancel, onSaved }) {
     <form className="manual-plan-form" onSubmit={handleSubmit}>
       <div className="manual-plan-form__head">
         <div>
-          <p className="manual-plan-form__eyebrow">Mode cadangan</p>
-          <h2 className="manual-plan-form__title">Susun rencana sendiri</h2>
-          <p className="manual-plan-form__copy">Tambahkan hal yang memang ingin kamu lakukan dan catat hari ini.</p>
+          <p className="manual-plan-form__eyebrow">{auraLabel ? `Mode Aura ${auraLabel}` : 'Mode cadangan'}</p>
+          <h2 className="manual-plan-form__title">{auraLabel ? 'Sesuaikan rencana hari ini' : 'Susun rencana sendiri'}</h2>
+          <p className="manual-plan-form__copy">{auraLabel ? `Pilih aktivitas dan makanan yang terasa pas untuk Aura ${auraLabel}.` : 'Tambahkan hal yang memang ingin kamu lakukan dan catat hari ini.'}</p>
         </div>
         <span className="manual-plan-form__badge">Tersimpan di akunmu</span>
       </div>
