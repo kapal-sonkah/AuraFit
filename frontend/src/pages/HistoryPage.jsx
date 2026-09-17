@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getHistory, getPlanByDate } from '../utils/network-data';
 import { savePlanItemProgress } from '../utils/progress-storage';
-import { presentActivity, presentFood } from '../utils/presentation';
+import { foodMeta, presentActivity, presentFood } from '../utils/presentation';
 import AuraGlyph from '../components/AuraGlyph';
 import { getAuraOption } from '../utils/aura';
 import '../history.css';
@@ -172,7 +172,7 @@ function PlanItem({ item, type, onToggle, saving }) {
       <div className="history-plan-item__body">
         <p className="history-plan-item__name">{presented.name}</p>
         <p className="history-plan-item__meta">
-          {presented.portion || presented.description || 'Bagian dari rencana harian'}
+          {(type === 'food' ? foodMeta(presented) : presented.description) || 'Bagian dari rencana harian'}
         </p>
       </div>
       <div className="history-plan-item__actions">

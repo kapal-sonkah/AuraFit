@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { foodMeta } from '../utils/presentation';
 
 export default function FoodPopup({ food, consumed, onClose, onConsume }) {
   const closeButtonRef = useRef(null);
@@ -45,7 +46,7 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
           {/* Info makanan */}
           <div className="food-card__body">
             <p id="food-dialog-description" className="food-card__name">{food.name}</p>
-            <p className="food-card__meta">{food.portion} · {food.kcal} kcal</p>
+            <p className="food-card__meta">{foodMeta(food)}</p>
             {consumed ? (
               <p className="food-card__status food-card__status--done">Sudah dicatat hari ini</p>
             ) : null}

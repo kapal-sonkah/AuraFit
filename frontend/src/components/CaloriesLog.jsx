@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import FoodPopup from './FoodPopup';
-import { presentFood } from '../utils/presentation';
+import { foodMeta, presentFood } from '../utils/presentation';
 
 function FoodItem({ food, consumed, onClick, onConsume }) {
   return (
@@ -16,7 +16,7 @@ function FoodItem({ food, consumed, onClick, onConsume }) {
         </span>
         <span className="food-card__body">
           <span className="food-card__name">{food.name}</span>
-          <span className="food-card__meta">{food.portion} · {food.kcal} kcal</span>
+          <span className="food-card__meta">{foodMeta(food)}</span>
           <span className={`food-card__status ${consumed ? 'food-card__status--done' : ''}`}>
             {consumed ? 'Sudah dicatat' : 'Belum dicatat'}
           </span>

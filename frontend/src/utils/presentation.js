@@ -105,6 +105,14 @@ export function presentActivity(item) {
   return copy ? { ...item, name: copy[0], description: copy[1] } : item;
 }
 
+// Porsi dan kalori sama-sama opsional pada makanan yang dicatat sendiri, jadi
+// hanya bagian yang terisi yang digabungkan.
+export function foodMeta(food) {
+  return [food.portion, food.kcal != null && food.kcal !== '' ? `${food.kcal} kcal` : '']
+    .filter(Boolean)
+    .join(' · ');
+}
+
 export function presentFood(item) {
   const kunci = keyOf(item?.name);
   return {
