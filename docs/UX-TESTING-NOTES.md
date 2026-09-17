@@ -61,6 +61,7 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - Popup aktivitas: bila foto gagal dimuat, `onError` menyembunyikan foto lalu menampilkan elemen sesudahnya (paragraf deskripsi), bukan ilustrasi pengganti. Kartu di dasbor sudah benar.
 - Access token yang sudah terbit tetap berlaku hingga tiga jam setelah reset kata sandi oleh admin; refresh token sudah dicabut.
 - Pengiriman tautan reset lewat email belum ada. Dapat ditambahkan kelak bila tersedia layanan email.
+- Endpoint `POST /register` tidak memeriksa nilai `sex` dan `goal` (misalnya `goal: "maintain"` diterima), padahal ubah profil hanya menerima `male`/`female` dan `lose_weight`/`maintain_weight`/`gain_weight`. Borang daftar selalu mengirim nilai yang benar, jadi hanya terjadi bila API dipanggil langsung; akun seperti itu gagal menyimpan profil sampai tujuannya diperbaiki.
 
 ## Checklist tindak lanjut
 
