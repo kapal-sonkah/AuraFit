@@ -1,6 +1,6 @@
 # Catatan UX Testing AuraFit
 
-Status: hampir seluruh temuan sudah diperbaiki; sisa pekerjaan tercantum di bawah.
+Status: seluruh temuan sudah diperbaiki; catatan kecil tercantum di bawah.
 Tanggal dicatat: 2026-09-17
 
 Catatan ini merangkum keluhan dari testing (termasuk masukan teman penguji)
@@ -38,20 +38,14 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Pendaftaran lewat API menerima jenis kelamin dan tujuan sembarang | `POST /register` kini memakai aturan yang sama dengan ubah profil | `a0bf90a` |
 | Video YouTube lama tidak cocok dengan aktivitasnya | Bersepeda santai, Joging sore, Interval sprint, dan Sirkuit CrossFit dasar kini memakai video panduan atau latihan yang sesuai; semuanya dapat diputar di aplikasi | `02c3493` |
 | Gambar aktivitas tanpa sumber yang tidak dipakai | 17 berkas dihapus bersama `dummyData.js` yang tidak lagi di-import; tersisa 48 foto, semuanya tercatat di `docs/image-credits.md` | `d5a8e36` |
+| Indeks email unik belum ada di produksi | Migrasi `1780300000000_unique-user-email` dijalankan di Neon pada 2026-09-17 setelah dipastikan tidak ada email ganda (8 pengguna) | `4a2641f` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
 kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk layar
 "pilih aura dulu".
 
-## 1. Migrasi email unik belum dijalankan di Neon
-
-- Migrasi `backend/migrations/1780300000000_unique-user-email.js` membuat indeks unik `lower(email)`.
-- Belum dijalankan di produksi karena `DATABASE_URL` pada `backend/.env` ditolak Neon (password authentication failed); kredensialnya kemungkinan sudah diganti.
-- Tanpa migrasi ini aplikasi tetap aman: pendaftaran memeriksa email ganda di tingkat aplikasi. Indeks hanya pengaman terakhir terhadap pendaftaran bersamaan.
-- Langkah: perbarui `DATABASE_URL` di `backend/.env`, periksa duplikat dengan `SELECT lower(email), count(*) FROM users GROUP BY 1 HAVING count(*) > 1;`, lalu jalankan `npm run migrate up` di folder `backend`. Bila ada duplikat, rapikan dulu datanya.
-
-## 2. Catatan kecil
+## 1. Catatan kecil
 
 - Popup aktivitas: bila foto gagal dimuat, `onError` menyembunyikan foto lalu menampilkan elemen sesudahnya (paragraf deskripsi), bukan ilustrasi pengganti. Kartu di dasbor sudah benar.
 - Access token yang sudah terbit tetap berlaku hingga tiga jam setelah reset kata sandi oleh admin; refresh token sudah dicabut.
@@ -70,7 +64,7 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - [x] Reset kata sandi oleh admin dan ganti kata sandi di Profil
 - [x] Layar pilih aura dilihat di browser
 - [x] Normalisasi line ending
-- [ ] Jalankan migrasi email unik di Neon
+- [x] Jalankan migrasi email unik di Neon
 - [x] Tambah 24 aktivitas dengan foto berlisensi Pexels
 - [x] Tautan YouTube untuk 24 aktivitas baru
 - [x] Ganti gambar aktivitas lama yang lisensinya tidak jelas
