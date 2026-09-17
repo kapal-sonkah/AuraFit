@@ -229,6 +229,9 @@ class PlanRepositories {
     `, [planItemId, userId]);
 
     if (!milik.rows.length) return { ok: false, streak: null };
+    // Hari yang sudah lewat dikunci agar Riwayat dan streak tidak dapat diubah
+    // mundur. Pembatalan tetap bisa selama hari itu belum berganti (WIB).
+    if (milik.rows[0].plan_date !== todayInJakarta()) return { ok: false, locked: true, streak: null };
 
     await this.pool.query(`
       INSERT INTO plan_item_progress (id, plan_item_id, completed, completed_at, updated_at)

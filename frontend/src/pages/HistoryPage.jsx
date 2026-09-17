@@ -121,7 +121,7 @@ function SummaryCard({ label, value, hint }) {
   );
 }
 
-function PlanItem({ item, type, onToggle, saving }) {
+function PlanItem({ item, type, onToggle, saving, editable }) {
   const presented = type === 'activity' ? presentActivity(item) : presentFood(item);
   const actionLabel = saving
     ? 'Menyimpan…'
@@ -142,15 +142,17 @@ function PlanItem({ item, type, onToggle, saving }) {
       </div>
       <div className="history-plan-item__actions">
         <span className="history-plan-item__status">{itemStatus(item, type)}</span>
-        <button
-          type="button"
-          className="history-plan-item__toggle"
-          onClick={() => onToggle(item.id, !item.completed)}
-          disabled={saving}
-          aria-pressed={item.completed}
-        >
-          {actionLabel}
-        </button>
+        {editable ? (
+          <button
+            type="button"
+            className="history-plan-item__toggle"
+            onClick={() => onToggle(item.id, !item.completed)}
+            disabled={saving}
+            aria-pressed={item.completed}
+          >
+            {actionLabel}
+          </button>
+        ) : null}
       </div>
     </article>
   );
@@ -356,13 +358,13 @@ export default function HistoryPage({ onLogout }) {
                   <div>
                     <h3 className="history-plan__heading">Aktivitas</h3>
                     <div className="history-plan__list">
-                      {planState.data.activities.map((item) => <PlanItem key={item.id} item={item} type="activity" onToggle={handlePlanItemToggle} saving={savingItemId === item.id} />)}
+                      {planState.data.activities.map((item) => <PlanItem key={item.id} item={item} type="activity" onToggle={handlePlanItemToggle} saving={savingItemId === item.id} editable={selectedDate === today} />)}
                     </div>
                   </div>
                   <div>
                     <h3 className="history-plan__heading">Makanan</h3>
                     <div className="history-plan__list">
-                      {planState.data.foods.map((item) => <PlanItem key={item.id} item={item} type="food" onToggle={handlePlanItemToggle} saving={savingItemId === item.id} />)}
+                      {planState.data.foods.map((item) => <PlanItem key={item.id} item={item} type="food" onToggle={handlePlanItemToggle} saving={savingItemId === item.id} editable={selectedDate === today} />)}
                     </div>
                   </div>
                 </div>

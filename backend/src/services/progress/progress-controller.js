@@ -1,5 +1,6 @@
 import PlanRepositories from '../plans/plan-repositories.js';
 import NotFoundError from '../../exceptions/not-found-error.js';
+import InvariantError from '../../exceptions/invariant-error.js';
 import response from '../../utils/response.js';
 
 export const getProgressToday = async (req, res, next) => {
@@ -24,6 +25,7 @@ export const updatePlanItemProgress = async (req, res, next) => {
     }
 
     const result = await PlanRepositories.setItemProgress(userId, req.params.itemId, completed);
+    if (result.locked) return next(new InvariantError('Catatan hari yang sudah lewat tidak dapat diubah.'));
     if (!result.ok) return next(new NotFoundError('Butir rencana tidak ditemukan'));
 
     return response(res, 200, 'Progres rencana diperbarui', { streak: result.streak });
