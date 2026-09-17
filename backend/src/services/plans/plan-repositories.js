@@ -184,13 +184,11 @@ class PlanRepositories {
    * butir tidak ada, bukan milik pengguna, atau bukan butir manual.
    */
   async deleteManualItem(userId, planItemId) {
-    // Tanggal dikembalikan sebagai teks: tipe date yang diubah pg menjadi Date
-    // lokal dapat bergeser satu hari saat diubah ke ISO.
     const result = await this.pool.query(`
       DELETE FROM daily_plan_items i
       USING daily_plans p
       WHERE i.id = $1 AND i.plan_id = p.id AND p.user_id = $2 AND i.source_ref IS NULL
-      RETURNING p.plan_date::text AS plan_date
+      RETURNING p.plan_date
     `, [planItemId, userId]);
 
     return result.rows[0]?.plan_date ?? null;
@@ -259,10 +257,7 @@ class PlanRepositories {
     const selesaiPenuh = new Set(
       result.rows
         .filter((row) => row.total > 0 && row.total === row.selesai)
-        .map((row) => {
-          if (typeof row.plan_date === 'string') return row.plan_date;
-          return row.plan_date.toISOString().slice(0, 10);
-        })
+        .map((row) => row.plan_date)
     );
 
     let tanggal = sampaiTanggal;

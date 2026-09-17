@@ -133,3 +133,20 @@ test('endpoint rekomendasi mengembalikan rencana tersimpan sebelum menghitung ul
     PlanRepositories.createPlanIfAbsent = originalCreatePlanIfAbsent;
   }
 });
+
+// pg bawaan mengubah kolom DATE menjadi Date pada tengah malam zona server,
+// lalu toISOString() mundur satu hari di zona seperti Asia/Jakarta. Pool
+// AuraFit menimpa parser itu agar tanggal tetap teks.
+test('kolom DATE dari basis data tetap teks di zona waktu mana pun', async () => {
+  const { default: pg } = await import('pg');
+  const originalTimeZone = process.env.TZ;
+  process.env.TZ = 'Asia/Jakarta';
+  try {
+    const hasil = pg.types.getTypeParser(1082)('2026-09-17');
+    assert.equal(typeof hasil, 'string');
+    assert.equal(hasil, '2026-09-17');
+  } finally {
+    if (originalTimeZone === undefined) delete process.env.TZ;
+    else process.env.TZ = originalTimeZone;
+  }
+});

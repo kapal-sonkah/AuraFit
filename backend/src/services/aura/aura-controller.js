@@ -28,7 +28,7 @@ export const setAuraToday = async (req, res, next) => {
 
     const record = await AuraRepository.setToday(req.user.id, aura);
     return response(res, 200, 'Aura hari ini disimpan', {
-      date: typeof record.aura_date === 'string' ? record.aura_date : record.aura_date.toISOString().slice(0, 10),
+      date: record.aura_date,
       aura: record.aura,
     });
   } catch (error) {

@@ -30,8 +30,7 @@ function shiftDate(dateString, days) {
 }
 
 function storedDateString(value) {
-  if (typeof value === 'string') return value.slice(0, 10);
-  return value.toISOString().slice(0, 10);
+  return value.slice(0, 10);
 }
 
 function emptyDay(date) {
