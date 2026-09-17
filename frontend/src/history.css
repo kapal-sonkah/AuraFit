@@ -125,3 +125,8 @@
 .history-aura-insight h2 { margin: 0.2rem 0 0; color: var(--color-ink); font-family: var(--font-display); font-size: 1.1rem; }
 .history-aura-insight p:last-child { margin: 0.35rem 0 0; color: var(--color-muted); font-size: 0.76rem; line-height: 1.45; }
 @media (max-width: 42rem) { .history-aura-insight { align-items: start; padding: var(--space-4); } }
+
+/* Bar progres harian dipertebal. Lintasannya transparan agar tetap terlihat
+   di kotak biasa maupun kotak terpilih yang berlatar hijau muda. */
+.history-day__bar { height: 0.5rem; background: color-mix(in oklch, var(--color-accent-strong) 16%, transparent); }
+.history-day__fill { background: var(--color-accent-strong); }
