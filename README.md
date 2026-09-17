@@ -109,13 +109,7 @@ tetap sama pada permintaan berulang dan dapat diuji.
 
 Sistem tidak memerlukan layanan model terpisah maupun Python.
 
-## Dokumentasi PPL
+## Dokumentasi
 
-Artefak analisis dan desain untuk mata kuliah Proyek Perangkat Lunak tersedia di `docs/`:
-
-- `docs/aurafit_srs.md` — spesifikasi kebutuhan perangkat lunak AuraFit.
-- `docs/decision-log-aurafit.md` — keputusan baseline yang masih menunggu pengesahan.
-- `docs/diagrams-aurafit.md` — batas sistem, use case, arsitektur, alur, dan model data.
-- `docs/test-matrix-aurafit.md` — rancangan functional test, non-functional test, dan UAT.
-
-Status pada dokumen tersebut membedakan rancangan, implementasi, dan pengujian formal.
+Dokumen proyek (SRS, decision log, diagram, dan test matrix) dikelola terpisah dari repositori ini.
+Sumber dan lisensi foto aktivitas tercatat di `docs/image-credits.md`.

@@ -26,3 +26,8 @@ frontend/dist/
 .claude/
 .vscode/
 .idea/
+
+# Dokumen proyek dikelola terpisah dari repositori software
+design.md
+docs/*
+!docs/image-credits.md
