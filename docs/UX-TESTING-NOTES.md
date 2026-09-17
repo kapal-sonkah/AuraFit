@@ -35,7 +35,7 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Header Hari ini, Riwayat, dan Profil berbeda di HP | Satu komponen header untuk ketiganya; tetap satu baris dengan empat tombol sampai lebar 360px | `edbc836` |
 | Konten dasbor terpotong di kanan pada iPhone | Kolom dasbor kini boleh menyempit (`minmax(0, 1fr)`) | `2415ead` |
 | Kartu aktivitas dalam satu baris tidak rata | Judul memakan dua baris dan tombol berada di dasar kartu | `b757c21` |
-| Pendaftaran lewat API menerima jenis kelamin dan tujuan sembarang | `POST /register` kini memakai aturan yang sama dengan ubah profil | (commit ini) |
+| Pendaftaran lewat API menerima jenis kelamin dan tujuan sembarang | `POST /register` kini memakai aturan yang sama dengan ubah profil | `a0bf90a` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
