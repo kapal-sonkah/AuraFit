@@ -58,42 +58,42 @@ const KATALOG = {
         "name": "Sit to Stand",
         "description": "Stand up from a chair and sit back down slowly, 10 repetitions for 3 sets.",
         "image": "/images/activities/sit-to-stand-chair.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=eutszbtbJM8"
       },
       {
         "id": 8,
         "name": "Wall Push-up",
         "description": "Push-ups against a wall, 10 repetitions for 3 sets.",
         "image": "/images/activities/wall-push-up.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=wIPJvBQs7RA"
       },
       {
         "id": 9,
         "name": "Seated Chair Exercises",
         "description": "Arm and leg movements while seated on a chair for 15 minutes.",
         "image": "/images/activities/seated-chair-exercises.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=rdihR3giOw4"
       },
       {
         "id": 10,
         "name": "Deep Breathing",
         "description": "Slow deep breathing for 10 minutes to relax the body.",
         "image": "/images/activities/deep-breathing.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=VUjiXcfKBn8"
       },
       {
         "id": 11,
         "name": "Balance Exercise",
         "description": "Stand on one leg near a support for 30 seconds per side, repeated 5 times.",
         "image": "/images/activities/balance-exercise.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=uth_9K3EmDI"
       },
       {
         "id": 12,
         "name": "Resistance Band Stretch",
         "description": "Gentle stretching with a resistance band for 15 minutes.",
         "image": "/images/activities/resistance-band-stretch.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=abqZwzk5LSw"
       }
     ],
     "foods": [
@@ -274,42 +274,42 @@ const KATALOG = {
         "name": "Stair Walking",
         "description": "Walk up and down stairs at a comfortable pace for 10 minutes.",
         "image": "/images/activities/stair-walking.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=Y1-uwSGuD5w"
       },
       {
         "id": 8,
         "name": "Stationary Bike",
         "description": "Light pedaling on a stationary bike for 20 minutes.",
         "image": "/images/activities/stationary-bike.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=rEqRmKAQ5xM"
       },
       {
         "id": 9,
         "name": "Treadmill Walking",
         "description": "Walk on a treadmill at a steady pace for 25 minutes.",
         "image": "/images/activities/treadmill-walking.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=4FOkSNhcncg"
       },
       {
         "id": 10,
         "name": "Bodyweight Squats",
         "description": "Squats without weights, 12 repetitions for 3 sets.",
         "image": "/images/activities/bodyweight-squats.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=m0GcZ24pK6k"
       },
       {
         "id": 11,
         "name": "Resistance Band Workout",
         "description": "Light full-body exercises with a resistance band for 20 minutes.",
         "image": "/images/activities/resistance-band-workout.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=sTueHjRCMaQ"
       },
       {
         "id": 12,
         "name": "Casual Badminton",
         "description": "A relaxed badminton rally for 30 minutes.",
         "image": "/images/activities/casual-badminton.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=1UIhKZCPMYM"
       }
     ],
     "foods": [
@@ -490,42 +490,42 @@ const KATALOG = {
         "name": "Hiking",
         "description": "Hike on a hill trail for 60 minutes.",
         "image": "/images/activities/hiking.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=gUzrBAqgqpc"
       },
       {
         "id": 8,
         "name": "Futsal",
         "description": "Play futsal for 40 minutes.",
         "image": "/images/activities/futsal.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=TyUIgY1uNaM"
       },
       {
         "id": 9,
         "name": "Calisthenics Circuit",
         "description": "A circuit of push-ups, dips, and squats for 30 minutes.",
         "image": "/images/activities/calisthenics-circuit.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=kuUZYUBHryw"
       },
       {
         "id": 10,
         "name": "Step-ups",
         "description": "Step up and down on a bench or box for 20 minutes.",
         "image": "/images/activities/step-ups.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=T7PT5nVHE6s"
       },
       {
         "id": 11,
         "name": "Dumbbell Full Body",
         "description": "Full-body workout with light to moderate dumbbells for 30 minutes.",
         "image": "/images/activities/dumbbell-full-body.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=XxuRSjER3Qk"
       },
       {
         "id": 12,
         "name": "Basketball",
         "description": "Play basketball for 40 minutes.",
         "image": "/images/activities/basketball.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=F6VLIExnc7Q"
       }
     ],
     "foods": [
@@ -706,42 +706,42 @@ const KATALOG = {
         "name": "Deadlift",
         "description": "Barbell deadlifts with proper form, 5 sets of 5 repetitions.",
         "image": "/images/activities/deadlift-barbell.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=r4MzxtBKyNE"
       },
       {
         "id": 8,
         "name": "Pull-ups",
         "description": "Pull-ups on a bar, 4 sets to near fatigue.",
         "image": "/images/activities/pull-ups.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=eGo4IYlbE5g"
       },
       {
         "id": 9,
         "name": "Rowing Machine",
         "description": "Rowing machine intervals for 20 minutes.",
         "image": "/images/activities/rowing-machine.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=4zWu1yuJ0_g"
       },
       {
         "id": 10,
         "name": "Trail Running",
         "description": "Run on a natural trail for 40 minutes.",
         "image": "/images/activities/trail-running.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=Tq9_kuqGVWg"
       },
       {
         "id": 11,
         "name": "Kettlebell Swing",
         "description": "Kettlebell swings, 5 sets of 20 repetitions.",
         "image": "/images/activities/kettlebell-swing.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=sSESeQAir2M"
       },
       {
         "id": 12,
         "name": "Box Jumps",
         "description": "Box jumps, 4 sets of 10 repetitions.",
         "image": "/images/activities/box-jumps.jpg",
-        "youtube_url": null
+        "youtube_url": "https://www.youtube.com/watch?v=kNIInK_Le8I"
       }
     ],
     "foods": [
