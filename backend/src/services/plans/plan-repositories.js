@@ -107,6 +107,74 @@ class PlanRepositories {
   }
 
   /**
+   * Menambahkan butir ke rencana satu tanggal, membuat rencananya bila belum ada.
+   *
+   * Butir yang sudah tersimpan tidak pernah dihapus atau ditulis ulang. Progres
+   * melekat pada butir melalui plan_item_progress dengan ON DELETE CASCADE,
+   * sehingga menulis ulang rencana akan ikut menghapus catatan progres hari itu
+   * beserta streak yang dihitung darinya. Karena itu penyimpanan bersifat
+   * menambah, bukan mengganti.
+   *
+   * Posisi butir baru melanjutkan nomor terakhir pada jenis yang sama agar
+   * kendala unique_daily_plan_item_position tetap terpenuhi.
+   */
+  async addItems(userId, { activities = [], foods = [], source = 'manual' } = {}, planDate = todayInJakarta()) {
+    const client = await this.pool.connect();
+    try {
+      await client.query('BEGIN');
+
+      await client.query(`
+        INSERT INTO daily_plans (id, user_id, plan_date, source)
+        VALUES ($1, $2, $3, $4)
+        ON CONFLICT (user_id, plan_date) DO NOTHING
+      `, [nanoid(16), userId, planDate, source]);
+
+      // Baris rencana dikunci sampai transaksi selesai agar dua permintaan
+      // bersamaan tidak membaca posisi terakhir yang sama lalu bertabrakan
+      // pada kendala unik.
+      const plan = await client.query(
+        'SELECT id FROM daily_plans WHERE user_id = $1 AND plan_date = $2 FOR UPDATE',
+        [userId, planDate]
+      );
+      const planId = plan.rows[0].id;
+
+      const posisiTerakhir = { activity: 0, food: 0 };
+      const terpakai = await client.query(
+        'SELECT item_type, MAX(position)::int AS posisi FROM daily_plan_items WHERE plan_id = $1 GROUP BY item_type',
+        [planId]
+      );
+      for (const row of terpakai.rows) posisiTerakhir[row.item_type] = row.posisi;
+
+      const butir = [
+        ...activities.map((a, k) => ['activity', posisiTerakhir.activity + k + 1, a]),
+        ...foods.map((f, k) => ['food', posisiTerakhir.food + k + 1, f]),
+      ];
+
+      for (const [tipe, posisi, isi] of butir) {
+        await client.query(`
+          INSERT INTO daily_plan_items
+            (id, plan_id, item_type, position, source_ref, name, description, image_url, video_url, portion, calorie_kcal, emoji)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+        `, [
+          nanoid(16), planId, tipe, posisi,
+          Number.isInteger(isi.id) ? isi.id : null,
+          isi.name, isi.description ?? null, isi.image ?? null, isi.youtube_url ?? null,
+          isi.portion ?? null, Number.isFinite(isi.kcal) ? isi.kcal : null, isi.emoji ?? null,
+        ]);
+      }
+
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+
+    return this.getPlan(userId, planDate);
+  }
+
+  /**
    * Menandai satu butir rencana selesai atau belum.
    *
    * Kepemilikan diperiksa di dalam kueri: butir hanya tersentuh bila

@@ -53,7 +53,18 @@ export const createManualPlan = async (req, res, next) => {
     }
 
     const planDate = todayInJakarta();
-    const plan = await PlanRepositories.createPlanIfAbsent(req.user.id, {
+
+    // Batas dihitung terhadap isi rencana yang sudah tersimpan, karena
+    // penyimpanan menambah butir pada rencana hari itu dan bukan menggantinya.
+    const tersimpan = await PlanRepositories.getPlan(req.user.id, planDate);
+    if ((tersimpan?.activities.length ?? 0) + activities.length > MAX_ITEMS_PER_TYPE
+      || (tersimpan?.foods.length ?? 0) + foods.length > MAX_ITEMS_PER_TYPE) {
+      return next(new InvariantError(
+        `Rencana satu hari memuat paling banyak ${MAX_ITEMS_PER_TYPE} aktivitas dan ${MAX_ITEMS_PER_TYPE} makanan.`
+      ));
+    }
+
+    const plan = await PlanRepositories.addItems(req.user.id, {
       activities: activities.map((item, index) => cleanItem(item, 'aktivitas', index)),
       foods: foods.map((item, index) => cleanItem(item, 'makanan', index)),
       source: 'manual',
