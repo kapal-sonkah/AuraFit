@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AuraGlyph from './AuraGlyph';
 import { getAuraOption } from '../utils/aura';
+import ActivityIcon from './ActivityIcon';
 import ActivityPopup from './ActivityPopup';
 import ManualItemEditor from './ManualItemEditor';
 import { presentActivity } from '../utils/presentation';
@@ -50,7 +51,9 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
             }}
           />
         ) : null}
-        <span className="activity-card__media activity-card__media--empty" hidden={Boolean(activity.image)} role="img" aria-label="Placeholder gambar aktivitas" />
+        <span className="activity-card__media activity-card__media--empty" hidden={Boolean(activity.image)} role="img" aria-label={`Ilustrasi ${activity.name}`}>
+          <ActivityIcon name={activity.name} />
+        </span>
         <span className="activity-card__hint">Lihat detail →</span>
       </button>
       <button

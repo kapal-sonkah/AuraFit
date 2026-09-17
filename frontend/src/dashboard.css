@@ -107,7 +107,12 @@
 .activity-card__status, .food-card__status { color: var(--color-muted); font-size: 0.68rem; font-weight: 700; }
 .activity-card__status--done, .food-card__status--done { color: var(--color-positive); }
 .activity-card__media { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: calc(var(--radius-card) - 0.25rem); background: var(--color-paper-strong); object-fit: cover; }
-.activity-card__media--empty { background: repeating-linear-gradient(135deg, var(--color-paper-strong) 0 0.25rem, var(--color-paper-soft) 0.25rem 0.5rem); }
+/* Pengganti foto untuk aktivitas tanpa gambar, termasuk aktivitas yang dicatat
+   sendiri. Penjaga [hidden] wajib: display: grid mengalahkan atribut hidden,
+   sehingga tanpa itu ilustrasi ikut tampil di atas foto katalog. */
+.activity-card__media--empty { display: grid; place-items: center; background: var(--color-accent-soft); color: var(--color-accent-strong); }
+.activity-card__media--empty[hidden] { display: none; }
+.activity-card__media--empty svg { width: min(40%, 4rem); height: auto; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.6; }
 .activity-card__hint { margin: 0; color: var(--color-accent); font-size: 0.72rem; font-weight: 800; }
 .food-card { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); }
 /* Ikon dibesarkan relatif terhadap petaknya. Pada 1.45rem di dalam petak 3rem,

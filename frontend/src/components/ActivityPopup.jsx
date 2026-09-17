@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import ActivityIcon from './ActivityIcon';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
@@ -76,10 +77,12 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
             />
           ) : (
             <div
-              className="modal-content__media"
+              className="modal-content__media activity-card__media--empty"
               role="img"
-              aria-label="Placeholder gambar aktivitas"
-            />
+              aria-label={`Ilustrasi ${activity.name}`}
+            >
+              <ActivityIcon name={activity.name} />
+            </div>
           )}
 
           <p id="activity-dialog-description" className="modal-content__copy">
