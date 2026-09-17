@@ -37,6 +37,7 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Kartu aktivitas dalam satu baris tidak rata | Judul memakan dua baris dan tombol berada di dasar kartu | `b757c21` |
 | Pendaftaran lewat API menerima jenis kelamin dan tujuan sembarang | `POST /register` kini memakai aturan yang sama dengan ubah profil | `a0bf90a` |
 | Video YouTube lama tidak cocok dengan aktivitasnya | Bersepeda santai, Joging sore, Interval sprint, dan Sirkuit CrossFit dasar kini memakai video panduan atau latihan yang sesuai; semuanya dapat diputar di aplikasi | `02c3493` |
+| Gambar aktivitas tanpa sumber yang tidak dipakai | 17 berkas dihapus bersama `dummyData.js` yang tidak lagi di-import; tersisa 48 foto, semuanya tercatat di `docs/image-credits.md` | `d5a8e36` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
@@ -73,5 +74,5 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - [x] Tambah 24 aktivitas dengan foto berlisensi Pexels
 - [x] Tautan YouTube untuk 24 aktivitas baru
 - [x] Ganti gambar aktivitas lama yang lisensinya tidak jelas
-- [ ] Hapus 18 berkas gambar yang tidak dipakai dan tidak tercatat sumbernya
+- [x] Hapus berkas gambar yang tidak dipakai dan tidak tercatat sumbernya
 - [x] Ganti video YouTube lama yang tidak cocok dengan aktivitasnya
