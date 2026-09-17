@@ -2,7 +2,12 @@
 
 .auth-shell { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr); min-height: 100vh; background: var(--color-paper); }
 .auth-panel { display: flex; min-width: 0; flex-direction: column; padding: clamp(var(--space-4), 5vw, var(--space-10)); }
-.auth-panel--form { justify-content: center; }
+/* Jarak minimum di bawah tombol beranda. Jarak sebelumnya hanya berasal dari
+   margin otomatis .auth-content, yang menyusut menjadi nol begitu isi borang
+   lebih tinggi daripada panelnya: halaman masuk menyisakan 164px, sedangkan
+   halaman daftar menempel tanpa jarak sama sekali. Gap tetap berlaku pada
+   tinggi borang berapa pun. */
+.auth-panel--form { justify-content: center; gap: var(--space-6); }
 .auth-back { display: inline-flex; align-items: center; align-self: flex-start; min-height: 2.75rem; padding: 0 var(--space-4); border: 1px solid var(--color-accent-line); border-radius: var(--radius-pill); color: var(--color-accent-strong); font-size: 0.8rem; font-weight: 800; text-decoration: none; transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
 .auth-back:hover { background: var(--color-accent); color: var(--color-accent-ink); transform: translateY(-1px); }
 .auth-content { width: min(100%, 32rem); margin: auto; }
