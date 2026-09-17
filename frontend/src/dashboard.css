@@ -181,7 +181,7 @@
 
 
 @media (max-width: 56rem) {
-  .dashboard-layout { grid-template-columns: 1fr; }
+  .dashboard-layout { grid-template-columns: minmax(0, 1fr); }
   .dashboard-summary { order: -1; }
   .overview-card { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
   .overview-card__head { grid-column: 1 / -1; }
@@ -234,7 +234,7 @@
 }
 
 /* Layout pass: keep the daily action area readable at tablet and laptop widths. */
-.dashboard-layout { grid-template-columns: 1fr; }
+.dashboard-layout { grid-template-columns: minmax(0, 1fr); }
 .dashboard-summary { order: -1; }
 .overview-card { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
 .overview-card__head { grid-column: 1 / -1; }
