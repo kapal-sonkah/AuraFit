@@ -5,9 +5,8 @@
 // Layanan itu tidak lagi dipakai, jadi berkas ini kini menjadi sumber katalog
 // dan disunting langsung.
 //
-// Aktivitas id 7-12 pada tiap tingkat memakai foto berlisensi Pexels; sumbernya
-// tercatat di docs/image-credits.md. Tambahkan catatan sumber untuk setiap
-// gambar baru.
+// Seluruh foto aktivitas berlisensi Pexels dan sumbernya tercatat di
+// docs/image-credits.md. Tambahkan catatan sumber untuk setiap gambar baru.
 
 const KATALOG = {
   "Sedentary": {

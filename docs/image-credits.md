@@ -1,6 +1,6 @@
 # Sumber Gambar Aktivitas
 
-Berkas ini mencatat asal setiap gambar di `frontend/public/images/activities`, agar
+Berkas ini mencatat asal setiap gambar aktivitas yang dipakai katalog di `frontend/public/images/activities`, agar
 lisensinya dapat ditelusuri. Tambahkan baris baru setiap kali menambah gambar.
 
 ## Foto berlisensi Pexels
@@ -40,15 +40,43 @@ Foto diunduh pada lebar 800 piksel dari CDN Pexels.
 | `kettlebell-swing.jpg` | Taco Fleur | [Pexels #622297](https://www.pexels.com/photo/man-in-black-shirt-carrying-kettle-bell-outdoors-622297/) |
 | `box-jumps.jpg` | cottonbro studio | [Pexels #7675416](https://www.pexels.com/photo/woman-practicing-plyometrics-7675416/) |
 
-## Gambar lama yang asalnya belum tercatat
+### Pengganti gambar 24 aktivitas awal
 
-Gambar untuk 24 aktivitas awal (id 1–6 pada tiap tingkat) berasal dari layanan
-capstone terdahulu dan sumbernya tidak tercatat. Pemeriksaan pada 2026-09-17 menemukan:
+Gambar untuk aktivitas id 1–6 pada tiap tingkat sebelumnya berasal dari layanan
+capstone terdahulu tanpa catatan sumber, termasuk `morning-cardio-run.jpg` yang
+memuat watermark Vecteezy dan `marching-in-place.jpg` yang memuat tanda
+© 2023 Healthwise. Seluruhnya diganti dengan foto Pexels pada 2026-09-17 memakai
+nama berkas yang sama. `basic-yoga.jpg` dipotong 4:3 karena foto aslinya potret.
 
-- `morning-cardio-run.jpg` memuat watermark **Vecteezy**, yaitu gambar pratinjau yang
-  memerlukan lisensi untuk dipakai.
-- `marching-in-place.jpg` memuat tanda **© 2023 Healthwise**.
-- Gambar lain belum diperiksa satu per satu, dan 18 berkas lain di folder yang sama
-  tidak dipakai katalog.
+| Berkas | Fotografer | Sumber |
+|---|---|---|
+| `morning-stretching.jpg` | Andrea Piacquadio | [Pexels #3807548](https://www.pexels.com/photo/woman-in-gray-tank-top-while-stretching-her-hands-up-3807548/) |
+| `leisurely-walk.jpg` | MART PRODUCTION | [Pexels #8121667](https://www.pexels.com/photo/group-of-friends-walking-in-the-park-8121667/) |
+| `chair-yoga.jpg` | Yaroslav Shuraev | [Pexels #6793195](https://www.pexels.com/photo/a-person-in-yoga-pose-on-a-wicker-chair-6793195/) |
+| `basic-tai-chi.jpg` | Vlada Karpovich | [Pexels #8940488](https://www.pexels.com/photo/an-elderly-couple-doing-yoga-with-their-arms-outstretched-8940488/) |
+| `neck-shoulder-stretch.jpg` | Miriam Alonso | [Pexels #7592384](https://www.pexels.com/photo/woman-sitting-on-floor-against-window-and-bending-neck-7592384/) |
+| `marching-in-place.jpg` | Anna Shvets | [Pexels #4587382](https://www.pexels.com/photo/a-fitness-coach-supervising-an-elderly-woman-workout-4587382/) |
+| `basic-yoga.jpg` | Artem Podrez | [Pexels #6951790](https://www.pexels.com/photo/woman-doing-yoga-6951790/) |
+| `brisk-walking.jpg` | Nataliya Vaitkevich | [Pexels #4939429](https://www.pexels.com/photo/woman-in-activewear-with-a-jacket-walking-while-carrying-a-backpack-4939429/) |
+| `beginner-pilates.jpg` | Ahmet Kurt | [Pexels #25596885](https://www.pexels.com/photo/women-stretching-on-yoga-mats-at-gym-25596885/) |
+| `leisurely-cycling.jpg` | RDNE Stock project | [Pexels #7982172](https://www.pexels.com/photo/a-family-riding-bicycles-together-7982172/) |
+| `light-aerobics.jpg` | Pavel Danilyuk | [Pexels #6339345](https://www.pexels.com/photo/people-in-the-fitness-center-doing-jumping-jacks-6339345/) |
+| `evening-walk.jpg` | Esra Afşar | [Pexels #14809103](https://www.pexels.com/photo/silhouette-of-couple-walking-dog-at-sunset-14809103/) |
+| `morning-cardio-run.jpg` | Ketut Subiyanto | [Pexels #5038884](https://www.pexels.com/photo/people-jogging-in-a-city-5038884/) |
+| `intense-cycling.jpg` | RUN 4 FFWPU | [Pexels #5735768](https://www.pexels.com/photo/man-in-black-riding-a-road-bike-5735768/) |
+| `swimming.jpg` | Jonathan Borba | [Pexels #15504538](https://www.pexels.com/photo/photo-of-a-swimmer-swimming-in-a-pool-15504538/) |
+| `zumba.jpg` | Kate Trysh | [Pexels #4090012](https://www.pexels.com/photo/a-woman-in-pink-tank-top-raising-her-hands-4090012/) |
+| `bodyweight-training.jpg` | RDNE Stock project | [Pexels #8401198](https://www.pexels.com/photo/woman-doing-push-ups-8401198/) |
+| `evening-jog.jpg` | Mary Taylor | [Pexels #6009290](https://www.pexels.com/photo/determined-sportsman-jogging-on-fenced-bridge-in-sunlight-6009290/) |
+| `hiit-training.jpg` | Vitaly Gariev | [Pexels #39219682](https://www.pexels.com/photo/intense-workout-with-battle-ropes-in-gym-39219682/) |
+| `jump-rope.jpg` | RDNE Stock project | [Pexels #8401106](https://www.pexels.com/photo/a-woman-exercising-using-a-jump-rope-8401106/) |
+| `sprint-intervals.jpg` | zheng liang | [Pexels #19787364](https://www.pexels.com/photo/sprinters-on-a-running-track-19787364/) |
+| `strength-training.jpg` | Vitaly Gariev | [Pexels #39219650](https://www.pexels.com/photo/female-weightlifting-training-in-gym-39219650/) |
+| `basic-crossfit.jpg` | Amar Preciado | [Pexels #9958673](https://www.pexels.com/photo/woman-lifting-barbell-9958673/) |
+| `kickboxing.jpg` | Annushka Ahuja | [Pexels #7992151](https://www.pexels.com/photo/woman-training-with-personal-coach-on-boxing-ring-7992151/) |
 
-Sebaiknya seluruh gambar lama diganti dengan gambar berlisensi jelas dan dicatat di sini.
+## Berkas lain yang asalnya belum tercatat
+
+Ada 18 berkas lain di `frontend/public/images/activities` yang tidak dipakai katalog
+dan sumbernya tidak tercatat. Berkas itu sebaiknya dihapus, atau dicatat sumbernya
+bila akan dipakai.
