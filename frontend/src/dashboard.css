@@ -306,3 +306,7 @@
 .activity-aura-context strong { color: var(--color-ink); }
 @media (max-width: 56rem) { .dashboard-hero__metrics { grid-template-columns: 1fr; } .dashboard-section__head-side { justify-items: start; min-width: 0; } .activity-aura-context { text-align: left; } }
 @media (max-width: 42rem) { .dashboard-hero__metrics { gap: var(--space-4); } }
+
+.plan-item-delete { justify-self: start; min-height: 2.75rem; padding: 0 var(--space-2); border: 0; background: transparent; color: var(--color-danger); font: inherit; font-size: 0.72rem; font-weight: 800; cursor: pointer; }
+.plan-item-delete:hover { text-decoration: underline; }
+.plan-item-delete:focus-visible { outline: 2px solid var(--color-danger); outline-offset: 2px; }

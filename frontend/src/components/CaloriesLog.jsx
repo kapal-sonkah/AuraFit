@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FoodPopup from './FoodPopup';
 import { foodMeta, presentFood } from '../utils/presentation';
 
-function FoodItem({ food, consumed, onClick, onConsume }) {
+function FoodItem({ food, consumed, onClick, onConsume, onDelete }) {
   return (
     <article className={`food-card ${consumed ? 'food-card--done' : ''}`}>
       <button
@@ -30,11 +30,16 @@ function FoodItem({ food, consumed, onClick, onConsume }) {
       >
         {consumed ? 'Batalkan catatan' : 'Catat sudah dimakan'}
       </button>
+      {food.source_ref == null && onDelete ? (
+        <button type="button" className="plan-item-delete" onClick={() => onDelete(food.id, food.name)}>
+          Hapus
+        </button>
+      ) : null}
     </article>
   );
 }
 
-export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume }) {
+export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume, onDelete }) {
   const [selected, setSelected] = useState(null);
 
   return (
@@ -56,6 +61,7 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume }) 
                 food={food}
                 onClick={() => setSelected(item)} 
                 onConsume={onConsume}
+                onDelete={onDelete}
                 consumed={consumedFoodIds.has(item.id)}
               />
             </li>

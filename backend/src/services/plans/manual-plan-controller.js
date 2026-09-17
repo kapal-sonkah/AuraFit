@@ -1,4 +1,5 @@
 import InvariantError from '../../exceptions/invariant-error.js';
+import NotFoundError from '../../exceptions/not-found-error.js';
 import response from '../../utils/response.js';
 import PlanRepositories from './plan-repositories.js';
 import { todayInJakarta } from '../../utils/date.js';
@@ -38,6 +39,22 @@ function cleanItem(item, type, index) {
 
   return { name, description, portion, emoji, kcal };
 }
+
+export const deleteManualItem = async (req, res, next) => {
+  try {
+    const planDate = await PlanRepositories.deleteManualItem(req.user.id, req.params.itemId);
+    if (!planDate) {
+      return next(new NotFoundError('Butir tidak ditemukan atau bukan catatan manual.'));
+    }
+
+    return response(res, 200, 'Butir rencana dihapus', {
+      ...(await PlanRepositories.getPlan(req.user.id, planDate)),
+      streak: await PlanRepositories.getStreak(req.user.id, planDate),
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
 
 export const createManualPlan = async (req, res, next) => {
   try {

@@ -175,6 +175,28 @@ class PlanRepositories {
   }
 
   /**
+   * Menghapus satu butir yang dicatat sendiri oleh pengguna.
+   *
+   * Hanya butir tanpa source_ref yang dapat dihapus, yaitu butir manual. Butir
+   * rekomendasi dibiarkan agar rencana tidak bisa dikosongkan demi streak.
+   * Progres butir itu ikut terhapus melalui ON DELETE CASCADE, sedangkan butir
+   * lain tidak tersentuh. Mengembalikan tanggal rencananya, atau null bila
+   * butir tidak ada, bukan milik pengguna, atau bukan butir manual.
+   */
+  async deleteManualItem(userId, planItemId) {
+    // Tanggal dikembalikan sebagai teks: tipe date yang diubah pg menjadi Date
+    // lokal dapat bergeser satu hari saat diubah ke ISO.
+    const result = await this.pool.query(`
+      DELETE FROM daily_plan_items i
+      USING daily_plans p
+      WHERE i.id = $1 AND i.plan_id = p.id AND p.user_id = $2 AND i.source_ref IS NULL
+      RETURNING p.plan_date::text AS plan_date
+    `, [planItemId, userId]);
+
+    return result.rows[0]?.plan_date ?? null;
+  }
+
+  /**
    * Menandai satu butir rencana selesai atau belum.
    *
    * Kepemilikan diperiksa di dalam kueri: butir hanya tersentuh bila

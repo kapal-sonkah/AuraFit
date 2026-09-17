@@ -4,7 +4,7 @@ import { getAuraOption } from '../utils/aura';
 import ActivityPopup from './ActivityPopup';
 import { presentActivity } from '../utils/presentation';
 
-function ActivityCard({ activity, active, onClick, onDone }) {
+function ActivityCard({ activity, active, onClick, onDone, onDelete }) {
   return (
     <article className={`activity-card ${active ? 'activity-card--done' : ''}`}>
       <button
@@ -41,11 +41,16 @@ function ActivityCard({ activity, active, onClick, onDone }) {
       >
         {active ? 'Batalkan selesai' : 'Tandai selesai'}
       </button>
+      {activity.source_ref == null && onDelete ? (
+        <button type="button" className="plan-item-delete" onClick={() => onDelete(activity.id, activity.name)}>
+          Hapus
+        </button>
+      ) : null}
     </article>
   );
 }
 
-export default function DailyActivities({ activities = [], completedActivityIds, aura, onDone }) {
+export default function DailyActivities({ activities = [], completedActivityIds, aura, onDone, onDelete }) {
   const [selected, setSelected] = useState(null);
   const auraOption = getAuraOption(aura);
 
@@ -72,6 +77,7 @@ export default function DailyActivities({ activities = [], completedActivityIds,
                 active={completedActivityIds.has(a.id)}
                 onClick={() => setSelected(activity)}
                 onDone={onDone}
+                onDelete={onDelete}
               />
             </li>
             );

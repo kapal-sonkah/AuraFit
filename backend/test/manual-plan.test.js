@@ -93,3 +93,73 @@ test('rencana yang masih kosong mulai dari posisi pertama', async () => {
   assert.equal(posisi.activity, 1);
   assert.equal(posisi.food, 1);
 });
+
+const { deleteManualItem } = await import('../src/services/plans/manual-plan-controller.js');
+
+function resTiruan() {
+  return {
+    body: undefined,
+    code: undefined,
+    status(c) { this.code = c; return this; },
+    json(v) { this.body = v; return this; },
+    end() { return this; },
+  };
+}
+
+test('hapus butir hanya menyasar butir manual milik pengguna itu sendiri', async () => {
+  const originalPool = PlanRepositories.pool;
+  let kueri;
+  PlanRepositories.pool = {
+    query: async (text, params) => { kueri = { text, params }; return { rows: [] }; },
+  };
+
+  try {
+    const tanggal = await PlanRepositories.deleteManualItem('user-test', 'item-1');
+    assert.equal(tanggal, null);
+    assert.match(kueri.text, /source_ref IS NULL/, 'butir rekomendasi tidak boleh bisa dihapus');
+    assert.match(kueri.text, /p\.user_id = \$2/, 'butir milik pengguna lain tidak boleh bisa dihapus');
+    assert.deepEqual(kueri.params, ['item-1', 'user-test']);
+  } finally {
+    PlanRepositories.pool = originalPool;
+  }
+});
+
+test('hapus butir yang tidak bisa dihapus menjawab 404, bukan sukses', async () => {
+  const asli = PlanRepositories.deleteManualItem;
+  PlanRepositories.deleteManualItem = async () => null;
+  const res = resTiruan();
+  let galat;
+
+  try {
+    await deleteManualItem({ user: { id: 'user-test' }, params: { itemId: 'item-1' } }, res, (e) => { galat = e; });
+    assert.equal(galat?.statusCode, 404);
+    assert.equal(res.body, undefined);
+  } finally {
+    PlanRepositories.deleteManualItem = asli;
+  }
+});
+
+test('hapus butir mengembalikan rencana terbaru tanggal itu', async () => {
+  const asli = {
+    del: PlanRepositories.deleteManualItem,
+    getPlan: PlanRepositories.getPlan,
+    getStreak: PlanRepositories.getStreak,
+  };
+  let tanggalDiminta;
+  PlanRepositories.deleteManualItem = async () => '2026-09-17';
+  PlanRepositories.getPlan = async (_u, t) => { tanggalDiminta = t; return { id: 'plan-1', activities: [], foods: [] }; };
+  PlanRepositories.getStreak = async () => 3;
+  const res = resTiruan();
+
+  try {
+    await deleteManualItem({ user: { id: 'user-test' }, params: { itemId: 'item-1' } }, res, assert.fail);
+    assert.equal(res.code, 200);
+    assert.equal(tanggalDiminta, '2026-09-17');
+    assert.equal(res.body.data.id, 'plan-1');
+    assert.equal(res.body.data.streak, 3);
+  } finally {
+    PlanRepositories.deleteManualItem = asli.del;
+    PlanRepositories.getPlan = asli.getPlan;
+    PlanRepositories.getStreak = asli.getStreak;
+  }
+});

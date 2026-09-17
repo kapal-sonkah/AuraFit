@@ -6,7 +6,7 @@ import CaloriesLog from "../components/CaloriesLog";
 import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
 import { savePlanItemProgress } from '../utils/progress-storage';
-import { getAIRecommendations, getAuraToday, saveAuraToday } from '../utils/network-data';
+import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday } from '../utils/network-data';
 import { getAuraOption } from '../utils/aura';
 import '../dashboard.css';
 
@@ -104,6 +104,19 @@ export default function DashboardPage({ onLogout, user }) {
 
     terapkanRencana(data);
   }, [user]);
+
+  // Hanya butir manual yang punya tombol hapus. Rencana yang dikembalikan
+  // backend langsung diterapkan agar progres dan streak ikut terbarui.
+  async function hapusButir(itemId, nama) {
+    if (!window.confirm(`Hapus "${nama}" dari rencana hari ini?`)) return;
+    setGalatSimpan('');
+    const { error, data, message } = await deletePlanItem(itemId);
+    if (error) {
+      setGalatSimpan(message);
+      return;
+    }
+    terapkanRencana(data);
+  }
 
   function simpanRencanaManual(data) {
     setShowManualForm(false);
@@ -292,10 +305,12 @@ export default function DashboardPage({ onLogout, user }) {
                   completedActivityIds={completedActivityIds}
                   aura={auraState.value}
                   onDone={(id, selesai) => handlePlanItemToggle(id, selesai, 'activity')}
+                  onDelete={hapusButir}
                 />
                 <CaloriesLog
                   foods={foods}
                   onConsume={(id, dikonsumsi) => handlePlanItemToggle(id, dikonsumsi, 'food')}
+                  onDelete={hapusButir}
                   consumedFoodIds={consumedFoodIds}
                 />
               </>

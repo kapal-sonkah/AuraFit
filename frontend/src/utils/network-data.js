@@ -209,6 +209,23 @@ async function createManualPlan({ activities, foods }) {
   }
 }
 
+async function deletePlanItem(itemId) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/plan-items/${encodeURIComponent(itemId)}`, {
+      method: 'DELETE',
+    });
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, data: null, message: responseJson.message || 'Butir belum dapat dihapus.' };
+    }
+
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null, message: 'Tidak dapat menghapus butir. Periksa koneksi, lalu coba lagi.' };
+  }
+}
+
 async function updateUserProfile(profile) {
   try {
     const response = await fetchWithToken(`${BASE_URL}/users/me`, {
@@ -239,6 +256,7 @@ export {
   getHistory,
   getPlanByDate,
   createManualPlan,
+  deletePlanItem,
   updateUserProfile,
   getAuraToday,
   saveAuraToday,
