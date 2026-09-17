@@ -32,6 +32,15 @@ export default function DashboardPage({ onLogout, user }) {
   const [auraState, setAuraState] = useState({ status: 'loading', value: null, error: '' });
 
   function terapkanRencana(data) {
+    // Rencana baru baru disusun setelah aura hari itu dipilih, sehingga
+    // isinya mengikuti aura. Selama belum dipilih, backend menjawab tanpa
+    // rencana dan dasbor menampilkan pemilihan auranya lebih dulu.
+    if (data.awaiting_aura) {
+      setStreak(Number(data.streak) || 0);
+      setStatusRencana('menunggu-aura');
+      return;
+    }
+
     setActivities(data.activities ?? []);
     setFoods(data.foods ?? []);
     setCompletedActivityIds(new Set((data.activities ?? []).filter((item) => item.completed).map((item) => item.id)));
@@ -127,6 +136,10 @@ export default function DashboardPage({ onLogout, user }) {
       return;
     }
     setAuraState({ status: 'ready', value: data?.aura ?? value, error: '' });
+
+    // Rencana hari ini belum ada selama auranya belum dipilih. Begitu
+    // tersimpan, rencananya diambil agar tersusun menurut aura tersebut.
+    if (statusRencana === 'menunggu-aura') await ambilRencana();
   }
 
   useEffect(() => {
@@ -182,6 +195,23 @@ export default function DashboardPage({ onLogout, user }) {
               <div className="dashboard-state" aria-live="polite">
                 <p className="dashboard-state__title">Menyusun rencana hari ini…</p>
               </div>
+            ) : statusRencana === 'menunggu-aura' ? (
+              <>
+                <div className="dashboard-state" aria-live="polite">
+                  <p className="dashboard-state__title">Mulai dari auramu hari ini.</p>
+                  <p className="dashboard-state__copy">
+                    Rencana hari ini disusun mengikuti aura yang kamu pilih, jadi pilih dulu kondisi
+                    yang paling mendekati. Rencananya menyusul begitu auramu tersimpan.
+                  </p>
+                </div>
+                <AuraCheckIn
+                  aura={auraState.value}
+                  loading={auraState.status === 'loading'}
+                  saving={auraState.status === 'saving'}
+                  error={auraState.error}
+                  onChange={ubahAura}
+                />
+              </>
             ) : statusRencana === 'gagal' ? (
               showManualForm ? (
                 <ManualPlanForm
@@ -218,7 +248,7 @@ export default function DashboardPage({ onLogout, user }) {
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
                     <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
                     <p className="dashboard-hero__copy">
-                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {auraOption ? `Mode ${auraOption.label} aktif—ikuti ritme yang terasa tepat untukmu.` : 'Pilih Aura untuk memberi konteks pada ritmemu hari ini.'}
+                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {auraOption ? `Rencana ini disusun mengikuti Aura ${auraOption.label} yang kamu pilih hari ini.` : 'Rencana ini tersimpan dari hari sebelumnya.'}
                     </p>
                   </div>
                   <div className="dashboard-hero__metrics">

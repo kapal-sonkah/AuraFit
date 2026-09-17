@@ -53,9 +53,26 @@ function normalkanTujuan(tujuan) {
   return String(tujuan ?? '').trim().toLowerCase().replace(/-/g, '_');
 }
 
-export function tentukanIntensitas(bmi, tujuan) {
+// Penyesuaian menurut aura yang dipilih pengguna pada hari itu.
+//
+// Pergeserannya dibatasi satu tingkat ke tiap arah. Intensitas dasar menurut
+// kategori BMI memuat pertimbangan keamanan, khususnya Obese yang sengaja
+// dimulai dari tingkat paling ringan agar beban sendi tidak berlebihan;
+// pergeseran yang lebih besar akan membatalkan pertimbangan itu pada hari
+// dengan aura berenergi tinggi. Karena tangganya hanya empat tingkat,
+// redup dan tenang bertemu pada geseran yang sama, begitu pula bersemangat
+// dan menyala. Keduanya tetap berbeda pada anjuran yang ditampilkan.
+const GESER_AURA = {
+  redup: -1,
+  tenang: -1,
+  seimbang: 0,
+  bersemangat: 1,
+  menyala: 1,
+};
+
+export function tentukanIntensitas(bmi, tujuan, aura) {
   const dasar = INTENSITAS_DASAR[kategoriBmi(bmi)];
-  const geser = GESER_TUJUAN[normalkanTujuan(tujuan)] ?? 0;
+  const geser = (GESER_TUJUAN[normalkanTujuan(tujuan)] ?? 0) + (GESER_AURA[aura] ?? 0);
   const indeks = TINGKAT.indexOf(dasar) + geser;
   return TINGKAT[Math.min(Math.max(indeks, 0), TINGKAT.length - 1)];
 }
@@ -103,10 +120,10 @@ export const JUMLAH_MAKANAN = 6;
  * ditambah keterangan bmi, kategori, dan intensitas agar dasar penyusunannya
  * dapat ditelusuri.
  */
-export function susunRencanaHarian({ id, weight_kg, height_cm, goal }, tanggal) {
+export function susunRencanaHarian({ id, weight_kg, height_cm, goal }, tanggal, aura = null) {
   const bmi = hitungBmi(Number(weight_kg), Number(height_cm));
   const kategori = kategoriBmi(bmi);
-  const intensitas = tentukanIntensitas(bmi, goal);
+  const intensitas = tentukanIntensitas(bmi, goal, aura);
   const kolam = KATALOG[intensitas];
 
   const dasar = benih(`${id}|${tanggal}|${intensitas}`);
