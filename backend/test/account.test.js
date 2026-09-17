@@ -64,13 +64,13 @@ test('pendaftaran bersamaan yang ditahan kendala unik dijawab 400, bukan 500', a
   assert.doesNotMatch(galat.message, /duplicate key/);
 });
 
-test('ganti kata sandi dengan kata sandi lama yang salah dijawab 401', async () => {
+test('kata sandi lama yang salah dijawab 400, bukan 401 yang dibaca sebagai sesi habis', async () => {
   const asli = UserRepositories.changePassword;
   UserRepositories.changePassword = async () => false;
   let galat;
   try {
     await changePassword({ user: { id: 'u1' }, body: { current_password: 'salah', new_password: 'baru-12345' } }, resTiruan(), (e) => { galat = e; });
-    assert.equal(galat?.statusCode, 401);
+    assert.equal(galat?.statusCode, 400);
   } finally {
     UserRepositories.changePassword = asli;
   }

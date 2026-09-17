@@ -1,7 +1,6 @@
 import InvariantError from "../../../exceptions/invariant-error.js";
 import response from "../../../utils/response.js";
 import UserRepositories from "../repositories/user-repositories.js";
-import AuthenticationError from "../../../exceptions/authentication-error.js";
 import { isAcceptablePassword } from '../../../security/password.js';
 
 export const createUser = async (req, res, next) => {
@@ -49,7 +48,9 @@ export const changePassword = async (req, res, next) => {
     }
 
     const berhasil = await UserRepositories.changePassword(req.user.id, current_password, new_password);
-    if (!berhasil) return next(new AuthenticationError('Kata sandi saat ini salah.'));
+    // 400, bukan 401: pengguna sudah terautentikasi, yang salah hanya isian
+    // borang. 401 lazim dibaca klien sebagai sesi habis lalu memaksa keluar.
+    if (!berhasil) return next(new InvariantError('Kata sandi saat ini salah.'));
 
     return response(res, 200, 'Kata sandi berhasil diganti', null);
   } catch (error) {
