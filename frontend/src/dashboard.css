@@ -293,6 +293,10 @@
   .dashboard-nav-link, .dashboard-nav-logout { min-height: 2.5rem; padding-inline: var(--space-2); font-size: 0.72rem; }
   .dashboard-nav-link--profile { display: inline-flex; }
   .overview-card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Di layar HP kartu Ringkasan menjadi 2×2 dan memenuhi layar pertama dengan
+     angka yang di pagi hari masih nol. Rencana hari itu didahulukan, Ringkasan
+     dipindah ke bawah. */
+  .dashboard-summary { order: 1; }
   .activity-card__head { grid-template-columns: 1fr; gap: var(--space-1); }
   .activity-card__status { max-width: none; text-align: left; }
 }
