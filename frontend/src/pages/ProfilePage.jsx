@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import AppHeader from '../components/AppHeader';
 import { changePassword, updateUserProfile } from '../utils/network-data';
 import '../profile.css';
 
@@ -120,17 +121,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
   return (
     <div className="profile-shell">
       <div className="profile-frame">
-        <header className="profile-header">
-          <div className="profile-brand">
-            <Link to="/" className="profile-brand__name">AuraFit</Link>
-          </div>
-          <nav className="profile-nav" aria-label="Navigasi utama">
-            <Link to="/dashboard">Hari ini</Link>
-            <Link to="/history">Riwayat</Link>
-            <Link to="/profile" className="profile-nav__link--active" aria-current="page">Profil</Link>
-            <button type="button" className="profile-nav__logout" onClick={onLogout}>Keluar</button>
-          </nav>
-        </header>
+        <AppHeader onLogout={onLogout} />
 
         <main className="profile-main">
           <section className="profile-hero" aria-labelledby="profile-title">

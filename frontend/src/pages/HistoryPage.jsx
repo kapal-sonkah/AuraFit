@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AppHeader from '../components/AppHeader';
 import { getHistory, getPlanByDate } from '../utils/network-data';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { foodMeta, presentActivity, presentFood } from '../utils/presentation';
@@ -248,17 +249,7 @@ export default function HistoryPage({ onLogout }) {
   return (
     <div className="history-shell">
       <div className="history-frame">
-        <header className="history-header">
-          <div className="history-brand">
-            <Link to="/" className="history-brand__name">AuraFit</Link>
-          </div>
-            <nav className="history-nav" aria-label="Navigasi utama">
-            <Link to="/dashboard" className="history-nav__link">Hari ini</Link>
-            <Link to="/history" className="history-nav__link history-nav__link--active" aria-current="page">Riwayat</Link>
-            <Link to="/profile" className="history-nav__link history-nav__link--profile">Profil</Link>
-            <button type="button" className="history-nav__logout" onClick={onLogout}>Keluar</button>
-          </nav>
-        </header>
+        <AppHeader onLogout={onLogout} />
 
         <main className="history-main">
           <section className="history-hero" aria-labelledby="history-title">

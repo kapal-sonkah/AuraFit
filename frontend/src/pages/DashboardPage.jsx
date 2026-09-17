@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from "react";
-import { Link } from 'react-router-dom';
+import AppHeader from '../components/AppHeader';
 import OverviewSidebar from "../components/OverviewSidebar";
 import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
@@ -9,10 +9,7 @@ import { savePlanItemProgress } from '../utils/progress-storage';
 import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday, updatePlanItem } from '../utils/network-data';
 import { getAuraOption } from '../utils/aura';
 import '../dashboard.css';
-
 export default function DashboardPage({ onLogout, user }) {
-  const [scrolled, setScrolled] = useState(false);
-
   const [completedActivityIds, setCompletedActivityIds] = useState(new Set());
   const [consumedFoodIds, setConsumedFoodIds] = useState(new Set());
   const [streak, setStreak] = useState(0);
@@ -174,26 +171,10 @@ export default function DashboardPage({ onLogout, user }) {
     return () => cancelAnimationFrame(frame);
   }, [ambilAura]);
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
   return (
     <div className="dashboard-shell" data-aura={auraState.value || 'none'}>
       <div className="dashboard-frame">
-        <header className={`dashboard-header ${scrolled ? 'dashboard-header--scrolled' : ''}`}>
-          <div className="dashboard-brand">
-            <Link to="/" className="dashboard-brand__name">AuraFit</Link>
-          </div>
-          <nav aria-label="Navigasi utama">
-            <Link to="/dashboard" className="dashboard-nav-link dashboard-nav-link--active" aria-current="page">Hari ini</Link>
-            <Link to="/history" className="dashboard-nav-link">Riwayat</Link>
-            <Link to="/profile" className="dashboard-nav-link dashboard-nav-link--profile">Profil</Link>
-            <button type="button" className="dashboard-nav-logout" onClick={onLogout}>Keluar</button>
-          </nav>
-        </header>
+        <AppHeader onLogout={onLogout} />
 
         <main className="dashboard-layout">
           <div className="dashboard-summary">

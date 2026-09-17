@@ -66,12 +66,6 @@
 }
 
 .dashboard-frame { position: relative; z-index: 1; width: min(100%, 92rem); min-height: 100vh; margin: 0 auto; padding: var(--space-4); }
-.dashboard-header { display: flex; align-items: center; justify-content: space-between; min-height: 3.75rem; margin-bottom: var(--space-6); }
-.dashboard-brand { display: flex; align-items: baseline; gap: var(--space-3); min-width: 0; color: var(--color-accent-ink); }
-.dashboard-brand__name { margin: 0; color: inherit; font-family: var(--font-display); font-size: clamp(1.5rem, 4vw, 2.25rem); line-height: 1; letter-spacing: -0.025em; text-decoration: none; }
-.dashboard-brand__context { color: var(--color-on-dark-soft); font-size: 0.75rem; font-weight: 600; }
-.dashboard-nav-link { margin-right: var(--space-3); color: var(--color-on-dark-soft); font-size: 0.78rem; font-weight: 800; text-decoration: none; }
-.dashboard-nav-link:hover { color: var(--color-accent-ink); }
 
 .dashboard-layout { display: grid; grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
 .dashboard-summary { min-width: 0; }
@@ -196,9 +190,6 @@
 
 @media (max-width: 42rem) {
   .dashboard-frame { padding: var(--space-3); }
-  .dashboard-header { margin-bottom: var(--space-4); }
-  .dashboard-brand__context { display: none; }
-  .dashboard-nav-link { margin-right: var(--space-2); }
   .dashboard-hero { align-items: stretch; flex-direction: column; gap: var(--space-4); }
   .dashboard-progress { min-width: 0; }
   .dashboard-section { padding: var(--space-4); }
@@ -224,13 +215,6 @@
 .dashboard-shell { background: var(--color-paper); color: var(--color-ink); }
 .dashboard-shell::before { display: none; }
 .dashboard-frame { width: min(100%, 84rem); padding-block: var(--space-3) var(--space-12); }
-.dashboard-header { position: sticky; top: 0; z-index: 10; min-height: 3.75rem; margin-bottom: var(--space-6); border-bottom: 1px solid var(--color-card-line); background: var(--color-paper); }
-.dashboard-brand { color: var(--color-ink); }
-.dashboard-brand__context { color: var(--color-muted); }
-.dashboard-header > nav { display: flex; align-items: center; gap: var(--space-2); }
-.dashboard-nav-link { display: inline-flex; min-height: 2.75rem; align-items: center; margin-right: 0; padding-inline: var(--space-3); border-radius: var(--radius-pill); color: var(--color-muted); white-space: nowrap; }
-.dashboard-nav-link:hover { color: var(--color-ink); }
-.dashboard-nav-link--active { background: var(--color-accent-soft); color: var(--color-accent-strong); }
 .dashboard-layout { gap: var(--space-6); }
 .dashboard-hero { border-color: var(--color-card-line); background: var(--color-surface); box-shadow: var(--shadow-soft); }
 .dashboard-section { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); box-shadow: var(--shadow-soft); }
@@ -244,13 +228,9 @@
 .manual-plan-form { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); }
 .modal-card { border-color: var(--color-card-line); background: var(--color-surface); }
 .dashboard-button, .modal-action, .manual-plan-form__primary { white-space: nowrap; }
-.dashboard-nav-logout { display: inline-flex; min-height: 2.75rem; align-items: center; padding-inline: var(--space-3); border: 1px solid var(--color-danger); border-radius: var(--radius-pill); background: transparent; color: var(--color-danger); font: inherit; font-size: 0.78rem; font-weight: 800; white-space: nowrap; cursor: pointer; }
-.dashboard-nav-logout:hover { background: var(--color-alert-surface); }
-.dashboard-nav-logout:focus-visible { outline: 2px solid var(--color-danger); outline-offset: 2px; }
 
 @media (max-width: 42rem) {
   .dashboard-frame { padding-inline: var(--space-3); }
-  .dashboard-nav-link--profile { display: none; }
 }
 
 /* Layout pass: keep the daily action area readable at tablet and laptop widths. */
@@ -293,10 +273,6 @@
 }
 
 @media (max-width: 42rem) {
-  .dashboard-header { flex-wrap: wrap; gap: var(--space-2); }
-  .dashboard-header > nav { flex-wrap: wrap; justify-content: flex-end; }
-  .dashboard-nav-link, .dashboard-nav-logout { min-height: 2.5rem; padding-inline: var(--space-2); font-size: 0.72rem; }
-  .dashboard-nav-link--profile { display: inline-flex; }
   .overview-card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   /* Di layar HP kartu Ringkasan menjadi 2×2 dan memenuhi layar pertama dengan
      angka yang di pagi hari masih nol. Rencana hari itu didahulukan, Ringkasan
