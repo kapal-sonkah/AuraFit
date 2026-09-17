@@ -110,7 +110,18 @@ function ambil(daftar, jumlah, nilaiBenih) {
   return salinan.slice(0, Math.min(jumlah, salinan.length));
 }
 
-export const JUMLAH_AKTIVITAS = 3;
+// Empat aktivitas, bukan lebih.
+//
+// Setiap tingkat intensitas hanya memuat enam aktivitas, dan ambil() memotong
+// permintaan sebesar isi kolamnya. Meminta delapan atau sepuluh karena itu
+// tetap menghasilkan enam, hanya dengan angka yang tidak lagi jujur.
+//
+// Semakin banyak yang diambil, semakin sedikit pula ragam hariannya: empat
+// dari enam masih menyisakan lima belas susunan berbeda, lima dari enam
+// tinggal enam, dan enam dari enam berarti rencana yang sama setiap hari.
+// Empat juga menjaga jumlah butir harian tetap sepuluh, sehingga streak yang
+// menuntut seluruh butir selesai masih mungkin dicapai.
+export const JUMLAH_AKTIVITAS = 4;
 export const JUMLAH_MAKANAN = 6;
 
 /**

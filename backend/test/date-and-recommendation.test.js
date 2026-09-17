@@ -3,12 +3,48 @@ import assert from 'node:assert/strict';
 
 process.env.DATABASE_URL ??= 'postgresql://test:test@localhost:5432/test';
 
-const [{ default: PlanRepositories }, { default: UserRepositories }, { getRecommendationToday }, { todayInJakarta }] = await Promise.all([
+const [
+  { default: PlanRepositories },
+  { default: UserRepositories },
+  { getRecommendationToday },
+  { todayInJakarta },
+  { JUMLAH_AKTIVITAS, JUMLAH_MAKANAN, susunRencanaHarian },
+  { default: KATALOG },
+] = await Promise.all([
   import('../src/services/plans/plan-repositories.js'),
   import('../src/services/users/repositories/user-repositories.js'),
   import('../src/services/recommendations/recommendation-controller.js'),
   import('../src/utils/date.js'),
+  import('../src/services/recommendations/recommendation-service.js'),
+  import('../src/services/recommendations/katalog.js'),
 ]);
+
+// ambil() memotong permintaan sebesar isi kolamnya, sehingga jumlah yang
+// melebihi katalog tidak menimbulkan galat, hanya menghasilkan butir lebih
+// sedikit daripada angka yang tertulis. Uji ini menjaga agar angkanya tetap
+// sesuai dengan apa yang benar-benar dapat disusun.
+test('jumlah butir harian tidak melebihi isi katalog tiap tingkat', () => {
+  for (const [tingkat, kolam] of Object.entries(KATALOG)) {
+    assert.ok(
+      JUMLAH_AKTIVITAS <= kolam.activities.length,
+      `tingkat ${tingkat} hanya memuat ${kolam.activities.length} aktivitas, kurang dari ${JUMLAH_AKTIVITAS} yang diminta`
+    );
+    assert.ok(
+      JUMLAH_MAKANAN <= kolam.foods.length,
+      `tingkat ${tingkat} hanya memuat ${kolam.foods.length} makanan, kurang dari ${JUMLAH_MAKANAN} yang diminta`
+    );
+  }
+});
+
+test('rencana memuat butir sebanyak yang dijanjikan', () => {
+  const rencana = susunRencanaHarian(
+    { id: 'user-test', weight_kg: 62, height_cm: 168, goal: 'maintain_weight' },
+    '2026-09-17',
+    'seimbang'
+  );
+  assert.equal(rencana.activities.length, JUMLAH_AKTIVITAS);
+  assert.equal(rencana.foods.length, JUMLAH_MAKANAN);
+});
 
 test('tanggal bawaan repository mengikuti Asia/Jakarta', async () => {
   const originalTimeZone = process.env.TZ;
