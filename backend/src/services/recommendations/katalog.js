@@ -1,12 +1,13 @@
 // Katalog aktivitas dan makanan menurut tingkat intensitas.
 //
-// Isi berkas ini disalin apa adanya dari layanan rekomendasi capstone
-// terdahulu, yang menyimpannya sebagai daftar tetap di dalam kode. Karena
-// daftarnya memang tetap, katalog tidak memerlukan model dan dipindahkan ke
-// backend agar rekomendasi dapat diuji dengan hasil yang dihitung di muka.
+// Isi awalnya disalin dari layanan rekomendasi capstone terdahulu
+// (arsip/model-capstone), yang menyimpannya sebagai daftar tetap di dalam kode.
+// Layanan itu tidak lagi dipakai, jadi berkas ini kini menjadi sumber katalog
+// dan disunting langsung.
 //
-// Jangan menyunting berkas ini dengan tangan; hasilkan ulang bila katalog
-// asalnya berubah.
+// Aktivitas id 7-12 pada tiap tingkat memakai foto berlisensi Pexels; sumbernya
+// tercatat di docs/image-credits.md. Tambahkan catatan sumber untuk setiap
+// gambar baru.
 
 const KATALOG = {
   "Sedentary": {
@@ -52,6 +53,48 @@ const KATALOG = {
         "description": "March in place while watching TV for 15 minutes.",
         "image": "/images/activities/marching-in-place.jpg",
         "youtube_url": "https://www.youtube.com/watch?v=Ac8M_Osjy6s"
+      },
+      {
+        "id": 7,
+        "name": "Sit to Stand",
+        "description": "Stand up from a chair and sit back down slowly, 10 repetitions for 3 sets.",
+        "image": "/images/activities/sit-to-stand-chair.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 8,
+        "name": "Wall Push-up",
+        "description": "Push-ups against a wall, 10 repetitions for 3 sets.",
+        "image": "/images/activities/wall-push-up.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 9,
+        "name": "Seated Chair Exercises",
+        "description": "Arm and leg movements while seated on a chair for 15 minutes.",
+        "image": "/images/activities/seated-chair-exercises.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 10,
+        "name": "Deep Breathing",
+        "description": "Slow deep breathing for 10 minutes to relax the body.",
+        "image": "/images/activities/deep-breathing.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 11,
+        "name": "Balance Exercise",
+        "description": "Stand on one leg near a support for 30 seconds per side, repeated 5 times.",
+        "image": "/images/activities/balance-exercise.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 12,
+        "name": "Resistance Band Stretch",
+        "description": "Gentle stretching with a resistance band for 15 minutes.",
+        "image": "/images/activities/resistance-band-stretch.jpg",
+        "youtube_url": null
       }
     ],
     "foods": [
@@ -226,6 +269,48 @@ const KATALOG = {
         "description": "Leisurely walk covering a distance of 2-3 KM.",
         "image": "/images/activities/evening-walk.jpg",
         "youtube_url": "https://www.youtube.com/watch?v=kAWYgSWkaA8"
+      },
+      {
+        "id": 7,
+        "name": "Stair Walking",
+        "description": "Walk up and down stairs at a comfortable pace for 10 minutes.",
+        "image": "/images/activities/stair-walking.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 8,
+        "name": "Stationary Bike",
+        "description": "Light pedaling on a stationary bike for 20 minutes.",
+        "image": "/images/activities/stationary-bike.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 9,
+        "name": "Treadmill Walking",
+        "description": "Walk on a treadmill at a steady pace for 25 minutes.",
+        "image": "/images/activities/treadmill-walking.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 10,
+        "name": "Bodyweight Squats",
+        "description": "Squats without weights, 12 repetitions for 3 sets.",
+        "image": "/images/activities/bodyweight-squats.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 11,
+        "name": "Resistance Band Workout",
+        "description": "Light full-body exercises with a resistance band for 20 minutes.",
+        "image": "/images/activities/resistance-band-workout.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 12,
+        "name": "Casual Badminton",
+        "description": "A relaxed badminton rally for 30 minutes.",
+        "image": "/images/activities/casual-badminton.jpg",
+        "youtube_url": null
       }
     ],
     "foods": [
@@ -400,6 +485,48 @@ const KATALOG = {
         "description": "Light evening jog covering 3-5 KM.",
         "image": "/images/activities/evening-jog.jpg",
         "youtube_url": "https://www.youtube.com/watch?v=N9C88z3g0Es"
+      },
+      {
+        "id": 7,
+        "name": "Hiking",
+        "description": "Hike on a hill trail for 60 minutes.",
+        "image": "/images/activities/hiking.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 8,
+        "name": "Futsal",
+        "description": "Play futsal for 40 minutes.",
+        "image": "/images/activities/futsal.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 9,
+        "name": "Calisthenics Circuit",
+        "description": "A circuit of push-ups, dips, and squats for 30 minutes.",
+        "image": "/images/activities/calisthenics-circuit.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 10,
+        "name": "Step-ups",
+        "description": "Step up and down on a bench or box for 20 minutes.",
+        "image": "/images/activities/step-ups.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 11,
+        "name": "Dumbbell Full Body",
+        "description": "Full-body workout with light to moderate dumbbells for 30 minutes.",
+        "image": "/images/activities/dumbbell-full-body.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 12,
+        "name": "Basketball",
+        "description": "Play basketball for 40 minutes.",
+        "image": "/images/activities/basketball.jpg",
+        "youtube_url": null
       }
     ],
     "foods": [
@@ -574,6 +701,48 @@ const KATALOG = {
         "description": "High-intensity cardio kickboxing for 40 minutes.",
         "image": "/images/activities/kickboxing.jpg",
         "youtube_url": "https://www.youtube.com/watch?v=S4F0gOhskY8"
+      },
+      {
+        "id": 7,
+        "name": "Deadlift",
+        "description": "Barbell deadlifts with proper form, 5 sets of 5 repetitions.",
+        "image": "/images/activities/deadlift-barbell.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 8,
+        "name": "Pull-ups",
+        "description": "Pull-ups on a bar, 4 sets to near fatigue.",
+        "image": "/images/activities/pull-ups.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 9,
+        "name": "Rowing Machine",
+        "description": "Rowing machine intervals for 20 minutes.",
+        "image": "/images/activities/rowing-machine.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 10,
+        "name": "Trail Running",
+        "description": "Run on a natural trail for 40 minutes.",
+        "image": "/images/activities/trail-running.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 11,
+        "name": "Kettlebell Swing",
+        "description": "Kettlebell swings, 5 sets of 20 repetitions.",
+        "image": "/images/activities/kettlebell-swing.jpg",
+        "youtube_url": null
+      },
+      {
+        "id": 12,
+        "name": "Box Jumps",
+        "description": "Box jumps, 4 sets of 10 repetitions.",
+        "image": "/images/activities/box-jumps.jpg",
+        "youtube_url": null
       }
     ],
     "foods": [

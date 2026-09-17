@@ -23,6 +23,30 @@ const ACTIVITY_COPY = {
   'strength training': ['Latihan kekuatan', 'Latihan beban dengan dumbel atau barbel yang berfokus pada kelompok otot besar.'],
   'basic crossfit': ['Sirkuit CrossFit dasar', 'Latihan sirkuit intensif yang menggabungkan kardio dan beban ringan.'],
   kickboxing: ['Kickboxing', 'Latihan kardio kickboxing intensitas tinggi selama 40 menit.'],
+  'sit to stand': ['Duduk-berdiri dari kursi', 'Berdiri dari kursi lalu duduk kembali perlahan, 10 kali sebanyak 3 set.'],
+  'wall push-up': ['Push-up dinding', 'Push-up bertumpu pada dinding, 10 kali sebanyak 3 set.'],
+  'seated chair exercises': ['Senam duduk di kursi', 'Gerakan lengan dan kaki sambil duduk di kursi selama 15 menit.'],
+  'deep breathing': ['Latihan pernapasan dalam', 'Tarik napas dalam lalu hembuskan perlahan selama 10 menit untuk merilekskan tubuh.'],
+  'balance exercise': ['Latihan keseimbangan', 'Berdiri dengan satu kaki di dekat pegangan, 30 detik per sisi, diulang 5 kali.'],
+  'resistance band stretch': ['Peregangan dengan karet resistensi', 'Peregangan ringan memakai karet resistensi selama 15 menit.'],
+  'stair walking': ['Naik turun tangga', 'Naik turun tangga dengan tempo nyaman selama 10 menit.'],
+  'stationary bike': ['Sepeda statis', 'Mengayuh sepeda statis dengan beban ringan selama 20 menit.'],
+  'treadmill walking': ['Jalan di treadmill', 'Berjalan di treadmill dengan kecepatan stabil selama 25 menit.'],
+  'bodyweight squats': ['Squat tanpa beban', 'Squat tanpa beban, 12 kali sebanyak 3 set.'],
+  'resistance band workout': ['Latihan karet resistensi', 'Latihan ringan seluruh tubuh memakai karet resistensi selama 20 menit.'],
+  'casual badminton': ['Bulu tangkis santai', 'Bermain bulu tangkis santai selama 30 menit.'],
+  hiking: ['Mendaki bukit', 'Mendaki jalur bukit selama 60 menit.'],
+  futsal: ['Futsal', 'Bermain futsal selama 40 menit.'],
+  'calisthenics circuit': ['Sirkuit kalistenik', 'Sirkuit push-up, dips, dan squat selama 30 menit.'],
+  'step-ups': ['Naik turun bangku', 'Naik turun bangku atau kotak selama 20 menit.'],
+  'dumbbell full body': ['Latihan dumbel seluruh tubuh', 'Latihan seluruh tubuh dengan dumbel ringan hingga sedang selama 30 menit.'],
+  basketball: ['Bola basket', 'Bermain bola basket selama 40 menit.'],
+  deadlift: ['Deadlift', 'Deadlift dengan barbel dan teknik yang benar, 5 set masing-masing 5 kali.'],
+  'pull-ups': ['Pull-up', 'Pull-up pada palang, 4 set hingga hampir lelah.'],
+  'rowing machine': ['Mesin dayung', 'Interval mesin dayung selama 20 menit.'],
+  'trail running': ['Lari lintas alam', 'Berlari di jalur alam selama 40 menit.'],
+  'kettlebell swing': ['Ayunan kettlebell', 'Ayunan kettlebell, 5 set masing-masing 20 kali.'],
+  'box jumps': ['Lompat kotak', 'Lompat ke atas kotak, 4 set masing-masing 10 kali.'],
 };
 
 const FOOD_NAMES = {
@@ -58,8 +82,8 @@ const FOOD_NAMES = {
 // butir susu, tiga butir kacang, dan tiga butir ikan. Peta ini hanya menimpa
 // ikon yang berulang; butir yang ikonnya sudah khas tetap memakai ikon katalog.
 //
-// Penimpaan ditaruh di sini, bukan di katalog, karena katalog dihasilkan ulang
-// dari sumbernya dan tidak boleh disunting dengan tangan.
+// Penimpaan ditaruh di sini, bukan di katalog, karena ikon adalah urusan
+// tampilan: katalog backend tetap menyimpan data makanan apa adanya.
 const FOOD_EMOJI = {
   grapefruit: '🍋',
   'grilled chicken breast': '🍖',

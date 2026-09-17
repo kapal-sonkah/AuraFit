@@ -163,3 +163,13 @@ test('setiap gambar aktivitas di katalog benar-benar ada di frontend', async () 
     .map((a) => `${a.name}: ${a.image}`);
   assert.deepEqual(hilang, []);
 });
+
+test('setiap aktivitas di katalog punya nama berbahasa Indonesia', async () => {
+  const { presentActivity } = await import('../../frontend/src/utils/presentation.js');
+  const namaSama = new Set(['Kickboxing', 'Futsal', 'Deadlift']);
+  const belum = Object.values(KATALOG)
+    .flatMap((kolam) => kolam.activities)
+    .filter((a) => !namaSama.has(a.name) && presentActivity(a).name === a.name)
+    .map((a) => a.name);
+  assert.deepEqual(belum, []);
+});
