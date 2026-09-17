@@ -44,6 +44,7 @@ const FOOD_NAMES = {
   'cottage cheese': 'Keju cottage', 'tuna salad': 'Salad tuna', 'beef jerky': 'Dendeng sapi',
   'protein bar': 'Batang protein', 'sweet potato mash': 'Puree ubi jalar', 'mixed nuts': 'Kacang campur',
   'sardines (in water)': 'Sarden dalam air', 'whey protein isolate': 'Isolat protein whey',
+  'steamed tuna': 'Tuna kukus',
   'roasted chicken thigh': 'Paha ayam panggang', 'grilled tempeh': 'Tempe panggang', quinoa: 'Quinoa',
   'boiled broccoli': 'Brokoli rebus', 'boiled sweet potato': 'Ubi jalar rebus',
   'grilled chicken breast': 'Dada ayam panggang', 'whole wheat pasta': 'Pasta gandum utuh',
