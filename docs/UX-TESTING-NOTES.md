@@ -39,6 +39,7 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Video YouTube lama tidak cocok dengan aktivitasnya | Bersepeda santai, Joging sore, Interval sprint, dan Sirkuit CrossFit dasar kini memakai video panduan atau latihan yang sesuai; semuanya dapat diputar di aplikasi | `02c3493` |
 | Gambar aktivitas tanpa sumber yang tidak dipakai | 17 berkas dihapus bersama `dummyData.js` yang tidak lagi di-import; tersisa 48 foto, semuanya tercatat di `docs/image-credits.md` | `d5a8e36` |
 | Indeks email unik belum ada di produksi | Migrasi `1780300000000_unique-user-email` dijalankan di Neon pada 2026-09-17 setelah dipastikan tidak ada email ganda (8 pengguna) | `4a2641f` |
+| Status selesai bisa diubah kapan saja, termasuk hari yang sudah lewat | Pembatalan hanya pada hari yang sama (WIB); Riwayat hari lampau tanpa tombol ubah dan API menolak perubahan. SRS US-33/F-33, TC-21, dan decision log K-10 diperbarui (menunggu pengesahan) | `18a3813` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset

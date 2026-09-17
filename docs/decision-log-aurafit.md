@@ -16,6 +16,7 @@ persetujuan akademik.
 | K-07 | Target kalori personal | Tidak menghitung target kalori personal pada baseline ini; label dashboard harus menggambarkan sisa rencana hari ini | Mencegah pengguna mengira aplikasi memberi target medis atau diet personal | Menunggu pengesahan |
 | K-08 | Pelaksanaan UAT | Jadwal, peserta, perangkat, dan penilai ditentukan setelah kalender mata kuliah dikonfirmasi | Tanpa data ini UAT belum dapat dinyatakan selesai | Menunggu pengesahan |
 | K-09 | Aturan streak | Satu hari dihitung bila minimal satu aktivitas selesai; makanan tidak dihitung, kelengkapan seluruh butir tetap ditampilkan sebagai progres. Diusulkan 2026-09-17 oleh Josh Peter Pardosi dari masukan penguji UX: menuntut seluruh butir tidak adil karena tujuan tiap pengguna berbeda dan rencana disusun sistem, bukan dipilih pengguna | Mengubah US-32 dan F-40 pada SRS; TC-22 diperbarui; streak hari-hari lampau ikut dihitung ulang karena streak dihitung saat dibaca | Diterapkan pada kode; menunggu pengesahan |
+| K-10 | Koreksi catatan tanggal lampau | Status butir hanya dapat diubah pada hari rencananya (WIB); hari yang sudah lewat dikunci. Diusulkan 2026-09-17 oleh Josh Peter Pardosi: koreksi mundur memungkinkan streak diakali dan membuat Riwayat kurang dapat dipercaya, sedangkan salah tekan pada hari yang sama tetap dapat dibatalkan | Mengubah US-33 dan F-33 pada SRS; TC-21 diperbarui | Diterapkan pada kode; menunggu pengesahan |
 
 ## Aturan perubahan
 

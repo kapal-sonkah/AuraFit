@@ -166,7 +166,7 @@ Tabel 3.4  User story riwayat dan ringkasan
 | US-30 | Sebagai pengguna, saya ingin melihat catatan pada tanggal tertentu agar dapat meninjau kebiasaan saya | Rencana dan progres pada tanggal yang dipilih tampil sesuai data tersimpan |
 | US-31 | Sebagai pengguna, saya ingin melihat ringkasan tujuh hari terakhir agar tahu perkembangan saya | Ringkasan dihitung dari data tersimpan dan sesuai perhitungan manual atas data uji |
 | US-32 | Sebagai pengguna, saya ingin melihat jumlah hari berturut-turut saya menjalankan rencana agar termotivasi melanjutkan | Hitungan bertambah ketika minimal satu aktivitas pada rencana harian diselesaikan pada satu hari |
-| US-33 | Sebagai pengguna, saya ingin mengoreksi status catatan pada tanggal lampau agar riwayat tetap benar | Status butir pada tanggal yang dipilih dapat ditandai atau dibatalkan dan tersimpan |
+| US-33 | Sebagai pengguna, saya ingin riwayat catatan saya tidak dapat diubah setelah harinya lewat agar riwayat dan streak dapat dipercaya | Status butir hanya dapat ditandai atau dibatalkan pada hari rencana itu (WIB); tanggal lampau ditampilkan tanpa tombol ubah dan perubahan lewat API ditolak |
 
 # BAB IV. KEBUTUHAN FUNGSIONAL
 
@@ -232,7 +232,7 @@ Tabel 4.5  Kebutuhan riwayat dan ringkasan
 | F-30 | Pengguna dapat memilih tanggal dan melihat rencana beserta progres pada tanggal itu | US-30 | Must |
 | F-31 | Sistem menampilkan ringkasan tujuh hari terakhir yang dihitung dari data tersimpan | US-31 | Must |
 | F-32 | Ringkasan menampilkan jumlah butir selesai terhadap jumlah butir rencana, terpisah untuk aktivitas dan makanan | US-31 | Must |
-| F-33 | Pengguna dapat mengoreksi status catatan pada tanggal yang telah lewat | US-33 | Could |
+| F-33 | Sistem mengunci status catatan pada tanggal yang telah lewat; pembatalan hanya dapat dilakukan pada hari yang sama | US-33 | Could |
 
 ## 4.5 Streak
 
