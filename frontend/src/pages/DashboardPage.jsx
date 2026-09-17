@@ -6,7 +6,7 @@ import CaloriesLog from "../components/CaloriesLog";
 import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
 import { savePlanItemProgress } from '../utils/progress-storage';
-import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday } from '../utils/network-data';
+import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday, updatePlanItem } from '../utils/network-data';
 import { getAuraOption } from '../utils/aura';
 import '../dashboard.css';
 
@@ -116,6 +116,15 @@ export default function DashboardPage({ onLogout, user }) {
       return;
     }
     terapkanRencana(data);
+  }
+
+  // Mengembalikan pesan galat untuk ditampilkan di borang ubah, atau null bila
+  // tersimpan. Rencana terbaru langsung diterapkan seperti saat menghapus.
+  async function ubahButir(itemId, fields) {
+    const { error, data, message } = await updatePlanItem(itemId, fields);
+    if (error) return message;
+    terapkanRencana(data);
+    return null;
   }
 
   function simpanRencanaManual(data) {
@@ -306,11 +315,13 @@ export default function DashboardPage({ onLogout, user }) {
                   aura={auraState.value}
                   onDone={(id, selesai) => handlePlanItemToggle(id, selesai, 'activity')}
                   onDelete={hapusButir}
+                  onEdit={ubahButir}
                 />
                 <CaloriesLog
                   foods={foods}
                   onConsume={(id, dikonsumsi) => handlePlanItemToggle(id, dikonsumsi, 'food')}
                   onDelete={hapusButir}
+                  onEdit={ubahButir}
                   consumedFoodIds={consumedFoodIds}
                 />
               </>

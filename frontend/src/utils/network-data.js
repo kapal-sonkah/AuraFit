@@ -209,6 +209,25 @@ async function createManualPlan({ activities, foods }) {
   }
 }
 
+async function updatePlanItem(itemId, fields) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/plan-items/${encodeURIComponent(itemId)}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
+    });
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, data: null, message: responseJson.message || 'Butir belum dapat diubah.' };
+    }
+
+    return { error: false, data: responseJson.data };
+  } catch {
+    return { error: true, data: null, message: 'Tidak dapat mengubah butir. Periksa koneksi, lalu coba lagi.' };
+  }
+}
+
 async function deletePlanItem(itemId) {
   try {
     const response = await fetchWithToken(`${BASE_URL}/plan-items/${encodeURIComponent(itemId)}`, {
@@ -257,6 +276,7 @@ export {
   getPlanByDate,
   createManualPlan,
   deletePlanItem,
+  updatePlanItem,
   updateUserProfile,
   getAuraToday,
   saveAuraToday,

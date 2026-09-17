@@ -175,6 +175,25 @@ class PlanRepositories {
   }
 
   /**
+   * Mengubah isi satu butir yang dicatat sendiri oleh pengguna.
+   *
+   * Aturan kepemilikannya sama dengan deleteManualItem: hanya butir tanpa
+   * source_ref milik pengguna yang meminta. Status progres butir tidak berubah.
+   * Mengembalikan tanggal rencananya, atau null bila butir tidak dapat diubah.
+   */
+  async updateManualItem(userId, planItemId, { name, description, portion, kcal }) {
+    const result = await this.pool.query(`
+      UPDATE daily_plan_items i
+      SET name = $3, description = $4, portion = $5, calorie_kcal = $6
+      FROM daily_plans p
+      WHERE i.id = $1 AND i.plan_id = p.id AND p.user_id = $2 AND i.source_ref IS NULL
+      RETURNING p.plan_date
+    `, [planItemId, userId, name, description, portion, kcal]);
+
+    return result.rows[0]?.plan_date ?? null;
+  }
+
+  /**
    * Menghapus satu butir yang dicatat sendiri oleh pengguna.
    *
    * Hanya butir tanpa source_ref yang dapat dihapus, yaitu butir manual. Butir

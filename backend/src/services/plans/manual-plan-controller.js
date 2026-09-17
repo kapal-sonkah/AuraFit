@@ -19,12 +19,15 @@ function cleanText(value, field, { required = false, maxLength = 500 } = {}) {
   return text || null;
 }
 
+// index diisi saat memvalidasi daftar butir, dan dikosongkan saat mengubah
+// satu butir sehingga pesan galat tidak menyebut urutan.
 function cleanItem(item, type, index) {
+  const ke = index === undefined ? '' : ` ke-${index + 1}`;
   if (!item || typeof item !== 'object' || Array.isArray(item)) {
-    throw new InvariantError(`Butir ${type} ke-${index + 1} tidak valid.`);
+    throw new InvariantError(`Butir ${type}${ke} tidak valid.`);
   }
 
-  const name = cleanText(item.name, `Nama ${type} ke-${index + 1}`, { required: true, maxLength: 150 });
+  const name = cleanText(item.name, `Nama ${type}${ke}`, { required: true, maxLength: 150 });
   const description = cleanText(item.description, 'Deskripsi', { maxLength: 500 });
   const portion = cleanText(item.portion, 'Porsi', { maxLength: 80 });
   const emoji = cleanText(item.emoji, 'Ikon', { maxLength: 8 });
@@ -33,12 +36,31 @@ function cleanItem(item, type, index) {
   if (item.kcal !== undefined && item.kcal !== null && item.kcal !== '') {
     kcal = Number(item.kcal);
     if (!Number.isFinite(kcal) || kcal < 0 || kcal > 100000) {
-      throw new InvariantError(`Kalori ${type} ke-${index + 1} tidak valid.`);
+      throw new InvariantError(`Kalori ${type}${ke} tidak valid.`);
     }
   }
 
   return { name, description, portion, emoji, kcal };
 }
+
+export const updateManualItem = async (req, res, next) => {
+  try {
+    const { name, description, portion, kcal } = cleanItem(req.body, 'butir');
+    const planDate = await PlanRepositories.updateManualItem(req.user.id, req.params.itemId, {
+      name, description, portion, kcal,
+    });
+    if (!planDate) {
+      return next(new NotFoundError('Butir tidak ditemukan atau bukan catatan manual.'));
+    }
+
+    return response(res, 200, 'Butir rencana diperbarui', {
+      ...(await PlanRepositories.getPlan(req.user.id, planDate)),
+      streak: await PlanRepositories.getStreak(req.user.id, planDate),
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
 
 export const deleteManualItem = async (req, res, next) => {
   try {

@@ -2,9 +2,29 @@ import { useState } from 'react';
 import AuraGlyph from './AuraGlyph';
 import { getAuraOption } from '../utils/aura';
 import ActivityPopup from './ActivityPopup';
+import ManualItemEditor from './ManualItemEditor';
 import { presentActivity } from '../utils/presentation';
 
-function ActivityCard({ activity, active, onClick, onDone, onDelete }) {
+function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
+  const [editing, setEditing] = useState(false);
+
+  if (editing) {
+    return (
+      <article className="activity-card">
+        <ManualItemEditor
+          item={activity}
+          type="activity"
+          onCancel={() => setEditing(false)}
+          onSave={async (id, fields) => {
+            const pesan = await onEdit(id, fields);
+            if (!pesan) setEditing(false);
+            return pesan;
+          }}
+        />
+      </article>
+    );
+  }
+
   return (
     <article className={`activity-card ${active ? 'activity-card--done' : ''}`}>
       <button
@@ -41,16 +61,17 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete }) {
       >
         {active ? 'Batalkan selesai' : 'Tandai selesai'}
       </button>
-      {activity.source_ref == null && onDelete ? (
-        <button type="button" className="plan-item-delete" onClick={() => onDelete(activity.id, activity.name)}>
-          Hapus
-        </button>
+      {activity.source_ref == null && onDelete && onEdit ? (
+        <div className="plan-item-manage">
+          <button type="button" className="plan-item-edit" onClick={() => setEditing(true)}>Ubah</button>
+          <button type="button" className="plan-item-delete" onClick={() => onDelete(activity.id, activity.name)}>Hapus</button>
+        </div>
       ) : null}
     </article>
   );
 }
 
-export default function DailyActivities({ activities = [], completedActivityIds, aura, onDone, onDelete }) {
+export default function DailyActivities({ activities = [], completedActivityIds, aura, onDone, onDelete, onEdit }) {
   const [selected, setSelected] = useState(null);
   const auraOption = getAuraOption(aura);
 
@@ -78,6 +99,7 @@ export default function DailyActivities({ activities = [], completedActivityIds,
                 onClick={() => setSelected(activity)}
                 onDone={onDone}
                 onDelete={onDelete}
+                onEdit={onEdit}
               />
             </li>
             );

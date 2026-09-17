@@ -1,8 +1,28 @@
 import { useState } from 'react';
 import FoodPopup from './FoodPopup';
+import ManualItemEditor from './ManualItemEditor';
 import { foodMeta, presentFood } from '../utils/presentation';
 
-function FoodItem({ food, consumed, onClick, onConsume, onDelete }) {
+function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
+  const [editing, setEditing] = useState(false);
+
+  if (editing) {
+    return (
+      <article className="food-card">
+        <ManualItemEditor
+          item={food}
+          type="food"
+          onCancel={() => setEditing(false)}
+          onSave={async (id, fields) => {
+            const pesan = await onEdit(id, fields);
+            if (!pesan) setEditing(false);
+            return pesan;
+          }}
+        />
+      </article>
+    );
+  }
+
   return (
     <article className={`food-card ${consumed ? 'food-card--done' : ''}`}>
       <button
@@ -30,16 +50,17 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete }) {
       >
         {consumed ? 'Batalkan catatan' : 'Catat sudah dimakan'}
       </button>
-      {food.source_ref == null && onDelete ? (
-        <button type="button" className="plan-item-delete" onClick={() => onDelete(food.id, food.name)}>
-          Hapus
-        </button>
+      {food.source_ref == null && onDelete && onEdit ? (
+        <div className="plan-item-manage">
+          <button type="button" className="plan-item-edit" onClick={() => setEditing(true)}>Ubah</button>
+          <button type="button" className="plan-item-delete" onClick={() => onDelete(food.id, food.name)}>Hapus</button>
+        </div>
       ) : null}
     </article>
   );
 }
 
-export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume, onDelete }) {
+export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume, onDelete, onEdit }) {
   const [selected, setSelected] = useState(null);
 
   return (
@@ -62,6 +83,7 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume, on
                 onClick={() => setSelected(item)} 
                 onConsume={onConsume}
                 onDelete={onDelete}
+                onEdit={onEdit}
                 consumed={consumedFoodIds.has(item.id)}
               />
             </li>

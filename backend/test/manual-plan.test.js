@@ -163,3 +163,60 @@ test('hapus butir mengembalikan rencana terbaru tanggal itu', async () => {
     PlanRepositories.getStreak = asli.getStreak;
   }
 });
+
+const { updateManualItem } = await import('../src/services/plans/manual-plan-controller.js');
+
+test('ubah butir hanya menyasar butir manual milik pengguna itu sendiri', async () => {
+  const originalPool = PlanRepositories.pool;
+  let kueri;
+  PlanRepositories.pool = {
+    query: async (text, params) => { kueri = { text, params }; return { rows: [] }; },
+  };
+
+  try {
+    const tanggal = await PlanRepositories.updateManualItem('user-test', 'item-1', {
+      name: 'Jalan kaki', description: null, portion: null, kcal: null,
+    });
+    assert.equal(tanggal, null);
+    assert.match(kueri.text, /source_ref IS NULL/, 'butir rekomendasi tidak boleh bisa diubah');
+    assert.match(kueri.text, /p\.user_id = \$2/, 'butir milik pengguna lain tidak boleh bisa diubah');
+    assert.deepEqual(kueri.params.slice(0, 3), ['item-1', 'user-test', 'Jalan kaki']);
+  } finally {
+    PlanRepositories.pool = originalPool;
+  }
+});
+
+test('ubah butir menolak nama kosong sebelum menyentuh basis data', async () => {
+  const asli = PlanRepositories.updateManualItem;
+  PlanRepositories.updateManualItem = async () => { throw new Error('tidak boleh dipanggil'); };
+  let galat;
+
+  try {
+    await updateManualItem(
+      { user: { id: 'user-test' }, params: { itemId: 'item-1' }, body: { name: '  ' } },
+      resTiruan(),
+      (e) => { galat = e; }
+    );
+    assert.equal(galat?.statusCode, 400);
+    assert.match(galat.message, /^Nama butir wajib diisi/);
+  } finally {
+    PlanRepositories.updateManualItem = asli;
+  }
+});
+
+test('ubah butir yang tidak bisa diubah menjawab 404', async () => {
+  const asli = PlanRepositories.updateManualItem;
+  PlanRepositories.updateManualItem = async () => null;
+  let galat;
+
+  try {
+    await updateManualItem(
+      { user: { id: 'user-test' }, params: { itemId: 'item-1' }, body: { name: 'Jalan kaki' } },
+      resTiruan(),
+      (e) => { galat = e; }
+    );
+    assert.equal(galat?.statusCode, 404);
+  } finally {
+    PlanRepositories.updateManualItem = asli;
+  }
+});
