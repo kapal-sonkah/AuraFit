@@ -110,7 +110,9 @@
 .activity-card__media--empty { background: repeating-linear-gradient(135deg, var(--color-paper-strong) 0 0.25rem, var(--color-paper-soft) 0.25rem 0.5rem); }
 .activity-card__hint { margin: 0; color: var(--color-accent); font-size: 0.72rem; font-weight: 800; }
 .food-card { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3); }
-.food-card__icon { display: grid; flex: 0 0 auto; width: 3rem; height: 3rem; place-items: center; border-radius: var(--radius-card); background: var(--color-accent-soft); font-size: 1.45rem; }
+/* Ikon dibesarkan relatif terhadap petaknya. Pada 1.45rem di dalam petak 3rem,
+   yang terbaca lebih dulu adalah petak seragamnya, bukan ikonnya. */
+.food-card__icon { display: grid; flex: 0 0 auto; width: 3rem; height: 3rem; place-items: center; border-radius: var(--radius-card); background: var(--color-accent-soft); font-size: 1.8rem; line-height: 1; }
 .food-card__body { display: grid; min-width: 0; gap: 0.2rem; }
 .food-card__name { margin: 0; overflow-wrap: anywhere; font-size: 0.84rem; font-weight: 800; }
 .food-card__meta { margin: 0; color: var(--color-muted); font-size: 0.72rem; }

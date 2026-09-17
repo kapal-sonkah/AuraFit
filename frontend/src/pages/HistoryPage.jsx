@@ -167,7 +167,7 @@ function PlanItem({ item, type, onToggle, saving }) {
   return (
     <article className={`history-plan-item ${item.completed ? 'history-plan-item--done' : ''}`}>
       <div className="history-plan-item__icon" aria-hidden="true">
-        {type === 'activity' ? <ActivityIcon name={presented.name} /> : presented.emoji || '•'}
+        {type === 'activity' ? <ActivityIcon name={presented.name} /> : presented.emoji}
       </div>
       <div className="history-plan-item__body">
         <p className="history-plan-item__name">{presented.name}</p>

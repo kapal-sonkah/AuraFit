@@ -52,6 +52,40 @@ const FOOD_NAMES = {
   'boiled shrimp': 'Udang rebus', 'turkey breast': 'Dada kalkun', couscous: 'Kuskus',
 };
 
+// Sebagian butir katalog berbagi satu ikon, sehingga jenis makanan sulit
+// dibedakan sekilas: tiga butir ayam memakai ikon yang sama, begitu pula tiga
+// butir susu, tiga butir kacang, dan tiga butir ikan. Peta ini hanya menimpa
+// ikon yang berulang; butir yang ikonnya sudah khas tetap memakai ikon katalog.
+//
+// Penimpaan ditaruh di sini, bukan di katalog, karena katalog dihasilkan ulang
+// dari sumbernya dan tidak boleh disunting dengan tangan.
+const FOOD_EMOJI = {
+  grapefruit: '🍋',
+  'grilled chicken breast': '🍖',
+  'roasted chicken thigh': '🐔',
+  'multigrain crackers': '🫓',
+  couscous: '🥘',
+  quinoa: '🌾',
+  'sweet potato mash': '🫕',
+  'lentil soup': '🍛',
+  'grilled tilapia': '🐠',
+  'sardines (in water)': '🥫',
+  'tuna salad': '🥪',
+  'boiled egg whites': '🍳',
+  'soy milk': '🫗',
+  'whey protein isolate': '💪',
+  almonds: '🌰',
+  'peanut butter': '🧈',
+  'miso soup': '🥢',
+  'grilled tempeh': '🍢',
+  'beef jerky': '🥓',
+  'turkey breast': '🦃',
+};
+
+// Butir yang dicatat sendiri oleh pengguna tidak membawa ikon apa pun. Tanpa
+// cadangan ini petaknya tampil sebagai kotak berwarna yang kosong.
+const FOOD_EMOJI_FALLBACK = '🍽️';
+
 function keyOf(value) {
   return String(value || '').trim().toLocaleLowerCase('en-US');
 }
@@ -71,6 +105,11 @@ export function presentActivity(item) {
 }
 
 export function presentFood(item) {
-  const name = FOOD_NAMES[keyOf(item?.name)];
-  return name ? { ...item, name, portion: localizePortion(item.portion) } : { ...item, portion: localizePortion(item?.portion) };
+  const kunci = keyOf(item?.name);
+  return {
+    ...item,
+    name: FOOD_NAMES[kunci] ?? item?.name,
+    emoji: FOOD_EMOJI[kunci] ?? item?.emoji ?? FOOD_EMOJI_FALLBACK,
+    portion: localizePortion(item?.portion),
+  };
 }
