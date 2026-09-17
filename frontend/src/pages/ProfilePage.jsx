@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { updateUserProfile } from '../utils/network-data';
+import { changePassword, updateUserProfile } from '../utils/network-data';
 import '../profile.css';
 
 const GOALS = [
@@ -23,6 +23,62 @@ function profileForm(user) {
 
 function sameProfile(left, right) {
   return Object.keys(left).every((field) => String(left[field]) === String(right[field]));
+}
+
+function PasswordCard() {
+  const [fields, setFields] = useState({ current: '', next: '', confirm: '' });
+  const [status, setStatus] = useState({ type: '', message: '' });
+  const [saving, setSaving] = useState(false);
+
+  function setField(field, value) {
+    setFields((current) => ({ ...current, [field]: value }));
+    if (status.message) setStatus({ type: '', message: '' });
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    if (fields.next.length < 8) {
+      setStatus({ type: 'error', message: 'Kata sandi baru minimal 8 karakter.' });
+      return;
+    }
+    if (fields.next !== fields.confirm) {
+      setStatus({ type: 'error', message: 'Konfirmasi kata sandi baru tidak sama.' });
+      return;
+    }
+
+    setSaving(true);
+    const result = await changePassword(fields.current, fields.next);
+    setSaving(false);
+
+    if (result.error) {
+      setStatus({ type: 'error', message: result.message });
+      return;
+    }
+    setFields({ current: '', next: '', confirm: '' });
+    setStatus({ type: 'success', message: 'Kata sandi berhasil diganti. Gunakan kata sandi baru saat masuk berikutnya.' });
+  }
+
+  return (
+    <form className="profile-card" onSubmit={handleSubmit}>
+      <div className="profile-card__head">
+        <div>
+          <p className="profile-card__eyebrow">Keamanan akun</p>
+          <h2 className="profile-card__title">Ganti kata sandi</h2>
+        </div>
+      </div>
+
+      <div className="profile-form-grid">
+        <label className="profile-field profile-field--wide"><span>Kata sandi saat ini</span><input type="password" autoComplete="current-password" value={fields.current} onChange={(event) => setField('current', event.target.value)} required /></label>
+        <label className="profile-field"><span>Kata sandi baru</span><input type="password" autoComplete="new-password" minLength={8} value={fields.next} onChange={(event) => setField('next', event.target.value)} required /></label>
+        <label className="profile-field"><span>Ulangi kata sandi baru</span><input type="password" autoComplete="new-password" minLength={8} value={fields.confirm} onChange={(event) => setField('confirm', event.target.value)} required /></label>
+      </div>
+
+      {status.message ? <p className={`profile-message profile-message--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p> : null}
+      <div className="profile-actions">
+        <button type="submit" className="profile-action profile-action--primary" disabled={saving} aria-busy={saving}>{saving ? 'Menyimpan…' : 'Ganti kata sandi'}</button>
+      </div>
+    </form>
+  );
 }
 
 export default function ProfilePage({ onLogout, user, onUserUpdated }) {
@@ -121,6 +177,8 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
               </div>
             )}
           </form>
+
+          <PasswordCard />
         </main>
       </div>
     </div>

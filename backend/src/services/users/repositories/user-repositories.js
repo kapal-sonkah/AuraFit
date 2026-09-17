@@ -64,10 +64,48 @@ class UserRepositories {
     return this.getUserById(id);
   }
 
+  // Mengembalikan jenis bentrokan pendaftaran: nama pengguna, email, atau keduanya.
+  async findRegistrationConflict(username, email) {
+    const result = await this.pool.query(
+      `SELECT bool_or(username = $1) AS username, bool_or(lower(email) = lower($2)) AS email
+       FROM users WHERE username = $1 OR lower(email) = lower($2)`,
+      [username, email]
+    );
+    return { username: Boolean(result.rows[0]?.username), email: Boolean(result.rows[0]?.email) };
+  }
+
+  // Mengganti kata sandi setelah kata sandi lama terbukti benar. Akun lama yang
+  // masih menyimpan plaintext dicocokkan dengan cara yang sama seperti login.
+  async changePassword(id, currentPassword, newPassword) {
+    const result = await this.pool.query('SELECT password, password_hash FROM users WHERE id = $1', [id]);
+    const user = result.rows[0];
+    if (!user) return false;
+
+    const cocok = user.password_hash
+      ? await verifyPassword(currentPassword, user.password_hash)
+      : typeof user.password === 'string' && user.password === currentPassword;
+    if (!cocok) return false;
+
+    await this.pool.query(
+      'UPDATE users SET password_hash = $2, password = NULL WHERE id = $1',
+      [id, await hashPassword(newPassword)]
+    );
+    return true;
+  }
+
+  // Dipakai skrip admin. Mengembalikan id pengguna, atau null bila tidak ada.
+  async resetPasswordByUsername(username, newPassword) {
+    const result = await this.pool.query(
+      'UPDATE users SET password_hash = $2, password = NULL WHERE username = $1 RETURNING id',
+      [username, await hashPassword(newPassword)]
+    );
+    return result.rows[0]?.id ?? null;
+  }
+
   async verifyUserCredential(username_email, password) {
     const query = {
       text: `SELECT id, password, password_hash FROM users
-            WHERE username = $1 OR email = $1
+            WHERE username = $1 OR lower(email) = lower($1)
             LIMIT 1`,
       values: [username_email]
     }

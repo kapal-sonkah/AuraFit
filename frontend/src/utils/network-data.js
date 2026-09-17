@@ -209,6 +209,25 @@ async function createManualPlan({ activities, foods }) {
   }
 }
 
+async function changePassword(currentPassword, newPassword) {
+  try {
+    const response = await fetchWithToken(`${BASE_URL}/users/me/password`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+    });
+    const responseJson = await response.json();
+
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, message: responseJson.message || 'Kata sandi belum dapat diganti.' };
+    }
+
+    return { error: false };
+  } catch {
+    return { error: true, message: 'Tidak dapat mengganti kata sandi. Periksa koneksi, lalu coba lagi.' };
+  }
+}
+
 async function updatePlanItem(itemId, fields) {
   try {
     const response = await fetchWithToken(`${BASE_URL}/plan-items/${encodeURIComponent(itemId)}`, {
@@ -277,6 +296,7 @@ export {
   createManualPlan,
   deletePlanItem,
   updatePlanItem,
+  changePassword,
   updateUserProfile,
   getAuraToday,
   saveAuraToday,

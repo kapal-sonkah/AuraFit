@@ -67,6 +67,9 @@ function LoginPage({ loginSuccess }) {
                 <PasswordVisibilityIcon visible={showPassword} />
               </button>
             </div>
+            <p className="auth-help">
+              Lupa kata sandi? Minta admin AuraFit membuat kata sandi sementara, lalu ganti di halaman Profil setelah masuk.
+            </p>
           </div>
 
           {galat ? (

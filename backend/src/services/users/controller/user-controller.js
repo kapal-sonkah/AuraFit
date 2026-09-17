@@ -1,26 +1,60 @@
 import InvariantError from "../../../exceptions/invariant-error.js";
 import response from "../../../utils/response.js";
 import UserRepositories from "../repositories/user-repositories.js";
+import AuthenticationError from "../../../exceptions/authentication-error.js";
 import { isAcceptablePassword } from '../../../security/password.js';
 
 export const createUser = async (req, res, next) => {
-  const { username, email, password, first_name, last_name, sex, weight, height, goal, age } = req.body;
+  try {
+    const { username, email, password, first_name, last_name, sex, weight, height, goal, age } = req.body ?? {};
 
-  if (!username || !email || !first_name || !last_name || !sex || !goal || !isAcceptablePassword(password)) {
-    return next(new InvariantError('Lengkapi data pendaftaran. Kata sandi minimal 8 karakter.'));
+    if (!username || !email || !first_name || !last_name || !sex || !goal || !isAcceptablePassword(password)) {
+      return next(new InvariantError('Lengkapi data pendaftaran. Kata sandi minimal 8 karakter.'));
+    }
+
+    if (!Number.isFinite(Number(weight)) || !Number.isFinite(Number(height)) || !Number.isFinite(Number(age))) {
+      return next(new InvariantError('Data tubuh tidak valid.'));
+    }
+
+    const emailBersih = String(email).trim().toLowerCase();
+    const bentrok = await UserRepositories.findRegistrationConflict(username, emailBersih);
+    if (bentrok.username) return next(new InvariantError('Nama pengguna sudah dipakai.'));
+    if (bentrok.email) return next(new InvariantError('Email sudah terdaftar.'));
+
+    const user = await UserRepositories.createUser(
+      username, emailBersih, password, first_name, last_name, sex, weight, height, goal, age
+    );
+
+    if (!user) return next(new InvariantError('Failed to create user'));
+
+    return response(res, 201, 'Pengguna berhasil dibuat', user);
+  } catch (error) {
+    // Dua pendaftaran bersamaan dapat lolos pemeriksaan di atas; kendala unik
+    // di basis data menahan yang kedua.
+    if (error.code === '23505') {
+      return next(new InvariantError('Nama pengguna atau email sudah terdaftar.'));
+    }
+    return next(error);
   }
+};
 
-  if (!Number.isFinite(Number(weight)) || !Number.isFinite(Number(height)) || !Number.isFinite(Number(age))) {
-    return next(new InvariantError('Data tubuh tidak valid.'));
+export const changePassword = async (req, res, next) => {
+  try {
+    const { current_password, new_password } = req.body ?? {};
+    if (typeof current_password !== 'string' || !current_password) {
+      return next(new InvariantError('Masukkan kata sandi saat ini.'));
+    }
+    if (!isAcceptablePassword(new_password)) {
+      return next(new InvariantError('Kata sandi baru minimal 8 karakter.'));
+    }
+
+    const berhasil = await UserRepositories.changePassword(req.user.id, current_password, new_password);
+    if (!berhasil) return next(new AuthenticationError('Kata sandi saat ini salah.'));
+
+    return response(res, 200, 'Kata sandi berhasil diganti', null);
+  } catch (error) {
+    return next(error);
   }
-
-  const user = await UserRepositories.createUser(
-    username, email, password, first_name, last_name, sex, weight, height, goal, age
-  );
-
-  if (!user) return next(new InvariantError('Failed to create user'));
-
-  return response(res, 201, 'Pengguna berhasil dibuat', user);
 };
 
 export const getUserById = async (req, res, next) => {

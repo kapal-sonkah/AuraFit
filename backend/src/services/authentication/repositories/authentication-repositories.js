@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import pool from '../../../database/pool.js';
 
 class AuthenticationRepositories {
@@ -21,6 +22,28 @@ class AuthenticationRepositories {
     };
 
     await this.pool.query(query);
+  }
+
+  // Tabel authentications hanya menyimpan token tanpa id pengguna, dan refresh
+  // token tidak pernah kedaluwarsa. Sesi seorang pengguna karena itu dicabut
+  // dengan membaca id di dalam setiap token. Token yang tidak dapat diverifikasi
+  // dibiarkan, karena sudah pasti ditolak saat dipakai.
+  async deleteRefreshTokensForUser(userId) {
+    const result = await this.pool.query('SELECT token FROM authentications');
+    const milikPengguna = result.rows
+      .map((row) => row.token)
+      .filter((token) => {
+        try {
+          return jwt.verify(token, process.env.REFRESH_TOKEN_KEY).id === userId;
+        } catch {
+          return false;
+        }
+      });
+
+    if (milikPengguna.length) {
+      await this.pool.query('DELETE FROM authentications WHERE token = ANY($1)', [milikPengguna]);
+    }
+    return milikPengguna.length;
   }
 
   async verifyRefreshToken(token) {
