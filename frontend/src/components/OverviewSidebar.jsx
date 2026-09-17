@@ -1,6 +1,4 @@
-import DonutChart from "./DonutChart";
-
-function StatCard({ label, value, unit, sub, subColor, right }) {
+function StatCard({ label, value, unit, sub, subColor }) {
   return (
     <article className="stat-card">
       <div>
@@ -10,7 +8,6 @@ function StatCard({ label, value, unit, sub, subColor, right }) {
         </p>
         <p className={`stat-card__sub ${subColor}`}>{sub}</p>
       </div>
-      {right && <div className="stat-card__visual">{right}</div>}
     </article>
   );
 }
@@ -70,15 +67,13 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
           label="Aktivitas Tercatat" 
           value={`${completedActivities} / ${totalActivities}`}
           sub="selesai dari rencana"
-          subColor={activitySubColor} 
-          right={<DonutChart completed={completedActivities} total={totalActivities || 1} />} />
+          subColor={activitySubColor} />
         
         <StatCard 
           label="Streak" 
-          value={streak} 
-          sub="hari berturut-turut" 
-          subColor={streakSubColor}
-          right={null} />
+          value={streak}
+          sub="hari berturut-turut"
+          subColor={streakSubColor} />
       </section>
     </aside>
   );

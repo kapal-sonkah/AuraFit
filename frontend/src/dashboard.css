@@ -128,10 +128,6 @@
 .stat-card__sub--positive { color: var(--color-positive); }
 .stat-card__sub--warning { color: var(--color-warning); }
 .stat-card__sub--muted { color: var(--color-subtle); }
-.stat-card__visual { flex: 0 0 auto; }
-.donut-chart { display: block; }
-.donut-chart__track { stroke: var(--color-paper-soft); }
-.donut-chart__value { stroke: var(--color-accent); }
 
 .dashboard-alert { padding: var(--space-3) var(--space-4); border: 1px solid var(--color-alert-line); border-radius: var(--radius-card); background: var(--color-alert-surface); color: var(--color-danger); font-size: 0.8rem; line-height: 1.5; }
 .dashboard-state { display: grid; gap: var(--space-2); place-items: center; padding: var(--space-10); border-radius: var(--radius-panel); background: var(--color-paper); text-align: center; }
@@ -189,7 +185,6 @@
   .overview-card { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
   .overview-card__head { grid-column: 1 / -1; }
   .stat-card { min-height: 6.4rem; flex-direction: column; align-items: start; }
-  .stat-card__visual { align-self: end; margin-top: -2.8rem; }
 }
 
 @media (max-width: 42rem) {
