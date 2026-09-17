@@ -28,6 +28,8 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Aktivitas manual tanpa gambar | Kotak bergaris diganti ilustrasi ikon aktivitas | `1dc5917` |
 | Tidak ada alur lupa kata sandi | Reset oleh admin (`npm run reset-password -- <nama_pengguna>`) yang mencabut semua sesi, borang ganti kata sandi di Profil, petunjuk di halaman masuk, dan email unik | `d1cab74`, `4a2641f` |
 | Line ending tidak konsisten | Seluruh berkas di repositori kini LF | `4077866` |
+| Foto "Morning Stretching" rusak di produksi | Path katalog salah ketik (`morning-streching.jpg`); kini benar dan dijaga uji | `ce7770c` |
+| Katalog hanya enam aktivitas per tingkat | 12 aktivitas per tingkat dengan foto berlisensi Pexels dan nama berbahasa Indonesia | `f38a4b8` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
@@ -41,13 +43,19 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - Tanpa migrasi ini aplikasi tetap aman: pendaftaran memeriksa email ganda di tingkat aplikasi. Indeks hanya pengaman terakhir terhadap pendaftaran bersamaan.
 - Langkah: perbarui `DATABASE_URL` di `backend/.env`, periksa duplikat dengan `SELECT lower(email), count(*) FROM users GROUP BY 1 HAVING count(*) > 1;`, lalu jalankan `npm run migrate up` di folder `backend`. Bila ada duplikat, rapikan dulu datanya.
 
-## 2. Katalog hanya enam aktivitas per tingkat
+## 2. Katalog aktivitas: video YouTube untuk 24 aktivitas baru
 
-- Setiap tingkat intensitas memuat enam aktivitas, sehingga 8–10 aktivitas per hari tidak dapat dicapai. Uji di `backend/test/date-and-recommendation.test.js` menolak jumlah yang melebihi katalog.
-- Perbaikan yang diharapkan: tambah aktivitas hingga sekitar 12–16 per tingkat. Setiap butir membutuhkan gambar dan tautan YouTube.
-- Gambar jangan diambil sembarangan dari Google Images karena hampir semuanya berhak cipta. Gunakan Pexels, Unsplash, atau Pixabay, atau periksa lisensi Creative Commons di situs sumbernya.
+- Katalog kini memuat 12 aktivitas per tingkat. Ke-24 aktivitas baru memakai foto berlisensi Pexels yang sumbernya tercatat di `docs/image-credits.md`.
+- Aktivitas baru belum punya `youtube_url`; popupnya menampilkan foto sebagai gantinya. Tautan video perlu dipilih dan disetujui sebelum dipasang.
 
-## 3. Catatan kecil
+## 3. Gambar aktivitas lama tanpa lisensi yang jelas
+
+- Gambar untuk 24 aktivitas awal berasal dari layanan capstone terdahulu dan sumbernya tidak tercatat.
+- `morning-cardio-run.jpg` memuat watermark Vecteezy (gambar pratinjau yang memerlukan lisensi), dan `marching-in-place.jpg` memuat tanda "© 2023 Healthwise". Keduanya tampil di produksi.
+- Ada 18 berkas lain di `frontend/public/images/activities` yang tidak dipakai katalog dan asalnya juga tidak tercatat.
+- Perbaikan yang diharapkan: ganti seluruh gambar lama dengan gambar berlisensi jelas (misalnya Pexels), catat sumbernya, dan hapus berkas yang tidak dipakai.
+
+## 4. Catatan kecil
 
 - Popup aktivitas: bila foto gagal dimuat, `onError` menyembunyikan foto lalu menampilkan elemen sesudahnya (paragraf deskripsi), bukan ilustrasi pengganti. Kartu di dasbor sudah benar.
 - Access token yang sudah terbit tetap berlaku hingga tiga jam setelah reset kata sandi oleh admin; refresh token sudah dicabut.
@@ -67,4 +75,6 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - [x] Layar pilih aura dilihat di browser
 - [x] Normalisasi line ending
 - [ ] Jalankan migrasi email unik di Neon
-- [ ] Tambah isi katalog aktivitas (gambar berlisensi + tautan YouTube)
+- [x] Tambah 24 aktivitas dengan foto berlisensi Pexels
+- [ ] Tautan YouTube untuk 24 aktivitas baru
+- [ ] Ganti gambar aktivitas lama yang lisensinya tidak jelas
