@@ -35,6 +35,7 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Header Hari ini, Riwayat, dan Profil berbeda di HP | Satu komponen header untuk ketiganya; tetap satu baris dengan empat tombol sampai lebar 360px | `edbc836` |
 | Konten dasbor terpotong di kanan pada iPhone | Kolom dasbor kini boleh menyempit (`minmax(0, 1fr)`) | `2415ead` |
 | Kartu aktivitas dalam satu baris tidak rata | Judul memakan dua baris dan tombol berada di dasar kartu | `b757c21` |
+| Pendaftaran lewat API menerima jenis kelamin dan tujuan sembarang | `POST /register` kini memakai aturan yang sama dengan ubah profil | (commit ini) |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
@@ -61,7 +62,6 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - Popup aktivitas: bila foto gagal dimuat, `onError` menyembunyikan foto lalu menampilkan elemen sesudahnya (paragraf deskripsi), bukan ilustrasi pengganti. Kartu di dasbor sudah benar.
 - Access token yang sudah terbit tetap berlaku hingga tiga jam setelah reset kata sandi oleh admin; refresh token sudah dicabut.
 - Pengiriman tautan reset lewat email belum ada. Dapat ditambahkan kelak bila tersedia layanan email.
-- Endpoint `POST /register` tidak memeriksa nilai `sex` dan `goal` (misalnya `goal: "maintain"` diterima), padahal ubah profil hanya menerima `male`/`female` dan `lose_weight`/`maintain_weight`/`gain_weight`. Borang daftar selalu mengirim nilai yang benar, jadi hanya terjadi bila API dipanggil langsung; akun seperti itu gagal menyimpan profil sampai tujuannya diperbaiki.
 
 ## Checklist tindak lanjut
 

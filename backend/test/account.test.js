@@ -20,13 +20,13 @@ const pendaftaran = {
   first_name: 'Budi', last_name: 'Santoso', sex: 'male', weight: 60, height: 170, goal: 'maintain_weight', age: 21,
 };
 
-async function daftar(stubs) {
+async function daftar(stubs, body = pendaftaran) {
   const asli = { conflict: UserRepositories.findRegistrationConflict, create: UserRepositories.createUser };
   Object.assign(UserRepositories, stubs);
   const res = resTiruan();
   let galat;
   try {
-    await createUser({ body: pendaftaran }, res, (e) => { galat = e; });
+    await createUser({ body }, res, (e) => { galat = e; });
   } finally {
     UserRepositories.findRegistrationConflict = asli.conflict;
     UserRepositories.createUser = asli.create;
@@ -111,5 +111,16 @@ test('pencabutan sesi hanya menghapus refresh token milik pengguna itu', async (
     assert.deepEqual(new Set(dihapus), new Set([milikBudi1, milikBudi2]));
   } finally {
     AuthenticationRepositories.pool = originalPool;
+  }
+});
+
+test('pendaftaran menolak jenis kelamin, tujuan, dan data tubuh di luar pilihan', async () => {
+  const stubs = {
+    findRegistrationConflict: async () => { throw new Error('tidak boleh dipanggil'); },
+    createUser: async () => { throw new Error('tidak boleh dipanggil'); },
+  };
+  for (const salah of [{ goal: 'maintain' }, { sex: 'pria' }, { age: 3 }, { weight: 5 }]) {
+    const { galat } = await daftar(stubs, { ...pendaftaran, ...salah });
+    assert.equal(galat?.statusCode, 400, JSON.stringify(salah));
   }
 });

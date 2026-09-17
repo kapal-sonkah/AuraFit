@@ -11,8 +11,18 @@ export const createUser = async (req, res, next) => {
       return next(new InvariantError('Lengkapi data pendaftaran. Kata sandi minimal 8 karakter.'));
     }
 
-    if (!Number.isFinite(Number(weight)) || !Number.isFinite(Number(height)) || !Number.isFinite(Number(age))) {
+    // Aturannya sama dengan ubah profil, agar akun yang lolos pendaftaran
+    // tidak tertolak saat pertama kali menyimpan profil.
+    const weightNumber = Number(weight);
+    const heightNumber = Number(height);
+    const ageNumber = Number(age);
+    if (!Number.isFinite(weightNumber) || weightNumber < 20 || weightNumber > 400
+      || !Number.isFinite(heightNumber) || heightNumber < 80 || heightNumber > 250
+      || !Number.isInteger(ageNumber) || ageNumber < 10 || ageNumber > 120) {
       return next(new InvariantError('Data tubuh tidak valid.'));
+    }
+    if (!['male', 'female'].includes(sex) || !['lose_weight', 'maintain_weight', 'gain_weight'].includes(goal)) {
+      return next(new InvariantError('Pilihan jenis kelamin atau tujuan tidak valid.'));
     }
 
     const emailBersih = String(email).trim().toLowerCase();
