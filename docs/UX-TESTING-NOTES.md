@@ -36,6 +36,7 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Konten dasbor terpotong di kanan pada iPhone | Kolom dasbor kini boleh menyempit (`minmax(0, 1fr)`) | `2415ead` |
 | Kartu aktivitas dalam satu baris tidak rata | Judul memakan dua baris dan tombol berada di dasar kartu | `b757c21` |
 | Pendaftaran lewat API menerima jenis kelamin dan tujuan sembarang | `POST /register` kini memakai aturan yang sama dengan ubah profil | `a0bf90a` |
+| Video YouTube lama tidak cocok dengan aktivitasnya | Bersepeda santai, Joging sore, Interval sprint, dan Sirkuit CrossFit dasar kini memakai video panduan atau latihan yang sesuai; semuanya dapat diputar di aplikasi | `02c3493` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
@@ -49,15 +50,7 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - Tanpa migrasi ini aplikasi tetap aman: pendaftaran memeriksa email ganda di tingkat aplikasi. Indeks hanya pengaman terakhir terhadap pendaftaran bersamaan.
 - Langkah: perbarui `DATABASE_URL` di `backend/.env`, periksa duplikat dengan `SELECT lower(email), count(*) FROM users GROUP BY 1 HAVING count(*) > 1;`, lalu jalankan `npm run migrate up` di folder `backend`. Bila ada duplikat, rapikan dulu datanya.
 
-## 2. Video YouTube lama yang tidak cocok dengan aktivitasnya
-
-- Ke-24 tautan YouTube lama masih aktif dan dapat diputar di aplikasi (diperiksa lewat oEmbed pada 2026-09-17), tetapi beberapa isinya tidak sesuai:
-  - Bersepeda santai (tingkat ringan) memakai video HIIT indoor cycling, yang justru intensitas tinggi.
-  - Joging sore dan Interval sprint memakai video penjelasan ("apa yang terjadi pada tubuh…"), bukan latihan.
-  - Sirkuit CrossFit dasar memakai video latihan dumbel.
-- Perbaikan yang diharapkan: ganti dengan video tutorial atau latihan yang sesuai intensitas tingkatnya.
-
-## 3. Catatan kecil
+## 2. Catatan kecil
 
 - Popup aktivitas: bila foto gagal dimuat, `onError` menyembunyikan foto lalu menampilkan elemen sesudahnya (paragraf deskripsi), bukan ilustrasi pengganti. Kartu di dasbor sudah benar.
 - Access token yang sudah terbit tetap berlaku hingga tiga jam setelah reset kata sandi oleh admin; refresh token sudah dicabut.
@@ -81,4 +74,4 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - [x] Tautan YouTube untuk 24 aktivitas baru
 - [x] Ganti gambar aktivitas lama yang lisensinya tidak jelas
 - [ ] Hapus 18 berkas gambar yang tidak dipakai dan tidak tercatat sumbernya
-- [ ] Ganti video YouTube lama yang tidak cocok dengan aktivitasnya
+- [x] Ganti video YouTube lama yang tidak cocok dengan aktivitasnya
