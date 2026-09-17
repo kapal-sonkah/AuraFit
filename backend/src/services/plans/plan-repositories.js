@@ -178,7 +178,7 @@ class PlanRepositories {
    * Menghapus satu butir yang dicatat sendiri oleh pengguna.
    *
    * Hanya butir tanpa source_ref yang dapat dihapus, yaitu butir manual. Butir
-   * rekomendasi dibiarkan agar rencana tidak bisa dikosongkan demi streak.
+   * rekomendasi dibiarkan agar rencana susunan sistem tetap utuh.
    * Progres butir itu ikut terhapus melalui ON DELETE CASCADE, sedangkan butir
    * lain tidak tersentuh. Mengembalikan tanggal rencananya, atau null bila
    * butir tidak ada, bukan milik pengguna, atau bukan butir manual.
@@ -240,12 +240,17 @@ class PlanRepositories {
   /**
    * Streak dihitung dari butir rencana tersimpan, sehingga membatalkan satu
    * catatan langsung tercermin. Tidak ada cron yang menyimpan angka terpisah.
+   *
+   * Satu hari dihitung bila minimal satu aktivitas pada rencananya selesai
+   * (SRS F-40). Streak mengukur konsistensi, bukan kepatuhan pada seluruh daftar
+   * yang disusun sistem; kelengkapan hari itu tetap terlihat pada bilah progres.
+   * Makanan tidak dihitung karena porsi yang dimakan tidak selalu sama dengan
+   * daftar rekomendasi.
    */
   async getStreak(userId, sampaiTanggal = todayInJakarta()) {
     const result = await this.pool.query(`
       SELECT p.plan_date,
-             COUNT(i.id)::int AS total,
-             COUNT(i.id) FILTER (WHERE pr.completed)::int AS selesai
+             COUNT(i.id) FILTER (WHERE i.item_type = 'activity' AND pr.completed)::int AS aktivitas_selesai
       FROM daily_plans p
       JOIN daily_plan_items i ON i.plan_id = p.id
       LEFT JOIN plan_item_progress pr ON pr.plan_item_id = i.id
@@ -254,15 +259,15 @@ class PlanRepositories {
       ORDER BY p.plan_date DESC
     `, [userId, sampaiTanggal]);
 
-    const selesaiPenuh = new Set(
+    const hariAktif = new Set(
       result.rows
-        .filter((row) => row.total > 0 && row.total === row.selesai)
+        .filter((row) => row.aktivitas_selesai > 0)
         .map((row) => row.plan_date)
     );
 
     let tanggal = sampaiTanggal;
     let streak = 0;
-    while (selesaiPenuh.has(tanggal)) {
+    while (hariAktif.has(tanggal)) {
       streak += 1;
       tanggal = previousDate(tanggal);
     }

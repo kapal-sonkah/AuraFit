@@ -69,16 +69,17 @@ test('tanggal bawaan repository mengikuti Asia/Jakarta', async () => {
   }
 });
 
-test('streak berjalan mundur berdasarkan tanggal kalender', async () => {
+test('streak berjalan mundur selama tiap hari punya minimal satu aktivitas selesai', async () => {
   const originalTimeZone = process.env.TZ;
   const originalPool = PlanRepositories.pool;
   process.env.TZ = 'Pacific/Kiritimati';
   PlanRepositories.pool = {
     query: async () => ({
       rows: [
-        { plan_date: '2026-09-13', total: 2, selesai: 2 },
-        { plan_date: '2026-09-12', total: 2, selesai: 2 },
-        { plan_date: '2026-09-11', total: 2, selesai: 1 },
+        { plan_date: '2026-09-13', aktivitas_selesai: 1 },
+        { plan_date: '2026-09-12', aktivitas_selesai: 4 },
+        { plan_date: '2026-09-11', aktivitas_selesai: 0 },
+        { plan_date: '2026-09-10', aktivitas_selesai: 2 },
       ],
     }),
   };

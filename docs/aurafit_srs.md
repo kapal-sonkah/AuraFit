@@ -165,7 +165,7 @@ Tabel 3.4  User story riwayat dan ringkasan
 |---|---|---|
 | US-30 | Sebagai pengguna, saya ingin melihat catatan pada tanggal tertentu agar dapat meninjau kebiasaan saya | Rencana dan progres pada tanggal yang dipilih tampil sesuai data tersimpan |
 | US-31 | Sebagai pengguna, saya ingin melihat ringkasan tujuh hari terakhir agar tahu perkembangan saya | Ringkasan dihitung dari data tersimpan dan sesuai perhitungan manual atas data uji |
-| US-32 | Sebagai pengguna, saya ingin melihat jumlah hari berturut-turut saya menyelesaikan rencana agar termotivasi melanjutkan | Hitungan bertambah ketika seluruh butir pada rencana harian diselesaikan pada satu hari |
+| US-32 | Sebagai pengguna, saya ingin melihat jumlah hari berturut-turut saya menjalankan rencana agar termotivasi melanjutkan | Hitungan bertambah ketika minimal satu aktivitas pada rencana harian diselesaikan pada satu hari |
 | US-33 | Sebagai pengguna, saya ingin mengoreksi status catatan pada tanggal lampau agar riwayat tetap benar | Status butir pada tanggal yang dipilih dapat ditandai atau dibatalkan dan tersimpan |
 
 # BAB IV. KEBUTUHAN FUNGSIONAL
@@ -240,7 +240,7 @@ Tabel 4.6  Kebutuhan streak
 
 | ID | Kebutuhan | Asal | Prioritas |
 |---|---|---|---|
-| F-40 | Sistem menghitung jumlah hari berturut-turut pengguna menyelesaikan seluruh butir pada rencana harian | US-32 | Should |
+| F-40 | Sistem menghitung jumlah hari berturut-turut pengguna menyelesaikan minimal satu aktivitas pada rencana harian; kelengkapan seluruh butir ditampilkan terpisah sebagai progres | US-32 | Should |
 
 # BAB V. KEBUTUHAN NON-FUNGSIONAL
 

@@ -37,7 +37,7 @@ demo sebelumnya tidak otomatis menjadi bukti UAT.
 | TC-19 | F-30 | Pilih tanggal lampau dan tanggal tanpa data | Riwayat menampilkan tanggal dan progres yang sesuai |  | Belum diuji formal |
 | TC-20 | F-31, F-32 | Bandingkan ringkasan tujuh hari dengan perhitungan manual | Jumlah aktivitas dan makanan selesai sesuai data uji |  | Belum diuji formal |
 | TC-21 | F-33 | Tandai dan batalkan status pada tanggal lampau | Koreksi tersimpan dan muncul pada riwayat serta ringkasan |  | Belum diuji formal |
-| TC-22 | F-40 | Lengkapi seluruh butir beberapa hari berurutan dan sisakan satu hari | Streak hanya menghitung hari yang seluruh butirnya selesai |  | Belum diuji formal |
+| TC-22 | F-40 | Selesaikan minimal satu aktivitas beberapa hari berurutan, lalu biarkan satu hari tanpa aktivitas selesai meskipun makanan dicatat | Streak menghitung hari dengan minimal satu aktivitas selesai dan berhenti pada hari tanpa aktivitas selesai |  | Belum diuji formal |
 
 ## Non-functional matrix
 
