@@ -32,6 +32,9 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Katalog hanya enam aktivitas per tingkat | 12 aktivitas per tingkat dengan foto berlisensi Pexels dan nama berbahasa Indonesia | `f38a4b8` |
 | Gambar aktivitas lama tanpa lisensi yang jelas | 24 gambar lama, termasuk yang ber-watermark Vecteezy dan bertanda Healthwise, diganti foto Pexels; seluruh sumber tercatat di `docs/image-credits.md` | `17b5fce` |
 | Aktivitas baru belum punya video | 24 aktivitas baru kini punya video YouTube yang dapat diputar di aplikasi | `f1c6896` |
+| Header Hari ini, Riwayat, dan Profil berbeda di HP | Satu komponen header untuk ketiganya; tetap satu baris dengan empat tombol sampai lebar 360px | `edbc836` |
+| Konten dasbor terpotong di kanan pada iPhone | Kolom dasbor kini boleh menyempit (`minmax(0, 1fr)`) | `2415ead` |
+| Kartu aktivitas dalam satu baris tidak rata | Judul memakan dua baris dan tombol berada di dasar kartu | `b757c21` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
