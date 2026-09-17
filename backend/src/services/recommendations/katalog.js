@@ -253,7 +253,7 @@ const KATALOG = {
         "name": "Leisurely Cycling",
         "description": "Leisurely cycling on a flat route for 30 minutes.",
         "image": "/images/activities/leisurely-cycling.jpg",
-        "youtube_url": "https://www.youtube.com/watch?v=ZiGE3-L4vyg"
+        "youtube_url": "https://www.youtube.com/watch?v=4ssLDk1eX9w"
       },
       {
         "id": 5,
@@ -483,7 +483,7 @@ const KATALOG = {
         "name": "Evening Jog",
         "description": "Light evening jog covering 3-5 KM.",
         "image": "/images/activities/evening-jog.jpg",
-        "youtube_url": "https://www.youtube.com/watch?v=N9C88z3g0Es"
+        "youtube_url": "https://www.youtube.com/watch?v=kVnyY17VS9Y"
       },
       {
         "id": 7,
@@ -678,7 +678,7 @@ const KATALOG = {
         "name": "Sprint Intervals",
         "description": "30-second sprints alternating with a 1-minute walk, repeated 10 times.",
         "image": "/images/activities/sprint-intervals.jpg",
-        "youtube_url": "https://www.youtube.com/watch?v=QLBT4-iN2yg"
+        "youtube_url": "https://www.youtube.com/watch?v=O78pemR9xdM"
       },
       {
         "id": 4,
@@ -692,7 +692,7 @@ const KATALOG = {
         "name": "Basic Crossfit",
         "description": "Intensive circuit training combining cardio and light weights.",
         "image": "/images/activities/basic-crossfit.jpg",
-        "youtube_url": "https://www.youtube.com/watch?v=l0gDqsSUtWo"
+        "youtube_url": "https://www.youtube.com/watch?v=Hvalihziujc"
       },
       {
         "id": 6,
