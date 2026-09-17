@@ -30,6 +30,8 @@ dan temuan audit kode yang perlu ditindaklanjuti.
 | Line ending tidak konsisten | Seluruh berkas di repositori kini LF | `4077866` |
 | Foto "Morning Stretching" rusak di produksi | Path katalog salah ketik (`morning-streching.jpg`); kini benar dan dijaga uji | `ce7770c` |
 | Katalog hanya enam aktivitas per tingkat | 12 aktivitas per tingkat dengan foto berlisensi Pexels dan nama berbahasa Indonesia | `f38a4b8` |
+| Gambar aktivitas lama tanpa lisensi yang jelas | 24 gambar lama, termasuk yang ber-watermark Vecteezy dan bertanda Healthwise, diganti foto Pexels; seluruh sumber tercatat di `docs/image-credits.md` | `17b5fce` |
+| Aktivitas baru belum punya video | 24 aktivitas baru kini punya video YouTube yang dapat diputar di aplikasi | `f1c6896` |
 
 Seluruh perubahan di atas diuji pada Postgres lokal dengan backend berjalan di zona
 Asia/Jakarta: 34 skenario API (termasuk email ganda, streak, ubah butir, ganti dan reset
@@ -43,19 +45,15 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - Tanpa migrasi ini aplikasi tetap aman: pendaftaran memeriksa email ganda di tingkat aplikasi. Indeks hanya pengaman terakhir terhadap pendaftaran bersamaan.
 - Langkah: perbarui `DATABASE_URL` di `backend/.env`, periksa duplikat dengan `SELECT lower(email), count(*) FROM users GROUP BY 1 HAVING count(*) > 1;`, lalu jalankan `npm run migrate up` di folder `backend`. Bila ada duplikat, rapikan dulu datanya.
 
-## 2. Katalog aktivitas: video YouTube untuk 24 aktivitas baru
+## 2. Video YouTube lama yang tidak cocok dengan aktivitasnya
 
-- Katalog kini memuat 12 aktivitas per tingkat. Ke-24 aktivitas baru memakai foto berlisensi Pexels yang sumbernya tercatat di `docs/image-credits.md`.
-- Aktivitas baru belum punya `youtube_url`; popupnya menampilkan foto sebagai gantinya. Tautan video perlu dipilih dan disetujui sebelum dipasang.
+- Ke-24 tautan YouTube lama masih aktif dan dapat diputar di aplikasi (diperiksa lewat oEmbed pada 2026-09-17), tetapi beberapa isinya tidak sesuai:
+  - Bersepeda santai (tingkat ringan) memakai video HIIT indoor cycling, yang justru intensitas tinggi.
+  - Joging sore dan Interval sprint memakai video penjelasan ("apa yang terjadi pada tubuh…"), bukan latihan.
+  - Sirkuit CrossFit dasar memakai video latihan dumbel.
+- Perbaikan yang diharapkan: ganti dengan video tutorial atau latihan yang sesuai intensitas tingkatnya.
 
-## 3. Gambar aktivitas lama tanpa lisensi yang jelas
-
-- Gambar untuk 24 aktivitas awal berasal dari layanan capstone terdahulu dan sumbernya tidak tercatat.
-- `morning-cardio-run.jpg` memuat watermark Vecteezy (gambar pratinjau yang memerlukan lisensi), dan `marching-in-place.jpg` memuat tanda "© 2023 Healthwise". Keduanya tampil di produksi.
-- Ada 18 berkas lain di `frontend/public/images/activities` yang tidak dipakai katalog dan asalnya juga tidak tercatat.
-- Perbaikan yang diharapkan: ganti seluruh gambar lama dengan gambar berlisensi jelas (misalnya Pexels), catat sumbernya, dan hapus berkas yang tidak dipakai.
-
-## 4. Catatan kecil
+## 3. Catatan kecil
 
 - Popup aktivitas: bila foto gagal dimuat, `onError` menyembunyikan foto lalu menampilkan elemen sesudahnya (paragraf deskripsi), bukan ilustrasi pengganti. Kartu di dasbor sudah benar.
 - Access token yang sudah terbit tetap berlaku hingga tiga jam setelah reset kata sandi oleh admin; refresh token sudah dicabut.
@@ -76,5 +74,7 @@ kata sandi, pencabutan sesi, CORS) dan pemeriksaan tampilan di browser, termasuk
 - [x] Normalisasi line ending
 - [ ] Jalankan migrasi email unik di Neon
 - [x] Tambah 24 aktivitas dengan foto berlisensi Pexels
-- [ ] Tautan YouTube untuk 24 aktivitas baru
-- [ ] Ganti gambar aktivitas lama yang lisensinya tidak jelas
+- [x] Tautan YouTube untuk 24 aktivitas baru
+- [x] Ganti gambar aktivitas lama yang lisensinya tidak jelas
+- [ ] Hapus 18 berkas gambar yang tidak dipakai dan tidak tercatat sumbernya
+- [ ] Ganti video YouTube lama yang tidak cocok dengan aktivitasnya
