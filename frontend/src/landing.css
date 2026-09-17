@@ -42,7 +42,12 @@
 .landing-contributor__link { margin-top: auto; color: var(--color-accent-strong); font-size: 0.76rem; font-weight: 800; text-decoration: none; }
 .landing-footer { padding: var(--space-5) var(--space-4); border-top: 1px solid var(--color-section-line); color: var(--color-subtle); font-size: 0.75rem; text-align: center; }
 @media (max-width: 48rem) { .landing-hero { grid-template-columns: 1fr; } .landing-hero__main { min-height: 26rem; } .landing-team { grid-template-columns: repeat(2, minmax(0, 1fr)); } .landing-section__head { align-items: start; flex-direction: column; } }
-@media (max-width: 34rem) { .landing-header { align-items: start; flex-direction: column; } .landing-nav { justify-content: start; } .landing-team { grid-template-columns: 1fr; } .landing-button { width: 100%; } }
+/* Kepala halaman tetap satu baris di layar sempit. Menumpuknya ke bawah
+   memindahkan tombol masuk ke sudut kiri bawah dan menghabiskan 130px tinggi
+   layar, padahal wordmark dan satu tombol muat berdampingan bahkan pada 320px.
+   Ukuran huruf tombol dinaikkan di sini karena 0.8rem terlalu kecil dibaca
+   pada perangkat genggam. */
+@media (max-width: 34rem) { .landing-team { grid-template-columns: 1fr; } .landing-nav .landing-button { font-size: 0.95rem; } }
 @media (prefers-reduced-motion: reduce) { .landing-button, .landing-contributor { transition-duration: 0.01ms; } }
 
 /* System pass: the public page carries the same paper, type, and action
