@@ -15,7 +15,7 @@ const KATALOG = {
         "id": 1,
         "name": "Morning Stretching",
         "description": "Light muscle stretching for 15 minutes to improve blood circulation.",
-        "image": "/images/activities/morning-streching.jpg",
+        "image": "/images/activities/morning-stretching.jpg",
         "youtube_url": "https://www.youtube.com/watch?v=4snu7NxD4nM"
       },
       {

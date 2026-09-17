@@ -151,3 +151,15 @@ test('kolom DATE dari basis data tetap teks di zona waktu mana pun', async () =>
     else process.env.TZ = originalTimeZone;
   }
 });
+
+// Path gambar yang salah ketik tidak menimbulkan galat, hanya gambar rusak di
+// peramban. "morning-streching.jpg" sempat tampil rusak di produksi karena itu.
+test('setiap gambar aktivitas di katalog benar-benar ada di frontend', async () => {
+  const { existsSync } = await import('node:fs');
+  const publik = new URL('../../frontend/public', import.meta.url).pathname;
+  const hilang = Object.values(KATALOG)
+    .flatMap((kolam) => kolam.activities)
+    .filter((a) => !existsSync(publik + a.image))
+    .map((a) => `${a.name}: ${a.image}`);
+  assert.deepEqual(hilang, []);
+});
