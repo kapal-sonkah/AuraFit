@@ -1,4 +1,4 @@
-/* Hallmark · genre: playful · tone: calm and task-focused · palette: AuraFit sage · structural fingerprint: Split Form + Brand Panel · design-system: design.md · designed-as-app */
+/* AuraFit design · genre: playful · tone: calm and task-focused · palette: AuraFit sage · layout: Split Form + Brand Panel */
 
 .auth-shell { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(22rem, 0.95fr); min-height: 100vh; background: var(--color-paper); }
 .auth-panel { display: flex; min-width: 0; flex-direction: column; padding: clamp(var(--space-4), 5vw, var(--space-10)); }

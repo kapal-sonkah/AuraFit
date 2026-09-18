@@ -1,4 +1,4 @@
-/* Hallmark · genre: playful · tone: calm and task-focused · palette: AuraFit sage · structural fingerprint: Bento Grid · design-system: design.md · designed-as-app */
+/* AuraFit design · genre: playful · tone: calm and task-focused · palette: AuraFit sage · layout: Bento Grid */
 
 .landing-shell { min-height: 100vh; background: var(--color-surface-dark); color: var(--color-accent-ink); }
 .landing-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); width: min(100%, 92rem); margin: 0 auto; padding: var(--space-5) var(--space-4); }

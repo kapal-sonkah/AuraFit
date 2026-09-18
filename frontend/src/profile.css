@@ -1,4 +1,4 @@
-/* Hallmark · genre: playful · tone: calm and task-focused · palette: AuraFit sage · structural fingerprint: Workbench · design-system: design.md · designed-as-app */
+/* AuraFit design · genre: playful · tone: calm and task-focused · palette: AuraFit sage · layout: Workbench */
 
 .profile-shell { min-height: 100vh; background: radial-gradient(circle at 8% 0%, var(--color-highlight), transparent 32rem), linear-gradient(145deg, var(--color-surface-dark) 0%, var(--color-surface-dark-2) 52%, var(--color-accent-strong) 100%); }
 .profile-frame { width: min(100%, 76rem); min-height: 100vh; margin: 0 auto; padding: var(--space-4); }
