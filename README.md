@@ -1,6 +1,6 @@
 # AuraFit - Pelatih Kesehatan Digital Pribadi Anda
 
-<img width="1000" alt="Dasbor Hari ini AuraFit" src=".github/screenshots/dashboard.png" />
+<img width="1000" alt="Dasbor Hari ini AuraFit" src=".github/screenshots/desktop-dashboard.png" />
 
 ## Deskripsi Singkat
 AuraFit adalah aplikasi web yang menyusun rencana aktivitas dan makanan harian dari data tubuh, tujuan, dan **aura** pengguna, yaitu kondisi energi yang dipilih setiap hari. Rencana, progres, dan riwayat disimpan di server sehingga tetap sama ketika akun dibuka dari perangkat berbeda.
@@ -11,9 +11,9 @@ Antarmuka dibangun dengan React, Vite, dan Tailwind CSS, layanan aplikasi dengan
 
 | Beranda | Hari ini |
 |:---:|:---:|
-| <img alt="Beranda" src=".github/screenshots/landing.png" width="440" /> | <img alt="Dasbor Hari ini" src=".github/screenshots/dashboard.png" width="440" /> |
+| <img alt="Beranda" src=".github/screenshots/desktop-landing.png" width="440" /> | <img alt="Dasbor Hari ini" src=".github/screenshots/desktop-dashboard.png" width="440" /> |
 | **Riwayat** | **Profil** |
-| <img alt="Riwayat tujuh hari" src=".github/screenshots/history.png" width="440" /> | <img alt="Profil" src=".github/screenshots/profile.png" width="440" /> |
+| <img alt="Riwayat tujuh hari" src=".github/screenshots/desktop-history.png" width="440" /> | <img alt="Profil" src=".github/screenshots/desktop-profile.png" width="440" /> |
 
 **Tampilan ponsel**
 
