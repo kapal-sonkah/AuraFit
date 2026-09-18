@@ -9,11 +9,17 @@ Antarmuka dibangun dengan React, Vite, dan Tailwind CSS, layanan aplikasi dengan
 
 ## Tampilan
 
-| Beranda | Riwayat |
-|---|---|
-| <img alt="Beranda" src=".github/screenshots/landing.png" width="480" /> | <img alt="Riwayat tujuh hari" src=".github/screenshots/history.png" width="480" /> |
-| **Profil** | **Hari ini di ponsel** |
-| <img alt="Profil" src=".github/screenshots/profile.png" width="480" /> | <img alt="Dasbor di ponsel" src=".github/screenshots/dashboard-mobile.png" width="240" /> |
+| Beranda | Hari ini |
+|:---:|:---:|
+| <img alt="Beranda" src=".github/screenshots/landing.png" width="440" /> | <img alt="Dasbor Hari ini" src=".github/screenshots/dashboard.png" width="440" /> |
+| **Riwayat** | **Profil** |
+| <img alt="Riwayat tujuh hari" src=".github/screenshots/history.png" width="440" /> | <img alt="Profil" src=".github/screenshots/profile.png" width="440" /> |
+
+**Tampilan ponsel**
+
+| Hari ini | Riwayat | Profil |
+|:---:|:---:|:---:|
+| <img alt="Hari ini di ponsel" src=".github/screenshots/mobile-dashboard.png" width="260" /> | <img alt="Riwayat di ponsel" src=".github/screenshots/mobile-history.png" width="260" /> | <img alt="Profil di ponsel" src=".github/screenshots/mobile-profile.png" width="260" /> |
 
 ## Fitur Utama
 
