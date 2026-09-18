@@ -335,7 +335,7 @@ export default function HistoryPage({ onLogout }) {
                 <p className="history-panel__eyebrow">Rincian tanggal</p>
                 <h2 id="history-detail-title" className="history-panel__title">{formatDate(selectedDate, { weekday: 'long', year: 'numeric' })}</h2>
               </div>
-              <p className="history-panel__hint">Kamu dapat mengoreksi status catatan.</p>
+              <p className="history-panel__hint">{selectedDate === today ? 'Status hari ini masih bisa diubah sampai pukul 00.00 WIB.' : 'Catatan hari yang sudah lewat terkunci.'}</p>
             </div>
 
             {planState.status === 'loading' ? (
