@@ -10,13 +10,20 @@ const GOALS = [
   ['gain_weight', 'Menambah berat badan'],
 ];
 
+// Kolom NUMERIC dari basis data tiba sebagai teks "58.00"; tampilkan "58".
+function angka(value) {
+  if (value === null || value === undefined || value === '') return '';
+  const n = Number(value);
+  return Number.isFinite(n) ? String(n) : value;
+}
+
 function profileForm(user) {
   return {
     first_name: user?.first_name || '',
     last_name: user?.last_name || '',
     gender: user?.gender || '',
-    weight: user?.weight_kg || '',
-    height: user?.height_cm || '',
+    weight: angka(user?.weight_kg),
+    height: angka(user?.height_cm),
     goal: user?.goal || '',
     age: user?.age || '',
   };

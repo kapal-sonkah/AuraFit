@@ -9,11 +9,23 @@ import AuraFitMark from './assets/images/aurafit-mark.svg';
 import React from 'react';
 import { getAccessToken, getUserLogged, putAccessToken, logout } from './utils/network-data';
 
+// Judul tab per halaman, agar riwayat peramban dan tab yang terbuka bersamaan
+// dapat dibedakan.
+const PAGE_TITLES = {
+  '/signup': 'Daftar',
+  '/login': 'Masuk',
+  '/dashboard': 'Hari ini',
+  '/history': 'Riwayat',
+  '/profile': 'Profil',
+};
+
 function RouteScrollReset() {
   const location = useLocation();
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    const judul = PAGE_TITLES[location.pathname];
+    document.title = judul ? `${judul} · AuraFit` : 'AuraFit';
   }, [location.pathname]);
 
   return null;
@@ -77,7 +89,7 @@ function App() {
       </Routes>
       ) : (
       <Routes>
-        <Route path='/' element={<LandingPage />} />
+        <Route path='/' element={<LandingPage loggedIn />} />
         <Route path='/dashboard' element={<DashboardPage onLogout={onLogout} user={authedUser} />} />
         <Route path='/history' element={<HistoryPage onLogout={onLogout} user={authedUser} />} />
         <Route path='/profile' element={<ProfilePage onLogout={onLogout} user={authedUser} onUserUpdated={setAuthedUser} />} />
