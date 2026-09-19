@@ -37,11 +37,17 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
           <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Tutup detail">×</button>
         </div>
 
+        {food.image ? (
+          <img src={food.image} alt="" className="food-card__media mt-5" />
+        ) : null}
+
         <div className="food-detail flex items-center gap-4 mt-5">
-          {/* Emoji icon */}
-          <div className="food-card__icon w-16 h-16 text-4xl">
-            <span aria-hidden="true">{food.emoji}</span>
-          </div>
+          {/* Ikon hanya untuk makanan tanpa foto, yaitu yang dicatat sendiri. */}
+          {food.image ? null : (
+            <div className="food-card__icon w-16 h-16 text-4xl">
+              <span aria-hidden="true">{food.emoji}</span>
+            </div>
+          )}
 
           {/* Info makanan */}
           <div className="food-card__body">
