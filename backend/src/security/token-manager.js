@@ -11,7 +11,7 @@ const TokenManager = {
       return payload;
     } catch (error) {
       console.log(error);
-      throw new InvariantError('Refresh token tidak valid');
+      throw new InvariantError('Sesi sudah berakhir. Silakan masuk kembali.');
     }
   },
   verifyAccessToken: (accessToken, secret) => {
@@ -19,7 +19,7 @@ const TokenManager = {
       const payload = jwt.verify(accessToken, secret);
       return payload;
     } catch (error) {
-      throw new AuthenticationError('Access Token tidak valid');
+      throw new AuthenticationError('Sesi sudah berakhir. Silakan masuk kembali.');
     }
   }
 };

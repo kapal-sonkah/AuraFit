@@ -26,7 +26,7 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
     calorieRatio >= 1 ? 'stat-card__sub--positive' :
     calorieRatio > 0 ? 'stat-card__sub--warning' : 'stat-card__sub--muted';
 
-  const calorieSub = `${Math.max(dailyCalorieTarget - consumedCalories, 0)} kcal tersisa dari rencana hari ini`;
+  const calorieSub = `${Math.max(dailyCalorieTarget - consumedCalories, 0)} kcal tersisa dari menu rencana hari ini`;
 
   // Warna BMI
   const bmiSubColor =

@@ -34,7 +34,7 @@ export const createUser = async (req, res, next) => {
       username, emailBersih, password, first_name, last_name, sex, weight, height, goal, age
     );
 
-    if (!user) return next(new InvariantError('Failed to create user'));
+    if (!user) return next(new InvariantError('Akun belum dapat dibuat. Coba lagi.'));
 
     return response(res, 201, 'Pengguna berhasil dibuat', user);
   } catch (error) {
@@ -73,7 +73,7 @@ export const getUserById = async (req, res, next) => {
 
   const user = await UserRepositories.getUserById(id);
 
-  if (!user) return next(new InvariantError('Failed to retrieve user'));
+  if (!user) return next(new InvariantError('Data akun belum dapat diambil. Coba lagi.'));
 
   return response(res, 201, 'User retrieved successfully', user);
 };

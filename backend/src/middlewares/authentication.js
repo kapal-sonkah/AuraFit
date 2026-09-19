@@ -13,7 +13,7 @@ async function authenticateToken(req, res, next) {
     }
   }
 
-  return response(res, 401, 'Unauthorized', null);
+  return response(res, 401, 'Sesi tidak ditemukan. Silakan masuk kembali.', null);
 };
 
 export default authenticateToken;

@@ -88,7 +88,7 @@ export default function DailyActivities({ activities = [], completedActivityIds,
           </div>
           <div className="dashboard-section__head-side">
             {auraOption ? <p className="activity-aura-context"><AuraGlyph aura={auraOption.value} /><span><strong>Mode {auraOption.label}</strong> · {auraOption.suggestion}</span></p> : null}
-            <p className="dashboard-section__count">{activities.length} aktivitas</p>
+            <p className="dashboard-section__count">{activities.length} aktivitas · cukup 1 selesai untuk menjaga streak</p>
           </div>
         </div>
         <ul className="dashboard-list dashboard-list--activities" role="list">
