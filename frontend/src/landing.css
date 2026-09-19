@@ -2,7 +2,7 @@
 
 .landing-shell { min-height: 100vh; background: var(--color-surface-dark); color: var(--color-accent-ink); }
 .landing-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); width: min(100%, 92rem); margin: 0 auto; padding: var(--space-5) var(--space-4); }
-.landing-wordmark { color: var(--color-accent-ink); font-family: var(--font-display); font-size: 1.55rem; text-decoration: none; }
+.landing-wordmark { display: inline-flex; align-items: center; min-height: 2.75rem; color: var(--color-accent-ink); font-family: var(--font-display); font-size: 1.55rem; text-decoration: none; }
 .landing-nav { display: flex; flex-wrap: wrap; justify-content: end; gap: var(--space-2); }
 .landing-button { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: 0 var(--space-4); border-radius: var(--radius-pill); font: inherit; font-size: 0.8rem; font-weight: 800; text-decoration: none; cursor: pointer; transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
 .landing-button:hover { transform: translateY(-1px); }
@@ -39,7 +39,8 @@
 .landing-contributor__name { margin: 0; font-size: 0.88rem; font-weight: 800; line-height: 1.35; }
 .landing-contributor__username { margin: 0.2rem 0 0; color: var(--color-muted); font-size: 0.72rem; }
 .landing-contributor__role { margin: 0; color: var(--color-accent); font-size: 0.72rem; font-weight: 800; }
-.landing-contributor__link { margin-top: auto; color: var(--color-accent-strong); font-size: 0.76rem; font-weight: 800; text-decoration: none; }
+/* Target sentuh minimal 44 piksel (N-05); sebelumnya hanya setinggi teks, 18 piksel. */
+.landing-contributor__link { display: inline-flex; align-items: center; align-self: start; min-height: 2.75rem; margin-top: auto; color: var(--color-accent-strong); font-size: 0.76rem; font-weight: 800; text-decoration: none; }
 .landing-footer { padding: var(--space-5) var(--space-4); border-top: 1px solid var(--color-section-line); color: var(--color-subtle); font-size: 0.75rem; text-align: center; }
 @media (max-width: 48rem) { .landing-hero { grid-template-columns: 1fr; } .landing-hero__main { min-height: 26rem; } .landing-team { grid-template-columns: repeat(2, minmax(0, 1fr)); } .landing-section__head { align-items: start; flex-direction: column; } }
 /* Kepala halaman tetap satu baris di layar sempit. Menumpuknya ke bawah
