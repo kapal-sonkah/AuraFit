@@ -137,11 +137,20 @@ export function foodMeta(food) {
     .join(' · ');
 }
 
+// Rencana yang tersimpan sebelum katalog makanan punya foto tidak membawa
+// image, jadi butir katalog yang dikenal diarahkan ke fotonya menurut nama.
+// Butir yang dicatat sendiri tidak punya foto dan tetap memakai ikon.
+function foodImageOf(kunci) {
+  if (!FOOD_NAMES[kunci]) return null;
+  return `/images/foods/${kunci.replace('(in water)', '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.jpg`;
+}
+
 export function presentFood(item) {
   const kunci = keyOf(item?.name);
   return {
     ...item,
     name: FOOD_NAMES[kunci] ?? item?.name,
+    image: item?.image ?? foodImageOf(kunci),
     emoji: FOOD_EMOJI[kunci] ?? item?.emoji ?? FOOD_EMOJI_FALLBACK,
     portion: localizePortion(item?.portion),
   };
