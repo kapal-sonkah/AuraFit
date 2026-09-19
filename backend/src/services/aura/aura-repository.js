@@ -17,17 +17,29 @@ class AuraRepository {
     return result.rows[0] ?? null;
   }
 
+  // Aura hanya dapat ditulis selama rencana tanggal itu belum ada. Rencana
+  // tersimpan sekali dan tidak pernah disusun ulang (F-11), jadi aura yang
+  // diubah sesudahnya tidak lagi menggambarkan rencana. Pemeriksaan ada di
+  // dalam kueri yang sama agar tidak terlewati oleh permintaan bersamaan.
+  // Mengembalikan null bila rencana sudah ada.
   async setToday(userId, aura, date = todayInJakarta()) {
     const result = await this.pool.query(`
       INSERT INTO daily_auras (id, user_id, aura_date, aura)
-      VALUES ($1, $2, $3, $4)
+      SELECT $1, $2, $3, $4
+      WHERE NOT EXISTS (
+        SELECT 1 FROM daily_plans WHERE user_id = $2 AND plan_date = $3
+      )
       ON CONFLICT (user_id, aura_date) DO UPDATE
         SET aura = EXCLUDED.aura,
             updated_at = NOW()
+        WHERE NOT EXISTS (
+          SELECT 1 FROM daily_plans
+          WHERE user_id = daily_auras.user_id AND plan_date = daily_auras.aura_date
+        )
       RETURNING aura_date, aura
     `, [nanoid(16), userId, date, aura]);
 
-    return result.rows[0];
+    return result.rows[0] ?? null;
   }
 
   async getRange(userId, fromDate, toDate) {

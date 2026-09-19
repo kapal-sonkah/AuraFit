@@ -11,7 +11,7 @@ export const login = async (req, res, next) => {
     const userId = await UserRepositories.verifyUserCredential(username_email, password);
   
     if (!userId) {
-      return next(new AuthenticationError('Incorrect Credentials'));
+      return next(new AuthenticationError('Nama pengguna, email, atau kata sandi salah.'));
     }
   
     const accessToken = TokenManager.generateAccessToken({ id: userId });
@@ -29,7 +29,7 @@ export const refreshToken = async (req, res, next) => {
 
   const result = await AuthenticationRepositories.verifyRefreshToken(refreshToken);
 
-  if (!result) return next(new InvariantError('Invalid Refresh Token'));
+  if (!result) return next(new InvariantError('Sesi sudah berakhir. Silakan masuk kembali.'));
 
   const { id } = TokenManager.verifyRefreshToken(refreshToken);
   const accessToken = TokenManager.generateAccessToken({ id });
@@ -42,7 +42,7 @@ export const logout = async (req, res, next) => {
 
   const result = await AuthenticationRepositories.verifyRefreshToken(refreshToken);
 
-  if (!result) return next(new InvariantError('Invalid Refresh Token'));
+  if (!result) return next(new InvariantError('Sesi sudah berakhir. Silakan masuk kembali.'));
 
   await AuthenticationRepositories.deleteRefreshToken(refreshToken);
   return response(res, 200, 'Refresh Token Deleted Successfully');

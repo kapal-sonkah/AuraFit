@@ -27,6 +27,12 @@ export const setAuraToday = async (req, res, next) => {
     }
 
     const record = await AuraRepository.setToday(req.user.id, aura);
+    if (!record) {
+      return next(new ClientError(
+        'Rencana hari ini sudah tersusun, jadi aura hari ini tidak dapat diubah lagi. Kamu bisa memilih aura baru besok.',
+        409
+      ));
+    }
     return response(res, 200, 'Aura hari ini disimpan', {
       date: record.aura_date,
       aura: record.aura,

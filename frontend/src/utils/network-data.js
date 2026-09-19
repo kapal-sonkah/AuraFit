@@ -168,7 +168,11 @@ async function saveAuraToday(aura) {
       body: JSON.stringify({ aura }),
     });
     const responseJson = await response.json();
-    if (!response.ok || responseJson.status !== 'success') return { error: true, data: null };
+    // 409 berarti rencana hari ini sudah tersusun dan aura terkunci; pesannya
+    // dari server diteruskan karena menjelaskan alasannya.
+    if (!response.ok || responseJson.status !== 'success') {
+      return { error: true, locked: response.status === 409, data: null, message: responseJson.message };
+    }
     return { error: false, data: responseJson.data };
   } catch {
     return { error: true, data: null };
