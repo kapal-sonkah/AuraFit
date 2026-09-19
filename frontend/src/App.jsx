@@ -89,7 +89,7 @@ function App() {
       </Routes>
       ) : (
       <Routes>
-        <Route path='/' element={<LandingPage />} />
+        <Route path='/' element={<LandingPage loggedIn />} />
         <Route path='/dashboard' element={<DashboardPage onLogout={onLogout} user={authedUser} />} />
         <Route path='/history' element={<HistoryPage onLogout={onLogout} user={authedUser} />} />
         <Route path='/profile' element={<ProfilePage onLogout={onLogout} user={authedUser} onUserUpdated={setAuthedUser} />} />
