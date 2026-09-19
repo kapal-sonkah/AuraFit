@@ -64,6 +64,7 @@
 .landing-hero__main { min-height: auto; border: 1px solid var(--color-card-line); box-shadow: var(--shadow-raised); }
 .landing-hero__title { font-size: clamp(2.4rem, 7vw, 5.2rem); line-height: 1; min-width: 0; }
 .landing-hero__copy { max-width: 52ch; }
+.landing-hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
 .landing-hero__side { color: var(--color-on-dark); }
 .landing-tile { border: 1px solid var(--color-dark-line); color: var(--color-on-dark); }
 .landing-tile--accent { color: var(--color-accent-ink); }

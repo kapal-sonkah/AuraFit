@@ -224,10 +224,15 @@
 .overview-card { border: 1px solid var(--color-card-line); background: var(--color-surface); box-shadow: var(--shadow-soft); }
 .stat-card { border-color: var(--color-paper-soft); background: var(--color-paper); }
 .activity-card, .food-card { border-color: var(--color-card-line); background: var(--color-paper); }
+/* Aturan di atas menimpa keadaan selesai pada baris sebelumnya, sehingga butir
+   yang selesai tampak sama dengan yang belum. Keadaan selesai dipulihkan. */
+.activity-card--done, .food-card--done { border-color: var(--color-accent); background: var(--color-accent-soft); }
 .activity-card:hover, .food-card:hover { border-color: var(--color-accent-line); }
 .dashboard-state { border: 1px solid var(--color-card-line); background: var(--color-surface); color: var(--color-ink); box-shadow: var(--shadow-soft); }
 .manual-plan-form { border-color: var(--color-card-line); background: var(--color-surface); color: var(--color-ink); }
 .modal-card { border-color: var(--color-card-line); background: var(--color-surface); }
+.modal-card[role="alertdialog"] { width: min(100%, 28rem); }
+.confirm-dialog__message { margin: var(--space-3) 0 var(--space-5); color: var(--color-muted); font-size: 0.9rem; line-height: 1.5; }
 .dashboard-button, .modal-action, .manual-plan-form__primary { white-space: nowrap; }
 
 @media (max-width: 42rem) {

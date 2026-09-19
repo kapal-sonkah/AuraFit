@@ -93,6 +93,11 @@ function LandingPage() {
           <p className="landing-hero__copy">
             Rencana aktivitas dan asupan harian yang disesuaikan dengan profil tubuhmu, tersimpan rapi dan dapat ditelusuri.
           </p>
+          {/* Pengunjung baru sebelumnya hanya menemukan tombol Masuk. */}
+          <div className="landing-hero__actions">
+            <Link to="/signup" className="landing-button landing-button--primary">Mulai sekarang</Link>
+            <Link to="/login" className="landing-button landing-button--secondary">Sudah punya akun? Masuk</Link>
+          </div>
         </div>
         <div className="landing-hero__side" aria-label="Cara kerja AuraFit">
           <article className="landing-tile landing-tile--accent">
