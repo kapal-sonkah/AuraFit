@@ -241,9 +241,18 @@
 .history-aura-insight h2,
 .history-aura-insight p { overflow-wrap: anywhere; }
 
-@media (max-width: 24.375rem) {
+@media (max-width: 42rem) {
+  .history-frame { padding-inline: var(--space-4); }
+  .history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-3); }
+  .history-summary__card { display: grid; align-content: start; min-height: 8rem; padding: var(--space-4); }
+  .history-summary__value { margin-top: var(--space-2); font-size: clamp(1.55rem, 7vw, 2rem); }
+  .history-summary__hint { line-height: 1.35; }
+  .history-summary--loading .history-summary__card { min-height: 8.5rem; }
+  .history-summary--loading .history-summary__value { display: flex; min-height: 1.7rem; align-items: center; }
+}
+
+@media (max-width: 24rem) {
   .history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2); }
   .history-summary__card { min-height: 8rem; padding: var(--space-3); }
   .history-summary__value { margin-top: var(--space-2); font-size: 1.6rem; }
-  .history-summary__hint { line-height: 1.35; }
 }
