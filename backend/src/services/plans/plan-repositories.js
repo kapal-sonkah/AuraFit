@@ -292,7 +292,14 @@ class PlanRepositories {
         .map((row) => row.plan_date)
     );
 
+    // Hari ini belum boleh memutus tampilan streak pada pagi/siang hari.
+    // Jika kemarin aktif dan pengguna belum menyelesaikan aktivitas hari ini,
+    // tampilkan streak terakhir sambil UI meminta satu aktivitas hari ini.
+    // Setelah tanggal berganti, hari yang belum aktif akan memutus streak.
     let tanggal = sampaiTanggal;
+    if (sampaiTanggal === todayInJakarta() && !hariAktif.has(tanggal)) {
+      tanggal = previousDate(tanggal);
+    }
     let streak = 0;
     while (hariAktif.has(tanggal)) {
       streak += 1;

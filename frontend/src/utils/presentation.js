@@ -127,6 +127,37 @@ const FOOD_NAMES = {
   'boiled shrimp': 'Udang rebus', 'turkey breast': 'Dada kalkun', couscous: 'Kuskus',
 };
 
+const FOOD_IMAGE_FALLBACK = '/images/foods/vegetable-salad.jpg';
+
+// Nama makanan manual biasanya lebih singkat daripada nama katalog, misalnya
+// "ayam" alih-alih "chicken breast". Pencocokan kata kunci membuat input
+// tersebut tetap mendapat foto lokal yang masuk akal.
+const FOOD_IMAGE_RULES = [
+  { terms: ['ayam panggang', 'grilled chicken'], image: '/images/foods/grilled-chicken-breast.jpg' },
+  { terms: ['ayam', 'chicken'], image: '/images/foods/chicken-breast.jpg' },
+  { terms: ['tuna'], image: '/images/foods/steamed-tuna.jpg' },
+  { terms: ['ikan', 'fish', 'salmon'], image: '/images/foods/salmon.jpg' },
+  { terms: ['nasi', 'rice'], image: '/images/foods/brown-rice.jpg' },
+  { terms: ['sayur', 'salad', 'vegetable'], image: '/images/foods/vegetable-salad.jpg' },
+  { terms: ['telur', 'egg'], image: '/images/foods/boiled-egg.jpg' },
+  { terms: ['ubi', 'sweet potato'], image: '/images/foods/boiled-sweet-potato.jpg' },
+  { terms: ['kentang', 'potato'], image: '/images/foods/baked-potato.jpg' },
+  { terms: ['tempe'], image: '/images/foods/grilled-tempeh.jpg' },
+  { terms: ['tahu', 'tofu'], image: '/images/foods/steamed-tofu.jpg' },
+  { terms: ['mi', 'mie', 'noodle', 'soba'], image: '/images/foods/soba-noodles.jpg' },
+  { terms: ['roti', 'bread'], image: '/images/foods/whole-wheat-bread.jpg' },
+  { terms: ['jagung', 'corn'], image: '/images/foods/boiled-corn.jpg' },
+  { terms: ['brokoli', 'broccoli'], image: '/images/foods/boiled-broccoli.jpg' },
+  { terms: ['bayam', 'spinach'], image: '/images/foods/steamed-spinach.jpg' },
+  { terms: ['kacang arab', 'chickpea'], image: '/images/foods/roasted-chickpeas.jpg' },
+  { terms: ['almond'], image: '/images/foods/almonds.jpg' },
+  { terms: ['kacang', 'nut'], image: '/images/foods/mixed-nuts.jpg' },
+  { terms: ['quinoa'], image: '/images/foods/quinoa.jpg' },
+  { terms: ['oat', 'havermut'], image: '/images/foods/oatmeal.jpg' },
+  { terms: ['pisang', 'banana'], image: '/images/foods/banana.jpg' },
+  { terms: ['apel', 'apple'], image: '/images/foods/apple.jpg' },
+];
+
 // Sebagian butir katalog berbagi satu ikon, sehingga jenis makanan sulit
 // dibedakan sekilas: tiga butir ayam memakai ikon yang sama, begitu pula tiga
 // butir susu, tiga butir kacang, dan tiga butir ikan. Peta ini hanya menimpa
@@ -213,10 +244,15 @@ export function foodMeta(food, { includeCalories = true } = {}) {
 
 // Rencana yang tersimpan sebelum katalog makanan punya foto tidak membawa
 // image, jadi butir katalog yang dikenal diarahkan ke fotonya menurut nama.
-// Butir yang dicatat sendiri tidak punya foto dan tetap memakai ikon.
-function foodImageOf(kunci) {
-  if (!FOOD_NAMES[kunci]) return null;
-  return `/images/foods/${kunci.replace('(in water)', '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.jpg`;
+// Butir manual memakai alias kata kunci, lalu foto umum bila namanya baru.
+function foodImageOf(kunci, item) {
+  if (FOOD_NAMES[kunci]) {
+    return `/images/foods/${kunci.replace('(in water)', '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}.jpg`;
+  }
+
+  const teks = `${kunci} ${item?.description ?? ''}`.toLocaleLowerCase('id-ID');
+  const cocok = FOOD_IMAGE_RULES.find((rule) => rule.terms.some((term) => teks.includes(term)));
+  return cocok?.image ?? FOOD_IMAGE_FALLBACK;
 }
 
 export function presentFood(item) {
@@ -224,7 +260,7 @@ export function presentFood(item) {
   return {
     ...item,
     name: FOOD_NAMES[kunci] ?? item?.name,
-    image: item?.image ?? foodImageOf(kunci),
+    image: item?.image || foodImageOf(kunci, item),
     emoji: FOOD_EMOJI[kunci] ?? item?.emoji ?? FOOD_EMOJI_FALLBACK,
     portion: localizePortion(item?.portion),
   };

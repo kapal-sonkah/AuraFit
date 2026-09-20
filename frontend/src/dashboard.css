@@ -241,7 +241,7 @@
 .stat-card--warm .stat-card__sub { color: var(--color-accent-warm-strong); }
 .stat-card--streak { border-color: var(--color-streak-line); background: var(--color-streak-soft); }
 .stat-card--streak .stat-card__value, .stat-card--streak .stat-card__sub { color: var(--color-streak); }
-.stat-card--streak .stat-card__icon { background: var(--color-surface); color: var(--color-streak); }
+.stat-card--streak .stat-card__icon { background: var(--color-surface); color: var(--color-streak-icon); }
 .activity-card, .food-card { border-color: var(--color-card-line); background: var(--color-paper); }
 /* Aturan di atas menimpa keadaan selesai pada baris sebelumnya, sehingga butir
    yang selesai tampak sama dengan yang belum. Keadaan selesai dipulihkan. */
@@ -395,6 +395,7 @@
 .dashboard-progress__bonus { margin: var(--space-2) 0 0; color: var(--color-muted); font-size: var(--text-xs); line-height: 1.4; }
 /* Penanda butir yang ditambahkan pengguna sendiri, dibedakan dari rekomendasi. */
 .plan-item-tag { display: inline-block; margin-left: var(--space-2); padding: 0.1rem var(--space-2); border: 1px solid var(--color-accent-warm-line); border-radius: var(--radius-pill); background: var(--color-accent-warm-soft); color: var(--color-accent-warm-strong); font-size: var(--text-xs); font-weight: var(--weight-semibold); vertical-align: middle; white-space: nowrap; }
+.plan-item-tag--custom { border-color: var(--color-accent-line); background: var(--color-accent-soft); color: var(--color-accent-strong); }
 .plan-item-tag--optional { border-color: var(--color-accent-line); background: var(--color-accent-soft); color: var(--color-accent-strong); }
 .dashboard-section--activities { border-color: var(--color-accent-line); background: var(--color-paper); }
 .dashboard-section--activities .section-kicker { color: var(--color-accent-strong); }

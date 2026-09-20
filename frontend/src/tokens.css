@@ -23,13 +23,14 @@
   --color-accent-warm-soft: oklch(92% 0.06 78);
   --color-accent-warm-line: oklch(82% 0.08 70);
   /* Aksen hangat tetap memberi sinyal perhatian tanpa merah pekat. */
-  --color-streak: #9b5a50;
-  --color-streak-soft: #fff5f2;
-  --color-streak-line: #e2beb5;
-  --color-progress-low: #9b5a50;
+  --color-streak: var(--color-accent-strong);
+  --color-streak-soft: var(--color-accent-soft);
+  --color-streak-line: var(--color-accent-line);
+  --color-streak-icon: var(--color-accent-warm-strong);
+  --color-progress-low: var(--color-danger);
   --color-progress-low-soft: #fff1f0;
   --color-progress-low-line: #e2beb5;
-  --color-progress-mid: #8a5a00;
+  --color-progress-mid: var(--color-accent-warm-strong);
   --color-progress-mid-soft: #fff8e5;
   --color-progress-mid-line: #e7c779;
   /* Dipakai untuk teks "Selesai" di atas kartu yang sudah bertanda; pada

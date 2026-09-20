@@ -22,7 +22,7 @@ function StatCard({ label, value, unit, sub, subColor, tone = '', icon = null })
   );
 }
 
-export default function OverviewSidebar({ user, planStatus = 'memuat', completedActivities = 0, totalActivities = 0, consumedCalories = 0, dailyCalorieTarget = 0, streak = 0 }) {
+export default function OverviewSidebar({ user, planStatus = 'memuat', completedActivities = 0, totalActivities = 0, consumedCalories = 0, dailyCalorieTarget = 0, streak = 0, todayActivityCompleted = false }) {
 
   const planReady = planStatus === 'siap';
 
@@ -57,6 +57,13 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
     
   // Warna streak
   const streakSubColor = streak > 0 ? 'stat-card__sub--streak' : 'stat-card__sub--muted';
+  const streakSub = planReady
+    ? todayActivityCompleted
+      ? 'hari berturut-turut · hari ini aman'
+      : streak > 0
+        ? 'hari berturut-turut · selesaikan 1 aktivitas hari ini'
+        : 'selesaikan 1 aktivitas hari ini'
+    : inactivePlanSub;
 
   return (
     <aside className="w-full shrink-0 overflow-hidden">
@@ -92,7 +99,7 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
         <StatCard 
           label="Streak" 
           value={planReady ? streak : '—'}
-          sub={planReady ? 'hari berturut-turut' : inactivePlanSub}
+          sub={streakSub}
           subColor={streakSubColor}
           tone={streak > 0 ? 'streak' : ''}
           icon={streak > 0 ? <FireIcon /> : null} />

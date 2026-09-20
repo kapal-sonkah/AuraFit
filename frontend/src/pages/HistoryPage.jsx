@@ -48,6 +48,33 @@ function completionLabel(day) {
   return 'Mulai';
 }
 
+function streakStatus(day, today) {
+  if (day?.date === today) return day.activities?.completed > 0 ? 'done-today' : 'today';
+  if (day?.activities?.completed > 0) return 'done';
+  if (day?.hasPlan) return 'missed';
+  return 'rest';
+}
+
+function streakStatusLabel(status) {
+  return {
+    done: 'Selesai',
+    'done-today': 'Selesai hari ini',
+    today: 'Hari ini',
+    missed: 'Belum dilakukan',
+    rest: 'Istirahat / tanpa rencana',
+  }[status] ?? 'Belum diketahui';
+}
+
+function streakStatusIcon(status) {
+  return {
+    done: '✓',
+    'done-today': '✓',
+    today: '•',
+    missed: '–',
+    rest: '·',
+  }[status] ?? '·';
+}
+
 function CalendarIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -158,7 +185,7 @@ function SummaryCard({ label, value, hint, tone = '' }) {
   );
 }
 
-function HistoryTrend({ days, selectedDate, loading }) {
+function HistoryTrend({ days, selectedDate, today, loading }) {
   if (loading) {
     return (
       <div className="history-trend history-trend--loading" aria-label="Memuat pola progres tujuh hari" aria-busy="true">
@@ -168,7 +195,7 @@ function HistoryTrend({ days, selectedDate, loading }) {
   }
 
   const latestFirst = days.slice().reverse();
-  const describedDays = latestFirst.map((day) => `${formatWeekday(day.date)} ${day.hasPlan ? `${day.completionRate}% selesai` : 'tanpa rencana'}`).join(', ');
+  const describedDays = latestFirst.map((day) => `${formatWeekday(day.date)} ${streakStatusLabel(streakStatus(day, today))}, ${day.hasPlan ? `${day.completionRate}% selesai` : 'tanpa rencana'}`).join(', ');
 
   return (
     <div className="history-trend" aria-label={`Pola progres tujuh hari: ${describedDays}`}>
@@ -181,12 +208,13 @@ function HistoryTrend({ days, selectedDate, loading }) {
       </div>
       <div className="history-trend__bars" aria-hidden="true">
         {latestFirst.map((day) => (
-          <div className={`history-trend__day history-trend__day--${completionTone(day)} ${day.date === selectedDate ? 'history-trend__day--selected' : ''}`} key={day.date}>
+          <div className={`history-trend__day history-trend__day--${completionTone(day)} history-trend__day--streak-${streakStatus(day, today)} ${day.date === selectedDate ? 'history-trend__day--selected' : ''}`} key={day.date}>
             <span className="history-trend__bar">
               <span style={{ height: `${day.hasPlan ? Math.max(day.completionRate, 8) : 0}%` }} />
             </span>
             <strong>{day.hasPlan ? `${day.completionRate}%` : '—'}</strong>
-            <span>{formatWeekday(day.date)}</span>
+            <span className="history-trend__weekday">{formatWeekday(day.date)}</span>
+            <span className="history-trend__streak-mark" aria-hidden="true">{streakStatusIcon(streakStatus(day, today))}</span>
           </div>
         ))}
       </div>
@@ -195,7 +223,13 @@ function HistoryTrend({ days, selectedDate, loading }) {
         <li><span className="history-trend__legend-swatch history-trend__legend-swatch--medium" />Berjalan · 40–79%</li>
         <li><span className="history-trend__legend-swatch history-trend__legend-swatch--high" />Terjaga · 80–100%</li>
       </ul>
-      <p className="history-trend__caption">Batang yang lebih tinggi berarti lebih banyak catatan selesai. Pilih kartu hari di bawah untuk melihat rinciannya.</p>
+      <ul className="history-trend__legend history-trend__legend--streak" aria-label="Legenda status streak">
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-done">✓</span>Selesai</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-today">•</span>Hari ini</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-missed">–</span>Belum dilakukan</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-rest">·</span>Istirahat / tanpa rencana</li>
+      </ul>
+      <p className="history-trend__caption">Batang yang lebih tinggi berarti lebih banyak catatan selesai. Status streak dihitung dari aktivitas, bukan makanan. Pilih kartu hari di bawah untuk melihat rinciannya.</p>
     </div>
   );
 }
@@ -326,7 +360,7 @@ export default function HistoryPage({ onLogout }) {
   }, [days]);
 
   const summaryCards = [
-    ['Item selesai', `${summary.completed}/${summary.total}`, 'item dari rencana tersimpan', completionTone({ hasPlan: true, completionRate: summary.rate })],
+    ['Item selesai', `${summary.completed}/${summary.total}`, 'item dari rencana tersimpan'],
     ['Hari dengan rencana', summary.activeDays, 'tanggal dengan rencana tersimpan'],
     ['Aktivitas', summary.activities, 'rencana olahraga tersimpan'],
     ['Makanan', summary.foods, 'rekomendasi makanan tersimpan'],
@@ -382,7 +416,7 @@ export default function HistoryPage({ onLogout }) {
               </div>
               <p className="history-panel__hint">Pilih hari untuk melihat rinciannya.</p>
             </div>
-            <HistoryTrend days={days} selectedDate={selectedDate} loading={historyState.status === 'loading'} />
+            <HistoryTrend days={days} selectedDate={selectedDate} today={today} loading={historyState.status === 'loading'} />
             <div className={`history-days ${historyState.status === 'loading' ? 'history-days--loading' : ''}`} aria-busy={historyState.status === 'loading'}>
               {historyState.status === 'loading' ? Array.from({ length: 7 }, (_, index) => (
                 <div className="history-day history-day--placeholder" key={`loading-${index}`} aria-hidden="true">

@@ -194,9 +194,9 @@ export default function DashboardPage({ onLogout, user }) {
   const pesanProgres = completedActivityIds.size > 0
     ? (completedItems === totalItems
       ? 'Semua butir hari ini tercatat.'
-      : `Streak hari ini aman. Sisanya boleh dilanjutkan kapan pun.`)
+      : 'Streak hari ini aman. Aktivitas tambahan juga menjaga streak.')
     : (activities.length > 0
-      ? 'Selesaikan satu aktivitas untuk menjaga streak hari ini.'
+      ? 'Selesaikan satu aktivitas untuk menjaga streak hari ini. Aktivitas tambahan juga ikut dihitung.'
       : 'Belum ada aktivitas pada rencana hari ini.');
 
   const cobaUlangAura = auraState.pending ? () => ubahAura(auraState.pending) : ambilAura;
@@ -225,9 +225,10 @@ export default function DashboardPage({ onLogout, user }) {
               user={user}
               planStatus={statusRencana}
               completedActivities={completedActivities}
-              totalActivities={activities.length}
+              totalActivities={aktivitasUtama.length}
               consumedCalories={consumedCalories}
               streak={streak}
+              todayActivityCompleted={completedActivityIds.size > 0}
               dailyCalorieTarget={dailyCalorieTarget}
             />
           </div>

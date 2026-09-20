@@ -147,6 +147,32 @@ test('streak berjalan mundur selama tiap hari punya minimal satu aktivitas seles
   }
 });
 
+test('streak hari ini tetap menampilkan rangkaian kemarin sebelum aktivitas pertama selesai', async () => {
+  const originalPool = PlanRepositories.pool;
+  const hariIni = todayInJakarta();
+  const tanggalKemarin = new Date(`${hariIni}T12:00:00Z`);
+  tanggalKemarin.setUTCDate(tanggalKemarin.getUTCDate() - 1);
+  const kemarin = tanggalKemarin.toISOString().slice(0, 10);
+  const duaHariLalu = new Date(`${kemarin}T12:00:00Z`);
+  duaHariLalu.setUTCDate(duaHariLalu.getUTCDate() - 1);
+
+  PlanRepositories.pool = {
+    query: async () => ({
+      rows: [
+        { plan_date: hariIni, aktivitas_selesai: 0 },
+        { plan_date: kemarin, aktivitas_selesai: 1 },
+        { plan_date: duaHariLalu.toISOString().slice(0, 10), aktivitas_selesai: 1 },
+      ],
+    }),
+  };
+
+  try {
+    assert.equal(await PlanRepositories.getStreak('user-test', hariIni), 2);
+  } finally {
+    PlanRepositories.pool = originalPool;
+  }
+});
+
 test('endpoint rekomendasi mengembalikan rencana tersimpan sebelum menghitung ulang', async () => {
   const originalGetUserById = UserRepositories.getUserById;
   const originalGetPlan = PlanRepositories.getPlan;

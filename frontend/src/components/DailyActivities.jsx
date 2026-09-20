@@ -40,7 +40,7 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
             <span className="activity-card__tags" aria-label="Label aktivitas">
               {/* Butir tanpa source_ref dicatat sendiri oleh pengguna; tanpa
                   penanda, butir tambahan tampak seperti rekomendasi sistem. */}
-              {activity.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+              {activity.source_ref == null ? <span className="plan-item-tag plan-item-tag--custom">Tambahanmu</span> : null}
               {activity.optional ? <span className="plan-item-tag plan-item-tag--optional">Pilihan tambahan</span> : null}
             </span>
           </span>
@@ -97,7 +97,8 @@ export default function DailyActivities({ activities = [], completedActivityIds,
     `${aktivitasUtama.length} utama`,
     aktivitasPilihan.length ? `${aktivitasPilihan.length} pilihan` : null,
     totalMenit ? `${totalMenit} menit` : null,
-    'cukup 1 selesai untuk menjaga streak',
+    '1 aktivitas cukup untuk menjaga streak',
+    aktivitasPilihan.length ? 'aktivitas tambahan juga menjaga streak' : null,
   ].filter(Boolean).join(' · ');
 
   return (
