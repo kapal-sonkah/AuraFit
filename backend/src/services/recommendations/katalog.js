@@ -5,8 +5,8 @@
 // Layanan itu tidak lagi dipakai, jadi berkas ini kini menjadi sumber katalog
 // dan disunting langsung.
 //
-// Seluruh foto aktivitas berlisensi Pexels dan sumbernya tercatat di
-// docs/image-credits.md. Tambahkan catatan sumber untuk setiap gambar baru.
+// Seluruh foto aktivitas dan makanan berlisensi Pexels dan sumbernya tercatat
+// di docs/image-credits.md. Tambahkan catatan sumber untuk setiap gambar baru.
 
 const KATALOG = {
   "Sedentary": {
@@ -102,126 +102,144 @@ const KATALOG = {
         "name": "Oatmeal",
         "portion": "80g",
         "kcal": 150,
-        "emoji": "🥣"
+        "emoji": "🥣",
+        "image": "/images/foods/oatmeal.jpg"
       },
       {
         "id": 2,
         "name": "Banana",
         "portion": "1 piece",
         "kcal": 89,
-        "emoji": "🍌"
+        "emoji": "🍌",
+        "image": "/images/foods/banana.jpg"
       },
       {
         "id": 3,
         "name": "Greek Yogurt",
         "portion": "150g",
         "kcal": 88,
-        "emoji": "🍶"
+        "emoji": "🍶",
+        "image": "/images/foods/greek-yogurt.jpg"
       },
       {
         "id": 4,
         "name": "Whole Wheat Bread",
         "portion": "2 slices",
         "kcal": 138,
-        "emoji": "🍞"
+        "emoji": "🍞",
+        "image": "/images/foods/whole-wheat-bread.jpg"
       },
       {
         "id": 5,
         "name": "Boiled Egg",
         "portion": "1 piece",
         "kcal": 77,
-        "emoji": "🥚"
+        "emoji": "🥚",
+        "image": "/images/foods/boiled-egg.jpg"
       },
       {
         "id": 6,
         "name": "Apple",
         "portion": "1 piece",
         "kcal": 95,
-        "emoji": "🍎"
+        "emoji": "🍎",
+        "image": "/images/foods/apple.jpg"
       },
       {
         "id": 7,
         "name": "Almond Milk",
         "portion": "250ml",
         "kcal": 39,
-        "emoji": "🥛"
+        "emoji": "🥛",
+        "image": "/images/foods/almond-milk.jpg"
       },
       {
         "id": 8,
         "name": "Almonds",
         "portion": "20g",
         "kcal": 115,
-        "emoji": "🥜"
+        "emoji": "🥜",
+        "image": "/images/foods/almonds.jpg"
       },
       {
         "id": 9,
         "name": "Green Tea",
         "portion": "1 cup",
         "kcal": 2,
-        "emoji": "🍵"
+        "emoji": "🍵",
+        "image": "/images/foods/green-tea.jpg"
       },
       {
         "id": 10,
         "name": "Strawberries",
         "portion": "100g",
         "kcal": 32,
-        "emoji": "🍓"
+        "emoji": "🍓",
+        "image": "/images/foods/strawberries.jpg"
       },
       {
         "id": 11,
         "name": "Cucumber Slices",
         "portion": "150g",
         "kcal": 24,
-        "emoji": "🥒"
+        "emoji": "🥒",
+        "image": "/images/foods/cucumber-slices.jpg"
       },
       {
         "id": 12,
         "name": "Watermelon",
         "portion": "200g",
         "kcal": 60,
-        "emoji": "🍉"
+        "emoji": "🍉",
+        "image": "/images/foods/watermelon.jpg"
       },
       {
         "id": 13,
         "name": "Pear",
         "portion": "1 piece",
         "kcal": 101,
-        "emoji": "🍐"
+        "emoji": "🍐",
+        "image": "/images/foods/pear.jpg"
       },
       {
         "id": 14,
         "name": "Chia Seeds",
         "portion": "15g",
         "kcal": 73,
-        "emoji": "🥄"
+        "emoji": "🥄",
+        "image": "/images/foods/chia-seeds.jpg"
       },
       {
         "id": 15,
         "name": "Carrot Sticks",
         "portion": "100g",
         "kcal": 41,
-        "emoji": "🥕"
+        "emoji": "🥕",
+        "image": "/images/foods/carrot-sticks.jpg"
       },
       {
         "id": 16,
         "name": "Rice Cakes",
         "portion": "2 pieces",
         "kcal": 70,
-        "emoji": "🍘"
+        "emoji": "🍘",
+        "image": "/images/foods/rice-cakes.jpg"
       },
       {
         "id": 17,
         "name": "Soy Milk",
         "portion": "250ml",
         "kcal": 80,
-        "emoji": "🥛"
+        "emoji": "🥛",
+        "image": "/images/foods/soy-milk.jpg"
       },
       {
         "id": 18,
         "name": "Blueberries",
         "portion": "100g",
         "kcal": 57,
-        "emoji": "🫐"
+        "emoji": "🫐",
+        "image": "/images/foods/blueberries.jpg"
       }
     ]
   },
@@ -318,126 +336,144 @@ const KATALOG = {
         "name": "Vegetable Salad",
         "portion": "200g",
         "kcal": 80,
-        "emoji": "🥗"
+        "emoji": "🥗",
+        "image": "/images/foods/vegetable-salad.jpg"
       },
       {
         "id": 2,
         "name": "Boiled Egg Whites",
         "portion": "3 pieces",
         "kcal": 51,
-        "emoji": "🥚"
+        "emoji": "🥚",
+        "image": "/images/foods/boiled-egg-whites.jpg"
       },
       {
         "id": 3,
         "name": "Avocado",
         "portion": "100g",
         "kcal": 160,
-        "emoji": "🥑"
+        "emoji": "🥑",
+        "image": "/images/foods/avocado.jpg"
       },
       {
         "id": 4,
         "name": "Clear Chicken Soup",
         "portion": "1 bowl",
         "kcal": 120,
-        "emoji": "🍲"
+        "emoji": "🍲",
+        "image": "/images/foods/clear-chicken-soup.jpg"
       },
       {
         "id": 5,
         "name": "Steamed Tofu",
         "portion": "100g",
         "kcal": 76,
-        "emoji": "🧊"
+        "emoji": "🧊",
+        "image": "/images/foods/steamed-tofu.jpg"
       },
       {
         "id": 6,
         "name": "Edamame",
         "portion": "100g",
         "kcal": 121,
-        "emoji": "🫛"
+        "emoji": "🫛",
+        "image": "/images/foods/edamame.jpg"
       },
       {
         "id": 7,
         "name": "Dragon Fruit",
         "portion": "150g",
         "kcal": 90,
-        "emoji": "🐉"
+        "emoji": "🐉",
+        "image": "/images/foods/dragon-fruit.jpg"
       },
       {
         "id": 8,
         "name": "Brown Rice",
         "portion": "100g",
         "kcal": 110,
-        "emoji": "🍚"
+        "emoji": "🍚",
+        "image": "/images/foods/brown-rice.jpg"
       },
       {
         "id": 9,
         "name": "Cherry Tomatoes",
         "portion": "150g",
         "kcal": 27,
-        "emoji": "🍅"
+        "emoji": "🍅",
+        "image": "/images/foods/cherry-tomatoes.jpg"
       },
       {
         "id": 10,
         "name": "Orange",
         "portion": "1 piece",
         "kcal": 62,
-        "emoji": "🍊"
+        "emoji": "🍊",
+        "image": "/images/foods/orange.jpg"
       },
       {
         "id": 11,
         "name": "Papaya",
         "portion": "150g",
         "kcal": 65,
-        "emoji": "🥭"
+        "emoji": "🥭",
+        "image": "/images/foods/papaya.jpg"
       },
       {
         "id": 12,
         "name": "Steamed Spinach",
         "portion": "100g",
         "kcal": 23,
-        "emoji": "🥬"
+        "emoji": "🥬",
+        "image": "/images/foods/steamed-spinach.jpg"
       },
       {
         "id": 13,
         "name": "Multigrain Crackers",
         "portion": "30g",
         "kcal": 120,
-        "emoji": "🍘"
+        "emoji": "🍘",
+        "image": "/images/foods/multigrain-crackers.jpg"
       },
       {
         "id": 14,
         "name": "Boiled Corn",
         "portion": "1 cob",
         "kcal": 96,
-        "emoji": "🌽"
+        "emoji": "🌽",
+        "image": "/images/foods/boiled-corn.jpg"
       },
       {
         "id": 15,
         "name": "Melon Slices",
         "portion": "200g",
         "kcal": 68,
-        "emoji": "🍈"
+        "emoji": "🍈",
+        "image": "/images/foods/melon-slices.jpg"
       },
       {
         "id": 16,
         "name": "Miso Soup",
         "portion": "1 bowl",
         "kcal": 40,
-        "emoji": "🥣"
+        "emoji": "🥣",
+        "image": "/images/foods/miso-soup.jpg"
       },
       {
         "id": 17,
         "name": "Boiled Pumpkin",
         "portion": "100g",
         "kcal": 26,
-        "emoji": "🎃"
+        "emoji": "🎃",
+        "image": "/images/foods/boiled-pumpkin.jpg"
       },
       {
         "id": 18,
         "name": "Grapefruit",
         "portion": "1 piece",
         "kcal": 52,
-        "emoji": "🍊"
+        "emoji": "🍊",
+        "image": "/images/foods/grapefruit.jpg"
       }
     ]
   },
@@ -534,126 +570,144 @@ const KATALOG = {
         "name": "Chicken Breast",
         "portion": "150g",
         "kcal": 248,
-        "emoji": "🍗"
+        "emoji": "🍗",
+        "image": "/images/foods/chicken-breast.jpg"
       },
       {
         "id": 2,
         "name": "Steamed Tuna",
         "portion": "120g",
         "kcal": 132,
-        "emoji": "🐟"
+        "emoji": "🐟",
+        "image": "/images/foods/steamed-tuna.jpg"
       },
       {
         "id": 3,
         "name": "Grilled Tempeh",
         "portion": "100g",
         "kcal": 193,
-        "emoji": "🧆"
+        "emoji": "🧆",
+        "image": "/images/foods/grilled-tempeh.jpg"
       },
       {
         "id": 4,
         "name": "Quinoa",
         "portion": "100g",
         "kcal": 120,
-        "emoji": "🍚"
+        "emoji": "🍚",
+        "image": "/images/foods/quinoa.jpg"
       },
       {
         "id": 5,
         "name": "Boiled Broccoli",
         "portion": "150g",
         "kcal": 53,
-        "emoji": "🥦"
+        "emoji": "🥦",
+        "image": "/images/foods/boiled-broccoli.jpg"
       },
       {
         "id": 6,
         "name": "Boiled Sweet Potato",
         "portion": "150g",
         "kcal": 129,
-        "emoji": "🍠"
+        "emoji": "🍠",
+        "image": "/images/foods/boiled-sweet-potato.jpg"
       },
       {
         "id": 7,
         "name": "Grilled Chicken Breast",
         "portion": "150g",
         "kcal": 220,
-        "emoji": "🍗"
+        "emoji": "🍗",
+        "image": "/images/foods/grilled-chicken-breast.jpg"
       },
       {
         "id": 8,
         "name": "Vegetable Salad",
         "portion": "200g",
         "kcal": 80,
-        "emoji": "🥗"
+        "emoji": "🥗",
+        "image": "/images/foods/vegetable-salad.jpg"
       },
       {
         "id": 9,
         "name": "Whole Wheat Pasta",
         "portion": "100g",
         "kcal": 124,
-        "emoji": "🍝"
+        "emoji": "🍝",
+        "image": "/images/foods/whole-wheat-pasta.jpg"
       },
       {
         "id": 10,
         "name": "Black Beans",
         "portion": "100g",
         "kcal": 132,
-        "emoji": "🫘"
+        "emoji": "🫘",
+        "image": "/images/foods/black-beans.jpg"
       },
       {
         "id": 11,
         "name": "Grilled Tilapia",
         "portion": "150g",
         "kcal": 192,
-        "emoji": "🐟"
+        "emoji": "🐟",
+        "image": "/images/foods/grilled-tilapia.jpg"
       },
       {
         "id": 12,
         "name": "Soba Noodles",
         "portion": "100g",
         "kcal": 99,
-        "emoji": "🍜"
+        "emoji": "🍜",
+        "image": "/images/foods/soba-noodles.jpg"
       },
       {
         "id": 13,
         "name": "Lentil Soup",
         "portion": "1 bowl",
         "kcal": 186,
-        "emoji": "🍲"
+        "emoji": "🍲",
+        "image": "/images/foods/lentil-soup.jpg"
       },
       {
         "id": 14,
         "name": "Roasted Chickpeas",
         "portion": "50g",
         "kcal": 180,
-        "emoji": "🧆"
+        "emoji": "🧆",
+        "image": "/images/foods/roasted-chickpeas.jpg"
       },
       {
         "id": 15,
         "name": "Baked Potato",
         "portion": "1 medium",
         "kcal": 161,
-        "emoji": "🥔"
+        "emoji": "🥔",
+        "image": "/images/foods/baked-potato.jpg"
       },
       {
         "id": 16,
         "name": "Boiled Shrimp",
         "portion": "100g",
         "kcal": 99,
-        "emoji": "🍤"
+        "emoji": "🍤",
+        "image": "/images/foods/boiled-shrimp.jpg"
       },
       {
         "id": 17,
         "name": "Turkey Breast",
         "portion": "100g",
         "kcal": 135,
-        "emoji": "🥩"
+        "emoji": "🥩",
+        "image": "/images/foods/turkey-breast.jpg"
       },
       {
         "id": 18,
         "name": "Couscous",
         "portion": "100g",
         "kcal": 112,
-        "emoji": "🍚"
+        "emoji": "🍚",
+        "image": "/images/foods/couscous.jpg"
       }
     ]
   },
@@ -750,126 +804,144 @@ const KATALOG = {
         "name": "Chicken Breast",
         "portion": "150g",
         "kcal": 248,
-        "emoji": "🍗"
+        "emoji": "🍗",
+        "image": "/images/foods/chicken-breast.jpg"
       },
       {
         "id": 2,
         "name": "Lean Beef",
         "portion": "150g",
         "kcal": 250,
-        "emoji": "🥩"
+        "emoji": "🥩",
+        "image": "/images/foods/lean-beef.jpg"
       },
       {
         "id": 3,
         "name": "Salmon",
         "portion": "150g",
         "kcal": 312,
-        "emoji": "🍣"
+        "emoji": "🍣",
+        "image": "/images/foods/salmon.jpg"
       },
       {
         "id": 4,
         "name": "Protein Shake",
         "portion": "1 glass",
         "kcal": 120,
-        "emoji": "🥤"
+        "emoji": "🥤",
+        "image": "/images/foods/protein-shake.jpg"
       },
       {
         "id": 5,
         "name": "Boiled Egg Whites",
         "portion": "4 pieces",
         "kcal": 68,
-        "emoji": "🥚"
+        "emoji": "🥚",
+        "image": "/images/foods/boiled-egg-whites.jpg"
       },
       {
         "id": 6,
         "name": "Greek Yogurt",
         "portion": "150g",
         "kcal": 88,
-        "emoji": "🍶"
+        "emoji": "🍶",
+        "image": "/images/foods/greek-yogurt.jpg"
       },
       {
         "id": 7,
         "name": "Oatmeal",
         "portion": "100g",
         "kcal": 389,
-        "emoji": "🥣"
+        "emoji": "🥣",
+        "image": "/images/foods/oatmeal.jpg"
       },
       {
         "id": 8,
         "name": "Roasted Asparagus",
         "portion": "100g",
         "kcal": 20,
-        "emoji": "🎋"
+        "emoji": "🎋",
+        "image": "/images/foods/roasted-asparagus.jpg"
       },
       {
         "id": 9,
         "name": "Peanut Butter",
         "portion": "2 tbsp",
         "kcal": 188,
-        "emoji": "🥜"
+        "emoji": "🥜",
+        "image": "/images/foods/peanut-butter.jpg"
       },
       {
         "id": 10,
         "name": "Cottage Cheese",
         "portion": "150g",
         "kcal": 147,
-        "emoji": "🧀"
+        "emoji": "🧀",
+        "image": "/images/foods/cottage-cheese.jpg"
       },
       {
         "id": 11,
         "name": "Tuna Salad",
         "portion": "200g",
         "kcal": 380,
-        "emoji": "🥗"
+        "emoji": "🥗",
+        "image": "/images/foods/tuna-salad.jpg"
       },
       {
         "id": 12,
         "name": "Beef Jerky",
         "portion": "50g",
         "kcal": 205,
-        "emoji": "🥩"
+        "emoji": "🥩",
+        "image": "/images/foods/beef-jerky.jpg"
       },
       {
         "id": 13,
         "name": "Protein Bar",
         "portion": "1 piece",
         "kcal": 220,
-        "emoji": "🍫"
+        "emoji": "🍫",
+        "image": "/images/foods/protein-bar.jpg"
       },
       {
         "id": 14,
         "name": "Sweet Potato Mash",
         "portion": "200g",
         "kcal": 172,
-        "emoji": "🍠"
+        "emoji": "🍠",
+        "image": "/images/foods/sweet-potato-mash.jpg"
       },
       {
         "id": 15,
         "name": "Mixed Nuts",
         "portion": "30g",
         "kcal": 180,
-        "emoji": "🥜"
+        "emoji": "🥜",
+        "image": "/images/foods/mixed-nuts.jpg"
       },
       {
         "id": 16,
         "name": "Sardines (in water)",
         "portion": "100g",
         "kcal": 148,
-        "emoji": "🐟"
+        "emoji": "🐟",
+        "image": "/images/foods/sardines.jpg"
       },
       {
         "id": 17,
         "name": "Whey Protein Isolate",
         "portion": "1 scoop",
         "kcal": 110,
-        "emoji": "🥛"
+        "emoji": "🥛",
+        "image": "/images/foods/whey-protein-isolate.jpg"
       },
       {
         "id": 18,
         "name": "Roasted Chicken Thigh",
         "portion": "150g",
         "kcal": 315,
-        "emoji": "🍗"
+        "emoji": "🍗",
+        "image": "/images/foods/roasted-chicken-thigh.jpg"
       }
     ]
   }

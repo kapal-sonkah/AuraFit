@@ -31,16 +31,28 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
         onClick={onClick}
         aria-label={`Lihat detail ${food.name}`}
       >
-        <span className="food-card__icon" aria-hidden="true">
-          <span aria-hidden="true">{food.emoji}</span>
-        </span>
-        <span className="food-card__body">
+        <span className="food-card__head">
           <span className="food-card__name">{food.name}</span>
-          <span className="food-card__meta">{foodMeta(food)}</span>
           <span className={`food-card__status ${consumed ? 'food-card__status--done' : ''}`}>
             {consumed ? 'Sudah dicatat' : 'Belum dicatat'}
           </span>
         </span>
+        {food.image ? (
+          <img
+            src={food.image}
+            alt=""
+            loading="lazy"
+            className="food-card__media"
+            onError={(event) => {
+              event.currentTarget.hidden = true;
+              if (event.currentTarget.nextElementSibling) event.currentTarget.nextElementSibling.hidden = false;
+            }}
+          />
+        ) : null}
+        <span className="food-card__media food-card__media--empty" hidden={Boolean(food.image)} aria-hidden="true">
+          {food.emoji}
+        </span>
+        <span className="food-card__meta">{foodMeta(food)}</span>
       </button>
       <button
         type="button"
