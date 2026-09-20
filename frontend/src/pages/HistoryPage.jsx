@@ -185,13 +185,36 @@ function SummaryCard({ label, value, hint, tone = '' }) {
   );
 }
 
+function HistoryTrendSkeleton() {
+  return (
+    <div className="history-trend history-trend--loading" aria-label="Memuat pola progres tujuh hari" aria-busy="true">
+      <div className="history-trend__head" aria-hidden="true">
+        <div>
+          <span className="history-skeleton-line history-skeleton-line--eyebrow" />
+          <span className="history-skeleton-line history-skeleton-line--title" />
+        </div>
+        <span className="history-skeleton-line history-skeleton-line--hint" />
+      </div>
+      <div className="history-trend__bars" aria-hidden="true">
+        {Array.from({ length: 7 }, (_, index) => (
+          <div className="history-trend__day history-trend__day--placeholder" key={`trend-loading-${index}`}>
+            <span className="history-skeleton-line history-skeleton-line--percent" />
+            <span className="history-trend__bar history-trend__bar--placeholder"><span /></span>
+            <span className="history-skeleton-line history-skeleton-line--weekday" />
+            <span className="history-trend__streak-mark history-trend__streak-mark--placeholder" />
+          </div>
+        ))}
+      </div>
+      <span className="history-skeleton-line history-skeleton-line--legend" aria-hidden="true" />
+      <span className="history-skeleton-line history-skeleton-line--legend history-skeleton-line--legend-streak" aria-hidden="true" />
+      <span className="history-skeleton-line history-skeleton-line--caption" aria-hidden="true" />
+    </div>
+  );
+}
+
 function HistoryTrend({ days, selectedDate, today, loading }) {
   if (loading) {
-    return (
-      <div className="history-trend history-trend--loading" aria-label="Memuat pola progres tujuh hari" aria-busy="true">
-        {Array.from({ length: 7 }, (_, index) => <span className="history-trend__placeholder" key={`trend-loading-${index}`} />)}
-      </div>
-    );
+    return <HistoryTrendSkeleton />;
   }
 
   const latestFirst = days.slice().reverse();
@@ -269,6 +292,26 @@ function PlanItem({ item, type, onToggle, saving, editable }) {
         ) : null}
       </div>
     </article>
+  );
+}
+
+function PlanLoadingState() {
+  return (
+    <div className="history-state history-state--loading" aria-live="polite" aria-busy="true">
+      <span className="history-skeleton-line history-skeleton-line--detail-title" aria-hidden="true" />
+      <div className="history-loading-plan" aria-hidden="true">
+        {Array.from({ length: 4 }, (_, index) => (
+          <span className="history-loading-plan__item" key={`plan-loading-${index}`}>
+            <span className="history-loading-plan__image" />
+            <span className="history-loading-plan__copy">
+              <span className="history-skeleton-line history-skeleton-line--detail-name" />
+              <span className="history-skeleton-line history-skeleton-line--detail-meta" />
+            </span>
+          </span>
+        ))}
+      </div>
+      <span className="history-skeleton-line history-skeleton-line--detail-label" />
+    </div>
   );
 }
 
@@ -457,7 +500,7 @@ export default function HistoryPage({ onLogout }) {
             </div>
 
             {planState.status === 'loading' ? (
-              <div className="history-state" aria-live="polite">Memuat rincian rencana…</div>
+              <PlanLoadingState />
             ) : planState.status === 'error' ? (
               <div className="history-state history-state--error" role="alert">Rincian tanggal belum dapat dimuat.</div>
             ) : !planState.data ? (
