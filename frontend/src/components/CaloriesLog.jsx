@@ -34,7 +34,7 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
         <span className="food-card__head">
           <span className="food-card__name">{food.name}</span>
           <span className={`food-card__status ${consumed ? 'food-card__status--done' : ''}`}>
-            {consumed ? 'Sudah dicatat' : 'Belum dicatat'}
+            {consumed ? <><span aria-hidden="true">✓ </span>Sudah dicatat</> : 'Belum dicatat'}
           </span>
         </span>
         {food.image ? (

@@ -37,7 +37,7 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
         <span className="activity-card__head">
           <span className="activity-card__name">{activity.name}</span>
           <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
-            {active ? 'Selesai' : 'Belum dimulai'}
+            {active ? <><span aria-hidden="true">✓ </span>Selesai</> : 'Belum dimulai'}
           </span>
         </span>
         {activity.image ? (

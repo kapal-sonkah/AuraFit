@@ -109,6 +109,13 @@
   .history-plan-item { display: grid; grid-template-columns: auto minmax(0, 1fr) 9.75rem; }
 }
 
+/* Dua daftar berdampingan hanya muat bila tiap kolom cukup lebar. Pada
+   ±800 piksel kolom status 9,75rem menyisakan ±100 piksel untuk nama butir,
+   sehingga nama terlipat per kata. Di bawah 64rem kedua daftar ditumpuk. */
+@media (max-width: 64rem) {
+  .history-plan__columns { grid-template-columns: 1fr; }
+}
+
 @media (min-width: 48rem) {
   .history-days { grid-template-columns: repeat(7, minmax(0, 1fr)); }
 }

@@ -5,6 +5,7 @@ import DailyActivities from "../components/DailyActivities";
 import CaloriesLog from "../components/CaloriesLog";
 import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
+import ConfirmDialog from '../components/ConfirmDialog';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday, updatePlanItem } from '../utils/network-data';
 import { getAuraOption } from '../utils/aura';
@@ -30,6 +31,9 @@ export default function DashboardPage({ onLogout, user }) {
   // pilihan yang sedang atau gagal disimpan, dipakai ulang oleh "Coba lagi".
   const [auraState, setAuraState] = useState({ status: 'loading', value: null, pending: null, error: '' });
   const [sumberRencana, setSumberRencana] = useState(null);
+  // Butir manual yang menunggu konfirmasi hapus: { itemId, nama } atau null.
+  const [konfirmasiHapus, setKonfirmasiHapus] = useState(null);
+  const batalHapus = useCallback(() => setKonfirmasiHapus(null), []);
 
   function terapkanRencana(data) {
     // Rencana baru baru disusun setelah aura hari itu dipilih, sehingga
@@ -108,8 +112,13 @@ export default function DashboardPage({ onLogout, user }) {
 
   // Hanya butir manual yang punya tombol hapus. Rencana yang dikembalikan
   // backend langsung diterapkan agar progres dan streak ikut terbarui.
-  async function hapusButir(itemId, nama) {
-    if (!window.confirm(`Hapus "${nama}" dari rencana hari ini?`)) return;
+  function hapusButir(itemId, nama) {
+    setKonfirmasiHapus({ itemId, nama });
+  }
+
+  async function lanjutkanHapus() {
+    const { itemId } = konfirmasiHapus;
+    setKonfirmasiHapus(null);
     setGalatSimpan('');
     const { error, data, message } = await deletePlanItem(itemId);
     if (error) {
@@ -340,6 +349,15 @@ export default function DashboardPage({ onLogout, user }) {
         </main>
 
       </div>
+      {konfirmasiHapus ? (
+        <ConfirmDialog
+          title="Hapus butir ini?"
+          message={`"${konfirmasiHapus.nama}" akan dihapus dari rencana hari ini beserta catatannya.`}
+          confirmLabel="Hapus"
+          onConfirm={lanjutkanHapus}
+          onCancel={batalHapus}
+        />
+      ) : null}
     </div>
   );
 }

@@ -76,13 +76,18 @@ function ContributorCard({ contributor }) {
   );
 }
 
-function LandingPage() {
+function LandingPage({ loggedIn = false }) {
   return (
     <div className="landing-shell">
       <header className="landing-header">
         <Link to="/" className="landing-wordmark">AuraFit</Link>
         <nav className="landing-nav" aria-label="Navigasi utama">
-          <Link to="/login" className="landing-button landing-button--primary">Masuk</Link>
+          {/* Tombol utama ada di hero; tombol header dibuat sekunder agar
+              keduanya tidak bersaing. Pengguna yang sudah masuk diarahkan
+              langsung ke dasbor, bukan ke halaman Masuk. */}
+          {loggedIn
+            ? <Link to="/dashboard" className="landing-button landing-button--secondary">Buka dasbor</Link>
+            : <Link to="/login" className="landing-button landing-button--secondary">Masuk</Link>}
         </nav>
       </header>
 
@@ -93,6 +98,12 @@ function LandingPage() {
           <p className="landing-hero__copy">
             Rencana aktivitas dan asupan harian yang disesuaikan dengan profil tubuhmu, tersimpan rapi dan dapat ditelusuri.
           </p>
+          {/* Pengunjung baru sebelumnya hanya menemukan tombol Masuk. */}
+          <div className="landing-hero__actions">
+            {loggedIn
+              ? <Link to="/dashboard" className="landing-button landing-button--primary">Lanjutkan rencana hari ini</Link>
+              : <Link to="/signup" className="landing-button landing-button--primary">Mulai sekarang</Link>}
+          </div>
         </div>
         <div className="landing-hero__side" aria-label="Cara kerja AuraFit">
           <article className="landing-tile landing-tile--accent">
