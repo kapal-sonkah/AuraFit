@@ -33,8 +33,10 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
       >
         <span className="food-card__head">
           <span className="food-card__name">
-            {food.name}
-            {food.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+            <span className="food-card__title">{food.name}</span>
+            <span className="food-card__tags" aria-label="Label makanan">
+              {food.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+            </span>
           </span>
           <span className={`food-card__status ${consumed ? 'food-card__status--done' : ''}`}>
             {consumed ? <><span aria-hidden="true">✓ </span>Sudah dicatat</> : 'Belum dicatat'}

@@ -36,11 +36,13 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
       >
         <span className="activity-card__head">
           <span className="activity-card__name">
-            {activity.name}
-            {/* Butir tanpa source_ref dicatat sendiri oleh pengguna; tanpa
-                penanda, butir tambahan tampak seperti rekomendasi sistem. */}
-            {activity.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
-            {activity.optional ? <span className="plan-item-tag plan-item-tag--optional">Pilihan tambahan</span> : null}
+            <span className="activity-card__title">{activity.name}</span>
+            <span className="activity-card__tags" aria-label="Label aktivitas">
+              {/* Butir tanpa source_ref dicatat sendiri oleh pengguna; tanpa
+                  penanda, butir tambahan tampak seperti rekomendasi sistem. */}
+              {activity.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+              {activity.optional ? <span className="plan-item-tag plan-item-tag--optional">Pilihan tambahan</span> : null}
+            </span>
           </span>
           <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
             {active ? <><span aria-hidden="true">✓ </span>Selesai</> : 'Belum dimulai'}
