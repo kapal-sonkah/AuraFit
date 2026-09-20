@@ -12,7 +12,9 @@ function StatCard({ label, value, unit, sub, subColor, tone = '' }) {
   );
 }
 
-export default function OverviewSidebar({ user, completedActivities = 0, totalActivities = 0, consumedCalories = 0, dailyCalorieTarget = 0, streak = 0 }) {
+export default function OverviewSidebar({ user, planStatus = 'memuat', completedActivities = 0, totalActivities = 0, consumedCalories = 0, dailyCalorieTarget = 0, streak = 0 }) {
+
+  const planReady = planStatus === 'siap';
 
   const calorieRatio = dailyCalorieTarget > 0 ? consumedCalories / dailyCalorieTarget : 0;
 
@@ -27,6 +29,11 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
     calorieRatio > 0 ? 'stat-card__sub--warning' : 'stat-card__sub--muted';
 
   const calorieSub = `${Math.max(dailyCalorieTarget - consumedCalories, 0)} kcal tersisa dari menu rencana hari ini`;
+  const inactivePlanSub = planStatus === 'memuat'
+    ? 'Memuat ringkasan…'
+    : planStatus === 'menunggu-aura'
+      ? 'Pilih aura untuk menyusun rencana hari ini'
+      : 'Rencana belum tersedia';
 
   // Warna BMI
   const bmiSubColor =
@@ -50,9 +57,9 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
         </div>
         <StatCard 
           label="Kalori Tercatat" 
-          value={consumedCalories} 
-          unit="kcal" 
-          sub={calorieSub}
+          value={planReady ? consumedCalories : '—'}
+          unit={planReady ? 'kcal' : null}
+          sub={planReady ? calorieSub : inactivePlanSub}
           subColor={calorieSubColor} 
         />
 
@@ -65,8 +72,8 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
         
         <StatCard 
           label="Aktivitas Tercatat" 
-          value={`${completedActivities} / ${totalActivities}`}
-          sub="selesai dari rencana"
+          value={planReady ? `${completedActivities} / ${totalActivities}` : '—'}
+          sub={planReady ? 'selesai dari rencana' : inactivePlanSub}
           subColor={activitySubColor} />
         
         {/* Streak memakai warna hangat, satu-satunya aksen non-hijau pada
@@ -74,8 +81,8 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
             tenggelam di antara kartu lain. */}
         <StatCard 
           label="Streak" 
-          value={streak}
-          sub="hari berturut-turut"
+          value={planReady ? streak : '—'}
+          sub={planReady ? 'hari berturut-turut' : inactivePlanSub}
           subColor={streakSubColor}
           tone={streak > 0 ? 'warm' : ''} />
       </section>

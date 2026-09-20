@@ -220,6 +220,7 @@ export default function DashboardPage({ onLogout, user }) {
           <div className="dashboard-summary">
             <OverviewSidebar
               user={user}
+              planStatus={statusRencana}
               completedActivities={completedActivities}
               totalActivities={activities.length}
               consumedCalories={consumedCalories}
@@ -300,9 +301,9 @@ export default function DashboardPage({ onLogout, user }) {
                 <section className="dashboard-hero" aria-labelledby="today-plan-title">
                   <div className="dashboard-hero__copyblock">
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
-                    <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
+                    <h2 id="today-plan-title" className="dashboard-hero__title">Rencana hari ini</h2>
                     <p className="dashboard-hero__copy">
-                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {sumberRencana === 'manual'
+                    {activities.length} aktivitas dan {foods.length} makanan tersimpan untuk hari ini. {sumberRencana === 'manual'
                       ? 'Rencana ini kamu susun sendiri.'
                       : auraOption
                         ? `Rencana ini disusun dari Aura ${auraOption.label} yang kamu pilih hari ini.`

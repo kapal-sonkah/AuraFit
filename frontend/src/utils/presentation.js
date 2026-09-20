@@ -140,8 +140,8 @@ export function presentActivity(item) {
 
 // Porsi dan kalori sama-sama opsional pada makanan yang dicatat sendiri, jadi
 // hanya bagian yang terisi yang digabungkan.
-export function foodMeta(food) {
-  return [food.portion, food.kcal != null && food.kcal !== '' ? `${food.kcal} kcal` : '']
+export function foodMeta(food, { includeCalories = true } = {}) {
+  return [food.portion, includeCalories && food.kcal != null && food.kcal !== '' ? `${food.kcal} kcal` : '']
     .filter(Boolean)
     .join(' · ');
 }

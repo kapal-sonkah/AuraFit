@@ -31,13 +31,12 @@ export default function NextStepCard({ activities, completedActivityIds, onDone 
       <p className="next-step__eyebrow">Berikutnya</p>
       <h2 id="next-step-title" className="next-step__title">{item.name}</h2>
       <p className="next-step__meta">
-        {lama ? `${lama} · ` : ''}Cukup satu aktivitas selesai untuk menjaga streak.
+        {lama ? `${lama} · ` : ''}Satu aktivitas selesai menjaga streak hari ini.
       </p>
       <div className="next-step__actions">
         <button type="button" className="next-step__primary" onClick={() => onDone(berikutnya.id, true)}>
           Tandai selesai
         </button>
-        <a className="next-step__secondary" href="#aktivitas-hari-ini">Lihat semua aktivitas</a>
       </div>
     </section>
   );
