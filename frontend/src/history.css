@@ -271,3 +271,58 @@
 .history-main,
 .history-summary { width: 100%; }
 .history-summary__card { box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; }
+
+/* Mobile-only detail layout: keep activity and food cards readable and
+   centered instead of squeezing their status/actions beside the copy. */
+@media (max-width: 42rem) {
+  .history-hero { align-items: center; }
+  .history-hero > div:first-child { width: 100%; }
+  .history-date-picker { width: min(100%, 32rem); margin-inline: auto; }
+  .history-date-picker__trigger { width: 100%; }
+  .history-date-picker__trigger > span { min-width: 0; overflow-wrap: anywhere; }
+  .history-date-picker__popover {
+    right: auto;
+    left: 50%;
+    width: min(22rem, calc(100vw - (2 * var(--space-3))));
+    transform: translateX(-50%);
+  }
+  .history-date-picker__head strong { min-width: 0; overflow-wrap: anywhere; text-align: right; }
+
+  .history-plan,
+  .history-plan__columns,
+  .history-plan__columns > div,
+  .history-plan__list { width: 100%; max-width: 100%; min-width: 0; }
+  .history-plan__columns { gap: var(--space-5); }
+  .history-plan-item {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    align-items: start;
+    box-sizing: border-box;
+  }
+  .history-plan-item__body { width: 100%; max-width: 100%; min-width: 0; }
+  .history-plan-item__name,
+  .history-plan-item__meta { max-width: 100%; overflow-wrap: anywhere; }
+  .history-plan-item__tag {
+    display: table;
+    max-width: 100%;
+    margin: 0.35rem 0 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .history-plan-item__actions {
+    grid-column: 1 / -1;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+  }
+  .history-plan-item__status { min-width: 0; margin-left: 0; overflow-wrap: anywhere; }
+  .history-plan-item__toggle { width: auto; max-width: 100%; white-space: normal; }
+}
