@@ -27,17 +27,17 @@ class AuraRepository {
       INSERT INTO daily_auras (id, user_id, aura_date, aura)
       SELECT $1, $2, $3, $4
       WHERE NOT EXISTS (
-        SELECT 1 FROM daily_plans WHERE user_id = $2 AND plan_date = $3
+        SELECT 1 FROM daily_plans WHERE user_id = $5 AND plan_date = $6
       )
       ON CONFLICT (user_id, aura_date) DO UPDATE
         SET aura = EXCLUDED.aura,
             updated_at = NOW()
         WHERE NOT EXISTS (
           SELECT 1 FROM daily_plans
-          WHERE user_id = daily_auras.user_id AND plan_date = daily_auras.aura_date
+          WHERE user_id = $5 AND plan_date = $6
         )
       RETURNING aura_date, aura
-    `, [nanoid(16), userId, date, aura]);
+    `, [nanoid(16), userId, date, aura, userId, date]);
 
     return result.rows[0] ?? null;
   }
