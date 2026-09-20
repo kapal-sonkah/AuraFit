@@ -167,6 +167,17 @@ test('setiap gambar aktivitas di katalog benar-benar ada di frontend', async () 
   assert.deepEqual(hilang, []);
 });
 
+test('setiap makanan di katalog punya foto yang benar-benar ada di frontend', async () => {
+  const { existsSync } = await import('node:fs');
+  const { fileURLToPath } = await import('node:url');
+  const publik = fileURLToPath(new URL('../../frontend/public', import.meta.url));
+  const hilang = Object.values(KATALOG)
+    .flatMap((kolam) => kolam.foods)
+    .filter((f) => !f.image || !existsSync(publik + f.image))
+    .map((f) => `${f.name}: ${f.image}`);
+  assert.deepEqual(hilang, []);
+});
+
 test('setiap aktivitas di katalog punya nama berbahasa Indonesia', async () => {
   const { presentActivity } = await import('../../frontend/src/utils/presentation.js');
   const namaSama = new Set(['Kickboxing', 'Futsal', 'Deadlift']);
