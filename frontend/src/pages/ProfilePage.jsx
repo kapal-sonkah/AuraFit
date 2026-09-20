@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppHeader from '../components/AppHeader';
 import { changePassword, updateUserProfile } from '../utils/network-data';
+import { collectFieldErrors } from '../utils/validation-messages';
 import '../profile.css';
 
 const GOALS = [
@@ -33,24 +34,47 @@ function sameProfile(left, right) {
   return Object.keys(left).every((field) => String(left[field]) === String(right[field]));
 }
 
+function FieldError({ errors, name, prefix = 'profile' }) {
+  return errors[name] ? <small id={`${prefix}-${name}-error`} className="profile-field__error">{errors[name]}</small> : null;
+}
+
 function PasswordCard() {
   const [fields, setFields] = useState({ current: '', next: '', confirm: '' });
+  const [fieldErrors, setFieldErrors] = useState({});
   const [status, setStatus] = useState({ type: '', message: '' });
   const [saving, setSaving] = useState(false);
 
   function setField(field, value) {
     setFields((current) => ({ ...current, [field]: value }));
+    setFieldErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
     if (status.message) setStatus({ type: '', message: '' });
+  }
+
+  function fieldProps(name) {
+    return {
+      name,
+      'aria-invalid': Boolean(fieldErrors[name]),
+      'aria-describedby': fieldErrors[name] ? `password-${name}-error` : undefined,
+      onBlur: (event) => {
+        const errors = collectFieldErrors(event.currentTarget.form);
+        if (errors[name]) setFieldErrors((current) => ({ ...current, [name]: errors[name] }));
+      },
+    };
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (fields.next.length < 8) {
-      setStatus({ type: 'error', message: 'Kata sandi baru minimal 8 karakter.' });
-      return;
-    }
-    if (fields.next !== fields.confirm) {
-      setStatus({ type: 'error', message: 'Konfirmasi kata sandi baru tidak sama.' });
+    const errors = collectFieldErrors(event.currentTarget);
+    if (fields.next && fields.confirm && fields.next !== fields.confirm) errors.confirm = 'Konfirmasi kata sandi baru tidak sama.';
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      const firstInvalid = event.currentTarget.querySelector(':invalid');
+      (firstInvalid || (errors.confirm ? document.getElementById('password-confirm') : null))?.focus();
       return;
     }
 
@@ -67,7 +91,7 @@ function PasswordCard() {
   }
 
   return (
-    <form className="profile-card" onSubmit={handleSubmit}>
+    <form className="profile-card" noValidate onSubmit={handleSubmit}>
       <div className="profile-card__head">
         <div>
           <p className="profile-card__eyebrow">Keamanan akun</p>
@@ -76,9 +100,9 @@ function PasswordCard() {
       </div>
 
       <div className="profile-form-grid">
-        <label className="profile-field profile-field--wide"><span>Kata sandi saat ini</span><input type="password" autoComplete="current-password" value={fields.current} onChange={(event) => setField('current', event.target.value)} required /></label>
-        <label className="profile-field"><span>Kata sandi baru</span><input type="password" autoComplete="new-password" minLength={8} value={fields.next} onChange={(event) => setField('next', event.target.value)} required /></label>
-        <label className="profile-field"><span>Ulangi kata sandi baru</span><input type="password" autoComplete="new-password" minLength={8} value={fields.confirm} onChange={(event) => setField('confirm', event.target.value)} required /></label>
+        <label className="profile-field profile-field--wide"><span>Kata sandi saat ini</span><input id="password-current" type="password" autoComplete="current-password" value={fields.current} onChange={(event) => setField('current', event.target.value)} required {...fieldProps('current')} /><FieldError errors={fieldErrors} name="current" prefix="password" /></label>
+        <label className="profile-field"><span>Kata sandi baru</span><input id="password-next" type="password" autoComplete="new-password" minLength={8} value={fields.next} onChange={(event) => setField('next', event.target.value)} required {...fieldProps('next')} /><FieldError errors={fieldErrors} name="next" prefix="password" /></label>
+        <label className="profile-field"><span>Ulangi kata sandi baru</span><input id="password-confirm" type="password" autoComplete="new-password" minLength={8} value={fields.confirm} onChange={(event) => setField('confirm', event.target.value)} required {...fieldProps('confirm')} /><FieldError errors={fieldErrors} name="confirm" prefix="password" /></label>
       </div>
 
       {status.message ? <p className={`profile-message profile-message--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p> : null}
@@ -92,23 +116,49 @@ function PasswordCard() {
 export default function ProfilePage({ onLogout, user, onUserUpdated }) {
   const [form, setForm] = useState(() => profileForm(user));
   const [savedForm, setSavedForm] = useState(() => profileForm(user));
+  const [fieldErrors, setFieldErrors] = useState({});
   const [status, setStatus] = useState({ type: '', message: '' });
   const [saving, setSaving] = useState(false);
   const isDirty = !sameProfile(form, savedForm);
 
   function setField(field, value) {
     setForm((current) => ({ ...current, [field]: value }));
+    setFieldErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
     if (status.message) setStatus({ type: '', message: '' });
+  }
+
+  function fieldProps(name) {
+    return {
+      name,
+      'aria-invalid': Boolean(fieldErrors[name]),
+      'aria-describedby': fieldErrors[name] ? `profile-${name}-error` : undefined,
+      onBlur: (event) => {
+        const errors = collectFieldErrors(event.currentTarget.form);
+        if (errors[name]) setFieldErrors((current) => ({ ...current, [name]: errors[name] }));
+      },
+    };
   }
 
   function resetChanges() {
     setForm(savedForm);
+    setFieldErrors({});
     setStatus({ type: '', message: '' });
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setStatus({ type: '', message: '' });
+    const errors = collectFieldErrors(event.currentTarget);
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      event.currentTarget.querySelector(':invalid')?.focus();
+      return;
+    }
     setSaving(true);
     const result = await updateUserProfile(form);
     setSaving(false);
@@ -137,7 +187,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
             <p className="profile-hero__copy">Perbarui data tubuh dan tujuanmu kapan saja. AuraFit akan menghitung ulang BMI setelah perubahan disimpan.</p>
           </section>
 
-          <form className="profile-card" onSubmit={handleSubmit}>
+          <form className="profile-card" noValidate onSubmit={handleSubmit}>
             <div className="profile-card__head">
               <div>
                 <p className="profile-card__eyebrow">Data profil</p>
@@ -150,13 +200,13 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
             </div>
 
             <div className="profile-form-grid">
-              <label className="profile-field"><span>Nama depan</span><input value={form.first_name} onChange={(event) => setField('first_name', event.target.value)} maxLength={50} required /></label>
-              <label className="profile-field"><span>Nama belakang</span><input value={form.last_name} onChange={(event) => setField('last_name', event.target.value)} maxLength={50} required /></label>
-              <label className="profile-field"><span>Jenis kelamin</span><select value={form.gender} onChange={(event) => setField('gender', event.target.value)} required><option value="" disabled>Pilih jenis kelamin</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select></label>
-              <label className="profile-field"><span>Umur (tahun)</span><input type="number" min="10" max="120" value={form.age} onChange={(event) => setField('age', event.target.value)} required /></label>
-              <label className="profile-field"><span>Berat badan (kg)</span><input type="number" min="20" max="400" step="0.1" value={form.weight} onChange={(event) => setField('weight', event.target.value)} required /></label>
-              <label className="profile-field"><span>Tinggi badan (cm)</span><input type="number" min="80" max="250" step="0.1" value={form.height} onChange={(event) => setField('height', event.target.value)} required /></label>
-              <label className="profile-field profile-field--wide"><span>Tujuan</span><select value={form.goal} onChange={(event) => setField('goal', event.target.value)} required><option value="" disabled>Pilih tujuan</option>{GOALS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+              <label className="profile-field"><span>Nama depan</span><input id="profile-first-name" value={form.first_name} onChange={(event) => setField('first_name', event.target.value)} maxLength={50} required {...fieldProps('first_name')} /><FieldError errors={fieldErrors} name="first_name" /></label>
+              <label className="profile-field"><span>Nama belakang</span><input id="profile-last-name" value={form.last_name} onChange={(event) => setField('last_name', event.target.value)} maxLength={50} required {...fieldProps('last_name')} /><FieldError errors={fieldErrors} name="last_name" /></label>
+              <label className="profile-field"><span>Jenis kelamin</span><select id="profile-gender" value={form.gender} onChange={(event) => setField('gender', event.target.value)} required {...fieldProps('gender')}><option value="" disabled>Pilih jenis kelamin</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select><FieldError errors={fieldErrors} name="gender" /></label>
+              <label className="profile-field"><span>Umur (tahun)</span><input id="profile-age" type="number" min="10" max="120" value={form.age} onChange={(event) => setField('age', event.target.value)} required {...fieldProps('age')} /><FieldError errors={fieldErrors} name="age" /></label>
+              <label className="profile-field"><span>Berat badan (kg)</span><input id="profile-weight" type="number" min="20" max="400" step="0.1" value={form.weight} onChange={(event) => setField('weight', event.target.value)} required {...fieldProps('weight')} /><FieldError errors={fieldErrors} name="weight" /></label>
+              <label className="profile-field"><span>Tinggi badan (cm)</span><input id="profile-height" type="number" min="80" max="250" step="0.1" value={form.height} onChange={(event) => setField('height', event.target.value)} required {...fieldProps('height')} /><FieldError errors={fieldErrors} name="height" /></label>
+              <label className="profile-field profile-field--wide"><span>Tujuan</span><select id="profile-goal" value={form.goal} onChange={(event) => setField('goal', event.target.value)} required {...fieldProps('goal')}><option value="" disabled>Pilih tujuan</option>{GOALS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><FieldError errors={fieldErrors} name="goal" /></label>
             </div>
 
             {status.message ? <p className={`profile-message profile-message--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p> : null}

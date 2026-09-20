@@ -1,16 +1,21 @@
 :root {
-  --color-paper: oklch(97% 0.015 145);
+  /* Palet dasar mengikuti hasil uji tampilan: kartu putih di atas latar mint
+     agar struktur halaman terlihat, teks sekunder dan garis tepi digelapkan. */
+  --color-paper: #f4faf5;
   --color-paper-strong: oklch(93% 0.025 145);
   --color-paper-soft: oklch(90% 0.035 145);
-  --color-ink: oklch(22% 0.03 155);
-  --color-muted: oklch(43% 0.035 155);
+  --color-ink: #102a1d;
+  --color-muted: #52675a;
+  /* Teks sekunder di atas kartu berlatar hijau lembut; --color-muted hanya
+     mencapai 4,35:1 di sana (N-04). */
+  --color-muted-on-accent: #3d5548;
   --color-subtle: oklch(58% 0.025 155);
-  --color-accent: oklch(43% 0.11 153);
+  --color-accent: #176b45;
   --color-accent-strong: oklch(34% 0.095 153);
   --color-accent-ink: oklch(98% 0.005 145);
   --color-accent-soft: oklch(88% 0.055 153);
   --color-accent-line: oklch(78% 0.055 153);
-  --color-surface: oklch(99% 0.006 145);
+  --color-surface: #ffffff;
   --color-surface-dark: oklch(24% 0.045 155);
   --color-surface-dark-2: oklch(29% 0.06 155);
   --color-accent-warm: oklch(52% 0.13 62);
@@ -34,7 +39,7 @@
   --color-dark-glass-strong: oklch(98% 0.005 145 / 0.18);
   --color-section-line: oklch(98% 0.005 145 / 0.14);
   --color-section-surface: oklch(98% 0.02 145 / 0.08);
-  --color-card-line: oklch(36% 0.03 155 / 0.1);
+  --color-card-line: #cadccf;
   --color-alert-line: oklch(48% 0.14 28 / 0.35);
   --color-alert-surface: oklch(96% 0.025 28);
   --color-overlay: oklch(16% 0.035 155 / 0.62);

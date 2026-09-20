@@ -16,6 +16,18 @@ function pesanUntuk(el) {
   return 'Isian ini belum valid.';
 }
 
+export function getValidationMessage(el) {
+  return pesanUntuk(el);
+}
+
+export function collectFieldErrors(form) {
+  return Array.from(form.elements).reduce((errors, element) => {
+    if (!element.name || typeof element.checkValidity !== 'function' || element.validity.valid) return errors;
+    errors[element.name] = pesanUntuk(element);
+    return errors;
+  }, {});
+}
+
 export function installValidationMessages(doc = document) {
   doc.addEventListener('invalid', (event) => {
     const el = event.target;

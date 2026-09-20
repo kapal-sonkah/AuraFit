@@ -32,7 +32,10 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
         aria-label={`Lihat detail ${food.name}`}
       >
         <span className="food-card__head">
-          <span className="food-card__name">{food.name}</span>
+          <span className="food-card__name">
+            {food.name}
+            {food.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+          </span>
           <span className={`food-card__status ${consumed ? 'food-card__status--done' : ''}`}>
             {consumed ? <><span aria-hidden="true">✓ </span>Sudah dicatat</> : 'Belum dicatat'}
           </span>
@@ -80,6 +83,15 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
 export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume, onDelete, onEdit }) {
   const [selected, setSelected] = useState(null);
 
+  // Butir yang dicatat sendiri bukan rekomendasi, jadi keduanya dihitung
+  // terpisah agar label tidak mengaku-ngaku.
+  const jumlahRekomendasi = foods.filter((f) => f.source_ref != null).length;
+  const jumlahTambahan = foods.length - jumlahRekomendasi;
+  const ringkasanMakanan = [
+    jumlahRekomendasi ? `${jumlahRekomendasi} rekomendasi makanan` : null,
+    jumlahTambahan ? `${jumlahTambahan} tambahanmu` : null,
+  ].filter(Boolean).join(' · ') || 'Belum ada makanan';
+
   return (
     <>
       <section id="makanan-hari-ini" aria-label="Makanan hari ini" className="dashboard-section">
@@ -88,7 +100,7 @@ export default function CaloriesLog({ foods = [], consumedFoodIds, onConsume, on
             <p className="section-kicker">Asupan hari ini</p>
             <h2 className="dashboard-section__title">Makanan Hari Ini</h2>
           </div>
-          <p className="dashboard-section__count">{foods.length} rekomendasi makanan</p>
+          <p className="dashboard-section__count">{ringkasanMakanan}</p>
         </div>
         <ul className="dashboard-list dashboard-list--foods" role="list">
           {foods.map((item) => {

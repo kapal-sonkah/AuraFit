@@ -35,6 +35,7 @@ export default function AuraCheckIn({ aura, pendingAura, loading, saving, error,
                 className={`aura-option ${aura === option.value ? 'aura-option--selected' : ''} ${saving && pendingAura === option.value ? 'aura-option--saving' : ''}`}
                 data-aura={option.value}
                 aria-pressed={aura === option.value}
+                aria-label={`${option.label}: ${option.detail}${aura === option.value ? ', dipilih' : ''}`}
                 disabled={loading || saving}
                 onClick={() => pilih(option.value)}
               >
@@ -43,6 +44,7 @@ export default function AuraCheckIn({ aura, pendingAura, loading, saving, error,
                 <span className="aura-option__detail">
                   {saving && pendingAura === option.value ? 'Menyimpan…' : option.detail}
                 </span>
+                <span className="aura-option__state" aria-hidden="true">{aura === option.value ? '✓ Dipilih' : ''}</span>
               </button>
             ))}
           </div>
