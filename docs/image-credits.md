@@ -1,4 +1,4 @@
-# Sumber Gambar Aktivitas
+# Sumber Gambar Aktivitas dan Makanan
 
 Berkas ini mencatat asal setiap gambar aktivitas yang dipakai katalog di `frontend/public/images/activities`, agar
 lisensinya dapat ditelusuri. Tambahkan baris baru setiap kali menambah gambar.
@@ -74,6 +74,82 @@ nama berkas yang sama. `basic-yoga.jpg` dipotong 4:3 karena foto aslinya potret.
 | `strength-training.jpg` | Vitaly Gariev | [Pexels #39219650](https://www.pexels.com/photo/female-weightlifting-training-in-gym-39219650/) |
 | `basic-crossfit.jpg` | Amar Preciado | [Pexels #9958673](https://www.pexels.com/photo/woman-lifting-barbell-9958673/) |
 | `kickboxing.jpg` | Annushka Ahuja | [Pexels #7992151](https://www.pexels.com/photo/woman-training-with-personal-coach-on-boxing-ring-7992151/) |
+
+## Foto makanan berlisensi Pexels
+
+Diunduh 2026-09-19 dari Pexels untuk katalog makanan di `frontend/public/images/foods`, dengan
+lisensi yang sama seperti foto aktivitas di atas. Foto diunduh dari CDN Pexels dan dipangkas
+menjadi 800 × 533 piksel.
+
+| Berkas | Fotografer | Sumber |
+|---|---|---|
+| `almond-milk.jpg` | Polina Tankilevitch | [Pexels #4187716](https://www.pexels.com/photo/a-milk-in-clear-drinking-glass-4187716/) |
+| `almonds.jpg` | Nixon Johnson | [Pexels #6003907](https://www.pexels.com/photo/almonds-in-red-bowl-6003907/) |
+| `apple.jpg` | Atlantic Ambience | [Pexels #12955951](https://www.pexels.com/photo/delicious-fresh-apples-12955951/) |
+| `avocado.jpg` | Franklin Andrés Hernández | [Pexels #5785658](https://www.pexels.com/photo/top-view-of-avocados-in-white-surface-5785658/) |
+| `baked-potato.jpg` | Pixabay | [Pexels #273825](https://www.pexels.com/photo/potato-fries-273825/) |
+| `banana.jpg` | SHVETS production | [Pexels #7194965](https://www.pexels.com/photo/background-of-ripe-bananas-with-blots-on-peel-7194965/) |
+| `beef-jerky.jpg` | Зорина Зуб | [Pexels #16571598](https://www.pexels.com/photo/spoon-of-spice-next-to-raw-meat-on-a-cutting-board-16571598/) |
+| `black-beans.jpg` | christian hembert | [Pexels #35553040](https://www.pexels.com/photo/top-view-of-basket-filled-with-black-beans-35553040/) |
+| `blueberries.jpg` | Jessica Lewis | [Pexels #583837](https://www.pexels.com/photo/selective-focus-photography-of-bunch-of-blueberries-583837/) |
+| `boiled-broccoli.jpg` | Mateusz Feliksik | [Pexels #8056670](https://www.pexels.com/photo/freshly-cooked-broccoli-on-stainless-pot-8056670/) |
+| `boiled-corn.jpg` | Geraldine Gabasa Marcano Uno | [Pexels #6194144](https://www.pexels.com/photo/close-up-photo-of-boiled-corns-6194144/) |
+| `boiled-egg.jpg` | Antoni Shkraba | [Pexels #4397261](https://www.pexels.com/photo/cut-eggs-on-white-background-4397261/) |
+| `boiled-egg-whites.jpg` | Efrem Efre | [Pexels #36999141](https://www.pexels.com/photo/hard-boiled-eggs-in-dramatic-lighting-36999141/) |
+| `boiled-pumpkin.jpg` | Richa Singh | [Pexels #5535527](https://www.pexels.com/photo/a-close-up-shot-of-cooked-squash-5535527/) |
+| `boiled-shrimp.jpg` | Tony Wu | [Pexels #16561984](https://www.pexels.com/photo/close-up-of-shrimps-16561984/) |
+| `boiled-sweet-potato.jpg` | Noval Gani | [Pexels #36946953](https://www.pexels.com/photo/traditional-indonesian-street-food-display-36946953/) |
+| `brown-rice.jpg` | Suzy Hazelwood | [Pexels #1311771](https://www.pexels.com/photo/bowl-of-rice-1311771/) |
+| `carrot-sticks.jpg` | Bora C | [Pexels #35440206](https://www.pexels.com/photo/healthy-snack-with-carrots-celery-and-hummus-35440206/) |
+| `cherry-tomatoes.jpg` | Dmitry Kharitonov | [Pexels #33499935](https://www.pexels.com/photo/fresh-cherry-tomatoes-stack-in-vibrant-red-33499935/) |
+| `chia-seeds.jpg` | Jubair Bin Iqbal | [Pexels #13613853](https://www.pexels.com/photo/wooden-spoon-with-chia-seeds-13613853/) |
+| `chicken-breast.jpg` | alleksana | [Pexels #6107765](https://www.pexels.com/photo/brown-meat-on-black-plate-beside-golden-spoon-6107765/) |
+| `clear-chicken-soup.jpg` | Anhelina Vasylyk | [Pexels #34326230](https://www.pexels.com/photo/delicious-chicken-noodle-soup-in-natural-light-34326230/) |
+| `cottage-cheese.jpg` | Kaboompics | [Pexels #4198168](https://www.pexels.com/photo/green-onion-knife-and-salad-placed-on-table-4198168/) |
+| `couscous.jpg` | Lisa Fotios | [Pexels #21531724](https://www.pexels.com/photo/close-up-of-delicious-homemade-couscous-with-cheese-and-lemon-21531724/) |
+| `cucumber-slices.jpg` | Alena Darmel | [Pexels #7223322](https://www.pexels.com/photo/green-and-white-sliced-cucumbers-7223322/) |
+| `dragon-fruit.jpg` | Atlantic Ambience | [Pexels #11450660](https://www.pexels.com/photo/close-up-photo-of-dragon-fruits-11450660/) |
+| `edamame.jpg` | Nano Erdozain | [Pexels #28460870](https://www.pexels.com/photo/fresh-edamame-beans-in-ceramic-bowl-28460870/) |
+| `grapefruit.jpg` | Engin Akyurt | [Pexels #14840380](https://www.pexels.com/photo/close-up-photo-of-fresh-grapefruits-14840380/) |
+| `greek-yogurt.jpg` | Enisa Halidi | [Pexels #29516115](https://www.pexels.com/photo/delicious-greek-yogurt-with-fresh-fruits-and-honey-29516115/) |
+| `green-tea.jpg` | Dmitry Alexandrovich | [Pexels #463445](https://www.pexels.com/photo/fresh-green-tea-463445/) |
+| `grilled-chicken-breast.jpg` | alleksana | [Pexels #6107757](https://www.pexels.com/photo/close-up-shot-of-sliced-chicken-breast-6107757/) |
+| `grilled-tempeh.jpg` | Jb Moordiana | [Pexels #34439456](https://www.pexels.com/photo/crispy-fried-tempeh-with-fresh-herbs-34439456/) |
+| `grilled-tilapia.jpg` | Masuma Rahaman | [Pexels #37255814](https://www.pexels.com/photo/delicious-grilled-tilapia-with-herbs-37255814/) |
+| `lean-beef.jpg` | Lydia Burkert | [Pexels #38879275](https://www.pexels.com/photo/grilled-steaks-on-open-flame-barbecue-grill-38879275/) |
+| `lentil-soup.jpg` | Snappr | [Pexels #29850843](https://www.pexels.com/photo/warm-and-hearty-lentil-soup-in-terra-cotta-bowl-29850843/) |
+| `melon-slices.jpg` | Kaboompics | [Pexels #4038753](https://www.pexels.com/photo/photo-of-sliced-melon-4038753/) |
+| `miso-soup.jpg` | Rafael Nicida | [Pexels #31256392](https://www.pexels.com/photo/delicious-miso-soup-in-a-black-bowl-31256392/) |
+| `mixed-nuts.jpg` | Mehran B | [Pexels #86649](https://www.pexels.com/photo/white-yellow-and-brown-peanut-on-clear-glass-basin-86649/) |
+| `multigrain-crackers.jpg` | Edita Brus | [Pexels #36040721](https://www.pexels.com/photo/stack-of-crispbread-against-wooden-background-36040721/) |
+| `oatmeal.jpg` | Iulian Sandu | [Pexels #33874707](https://www.pexels.com/photo/delicious-oatmeal-with-banana-and-raspberry-topping-33874707/) |
+| `orange.jpg` | Andrei Danilson | [Pexels #8639570](https://www.pexels.com/photo/close-up-of-oranges-8639570/) |
+| `papaya.jpg` | Nishant Aneja | [Pexels #28613331](https://www.pexels.com/photo/close-up-of-fresh-papayas-with-juicy-orange-flesh-28613331/) |
+| `peanut-butter.jpg` | Towfiqu barbhuiya | [Pexels #8611766](https://www.pexels.com/photo/peanut-butter-in-a-glass-jar-8611766/) |
+| `pear.jpg` | Ylanite Koppens | [Pexels #5564404](https://www.pexels.com/photo/close-up-photo-of-pears-5564404/) |
+| `protein-bar.jpg` | FOX | [Pexels #17763560](https://www.pexels.com/photo/protein-bar-with-sesame-seeds-and-nuts-17763560/) |
+| `protein-shake.jpg` | Anete Lusina | [Pexels #16513595](https://www.pexels.com/photo/a-bottle-with-a-protein-shake-standing-on-a-machine-at-the-gym-16513595/) |
+| `quinoa.jpg` | Loren Castillo | [Pexels #9218779](https://www.pexels.com/photo/close-up-of-a-dish-on-a-plate-9218779/) |
+| `rice-cakes.jpg` | Mabel Amber | [Pexels #13392726](https://www.pexels.com/photo/photo-of-a-plate-with-puffed-rice-cakes-13392726/) |
+| `roasted-asparagus.jpg` | alleksana | [Pexels #4050980](https://www.pexels.com/photo/photo-of-asparagus-beside-cherry-tomatoes-4050980/) |
+| `roasted-chicken-thigh.jpg` | noen nunik | [Pexels #37048888](https://www.pexels.com/photo/grilled-chicken-thighs-with-green-chilies-37048888/) |
+| `roasted-chickpeas.jpg` | Kyle Killam | [Pexels #106974](https://www.pexels.com/photo/yellow-beans-106974/) |
+| `salmon.jpg` | Anastasia Yudin | [Pexels #5014596](https://www.pexels.com/photo/raw-pieces-of-salmon-with-salt-and-lemon-wedges-on-a-baking-tray-5014596/) |
+| `sardines.jpg` | Karen Laårk Boshoff | [Pexels #13499754](https://www.pexels.com/photo/sardines-in-a-can-13499754/) |
+| `soba-noodles.jpg` | Ryutaro Tsukata | [Pexels #5745757](https://www.pexels.com/photo/appetizing-pasta-near-wakame-and-wasabi-5745757/) |
+| `soy-milk.jpg` | Polina Tankilevitch | [Pexels #4518615](https://www.pexels.com/photo/top-view-photo-of-soybeans-on-bowl-near-drinking-glass-with-soy-milk-4518615/) |
+| `steamed-spinach.jpg` | makafood | [Pexels #8954279](https://www.pexels.com/photo/spinach-appetizer-in-asian-style-8954279/) |
+| `steamed-tofu.jpg` | minchephoto photography | [Pexels #7491896](https://www.pexels.com/photo/cake-on-keg-and-glasses-near-7491896/) |
+| `steamed-tuna.jpg` | Adriano Bragi | [Pexels #31779503](https://www.pexels.com/photo/grilled-tuna-steak-with-fresh-salad-31779503/) |
+| `strawberries.jpg` | Ebru DOĞAN | [Pexels #18018686](https://www.pexels.com/photo/strawberries-on-mirror-18018686/) |
+| `sweet-potato-mash.jpg` | Kaboompics | [Pexels #5718130](https://www.pexels.com/photo/close-up-of-a-cream-in-a-bowl-5718130/) |
+| `tuna-salad.jpg` | Piriyonel Piri | [Pexels #5950514](https://www.pexels.com/photo/close-up-of-a-tuna-salad-5950514/) |
+| `turkey-breast.jpg` | Loren Castillo | [Pexels #9219093](https://www.pexels.com/photo/cooked-chicken-breast-with-black-pepper-9219093/) |
+| `vegetable-salad.jpg` | Engin Akyurt | [Pexels #13630358](https://www.pexels.com/photo/healthy-foods-on-a-bowl-13630358/) |
+| `watermelon.jpg` | Atlantic Ambience | [Pexels #12932797](https://www.pexels.com/photo/sliced-watermelon-in-close-up-photography-12932797/) |
+| `whey-protein-isolate.jpg` | Supplements On Demand | [Pexels #13779116](https://www.pexels.com/photo/a-white-container-and-a-pile-of-dry-food-with-a-clear-spoon-13779116/) |
+| `whole-wheat-bread.jpg` | Towfiqu barbhuiya | [Pexels #12284683](https://www.pexels.com/photo/sliced-bread-on-brown-wooden-surface-12284683/) |
+| `whole-wheat-pasta.jpg` | Lisa Fotios | [Pexels #1279330](https://www.pexels.com/photo/selective-focus-photography-of-pasta-with-tomato-and-basil-1279330/) |
 
 ## Berkas lain yang asalnya belum tercatat
 

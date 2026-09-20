@@ -116,6 +116,11 @@
 .food-card__name { margin: 0; overflow-wrap: anywhere; font-size: 0.84rem; font-weight: 800; }
 .food-card__meta { margin: 0; color: var(--color-muted); font-size: 0.72rem; }
 .food-card__status { display: block; margin-top: 0.05rem; }
+/* Kartu makanan mengikuti susunan kartu aktivitas: nama dan status, foto,
+   lalu porsi. Ikon hanya tampil untuk makanan yang dicatat sendiri. */
+.food-card__media { width: 100%; aspect-ratio: 4 / 3; overflow: hidden; border-radius: calc(var(--radius-card) - 0.25rem); background: var(--color-paper-strong); object-fit: cover; }
+.food-card__media--empty { display: grid; place-items: center; background: var(--color-accent-soft); font-size: 3rem; line-height: 1; }
+.food-card__media--empty[hidden] { display: none; }
 
 .overview-card { display: grid; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-panel); background: var(--color-paper); box-shadow: var(--shadow-raised); }
 .overview-card__head { display: flex; align-items: end; justify-content: space-between; gap: var(--space-2); }
@@ -265,8 +270,9 @@
 .activity-card__action:hover, .food-card__action:hover { border-color: var(--color-accent); background: var(--color-accent-soft); transform: translateY(-1px); }
 .activity-card__action--done, .food-card__action--done { border-color: var(--color-positive); color: var(--color-positive); }
 .food-card { display: grid; gap: var(--space-3); }
-.food-card__detail { display: flex; align-items: center; gap: var(--space-3); width: 100%; padding: 0; }
-.food-card__status { overflow-wrap: anywhere; }
+.food-card__detail { display: grid; gap: var(--space-3); width: 100%; padding: 0; }
+.food-card__head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; }
+.food-card__status { max-width: 7rem; overflow-wrap: anywhere; text-align: right; }
 
 @media (min-width: 56rem) {
   .dashboard-list--activities { grid-template-columns: repeat(3, minmax(0, 1fr)); }
