@@ -288,6 +288,9 @@ export default function DashboardPage({ onLogout, user }) {
             ) : activities.length === 0 && foods.length === 0 ? (
               <div className="dashboard-state">
                 <p className="dashboard-state__title">Belum ada rencana untuk hari ini.</p>
+                <p className="dashboard-state__copy">
+                  Pilih aura hari ini untuk menyusun rencana, atau tambahkan aktivitas dan makanan sendiri.
+                </p>
               </div>
             ) : (
               <>

@@ -35,7 +35,12 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
         aria-label={`Lihat detail ${activity.name}`}
       >
         <span className="activity-card__head">
-          <span className="activity-card__name">{activity.name}</span>
+          <span className="activity-card__name">
+            {activity.name}
+            {/* Butir tanpa source_ref dicatat sendiri oleh pengguna; tanpa
+                penanda, butir tambahan tampak seperti rekomendasi sistem. */}
+            {activity.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+          </span>
           <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
             {active ? <><span aria-hidden="true">✓ </span>Selesai</> : 'Belum dimulai'}
           </span>

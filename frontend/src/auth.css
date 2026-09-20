@@ -77,7 +77,8 @@
 
 .auth-password { position: relative; min-width: 0; }
 .auth-password .auth-input { padding-inline-end: 3.5rem; }
-.auth-password__toggle { position: absolute; top: 50%; right: var(--space-2); display: grid; width: 2.25rem; height: 2.25rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--color-accent-strong); cursor: pointer; transform: translateY(-50%); }
+/* Target sentuh minimal 44 piksel (N-05); sebelumnya 36 piksel. */
+.auth-password__toggle { position: absolute; top: 50%; right: var(--space-1); display: grid; width: 2.75rem; height: 2.75rem; place-items: center; padding: 0; border: 0; border-radius: 50%; background: transparent; color: var(--color-accent-strong); cursor: pointer; transform: translateY(-50%); }
 .auth-password__toggle svg { width: 1.15rem; height: 1.15rem; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 .auth-password__toggle:hover { background: var(--color-accent-soft); }
 .auth-password__toggle:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
