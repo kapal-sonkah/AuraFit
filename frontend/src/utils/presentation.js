@@ -124,6 +124,15 @@ function localizePortion(value) {
     .replace(/\bserving(s)?\b/gi, 'porsi');
 }
 
+// Durasi aktivitas sudah tertulis di dalam keterangannya ("selama 30 menit"),
+// sehingga tidak ada kolom baru yang perlu disimpan (K-05). Mengembalikan
+// jumlah menit, atau null bila keterangannya tidak menyebut durasi.
+export function activityMinutes(item) {
+  const teks = ACTIVITY_COPY[keyOf(item?.name)]?.[1] ?? item?.description ?? '';
+  const cocok = teks.match(/(\d+)\s*menit/i);
+  return cocok ? Number(cocok[1]) : null;
+}
+
 export function presentActivity(item) {
   const copy = ACTIVITY_COPY[keyOf(item?.name)];
   return copy ? { ...item, name: copy[0], description: copy[1] } : item;
@@ -131,8 +140,8 @@ export function presentActivity(item) {
 
 // Porsi dan kalori sama-sama opsional pada makanan yang dicatat sendiri, jadi
 // hanya bagian yang terisi yang digabungkan.
-export function foodMeta(food) {
-  return [food.portion, food.kcal != null && food.kcal !== '' ? `${food.kcal} kcal` : '']
+export function foodMeta(food, { includeCalories = true } = {}) {
+  return [food.portion, includeCalories && food.kcal != null && food.kcal !== '' ? `${food.kcal} kcal` : '']
     .filter(Boolean)
     .join(' · ');
 }

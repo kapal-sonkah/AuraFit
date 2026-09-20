@@ -6,6 +6,8 @@ import CaloriesLog from "../components/CaloriesLog";
 import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PlanSkeleton from '../components/PlanSkeleton';
+import NextStepCard from '../components/NextStepCard';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday, updatePlanItem } from '../utils/network-data';
 import { getAuraOption } from '../utils/aura';
@@ -184,6 +186,16 @@ export default function DashboardPage({ onLogout, user }) {
     return true;
   }
 
+  // Angka "2/12" tidak menjelaskan artinya. Kalimat ini menerjemahkannya ke
+  // syarat streak (K-09): satu aktivitas selesai sudah cukup untuk hari ini.
+  const pesanProgres = completedActivities > 0
+    ? (completedItems === totalItems
+      ? 'Semua butir hari ini tercatat.'
+      : `Streak hari ini aman. Sisanya boleh dilanjutkan kapan pun.`)
+    : (activities.length > 0
+      ? 'Selesaikan satu aktivitas untuk menjaga streak hari ini.'
+      : 'Belum ada aktivitas pada rencana hari ini.');
+
   const cobaUlangAura = auraState.pending ? () => ubahAura(auraState.pending) : ambilAura;
   // Rencana tersimpan sekali dan tidak disusun ulang (F-11), jadi aura
   // dikunci begitu rencana hari ini ada.
@@ -208,6 +220,7 @@ export default function DashboardPage({ onLogout, user }) {
           <div className="dashboard-summary">
             <OverviewSidebar
               user={user}
+              planStatus={statusRencana}
               completedActivities={completedActivities}
               totalActivities={activities.length}
               consumedCalories={consumedCalories}
@@ -223,9 +236,10 @@ export default function DashboardPage({ onLogout, user }) {
             ) : null}
 
             {statusRencana === 'memuat' ? (
-              <div className="dashboard-state" aria-live="polite">
-                <p className="dashboard-state__title">Menyusun rencana hari ini…</p>
-              </div>
+              <>
+                <p className="visually-hidden" aria-live="polite">Menyusun rencana hari ini…</p>
+                <PlanSkeleton />
+              </>
             ) : statusRencana === 'menunggu-aura' ? (
               <>
                 {/* Pemilih aura didahulukan karena itulah satu-satunya langkah
@@ -277,12 +291,19 @@ export default function DashboardPage({ onLogout, user }) {
               </div>
             ) : (
               <>
+                {/* Langkah berikutnya didahulukan; ringkasan dan daftar tetap
+                    di bawahnya untuk yang ingin melihat keseluruhan hari. */}
+                <NextStepCard
+                  activities={activities}
+                  completedActivityIds={completedActivityIds}
+                  onDone={(id, selesai) => handlePlanItemToggle(id, selesai, 'activity')}
+                />
                 <section className="dashboard-hero" aria-labelledby="today-plan-title">
                   <div className="dashboard-hero__copyblock">
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
-                    <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
+                    <h2 id="today-plan-title" className="dashboard-hero__title">Rencana hari ini</h2>
                     <p className="dashboard-hero__copy">
-                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {sumberRencana === 'manual'
+                    {activities.length} aktivitas dan {foods.length} makanan tersimpan untuk hari ini. {sumberRencana === 'manual'
                       ? 'Rencana ini kamu susun sendiri.'
                       : auraOption
                         ? `Rencana ini disusun dari Aura ${auraOption.label} yang kamu pilih hari ini.`
@@ -314,6 +335,7 @@ export default function DashboardPage({ onLogout, user }) {
                         <span>{completedActivities}/{activities.length} aktivitas</span>
                         <span>{completedFoods}/{foods.length} makanan</span>
                       </div>
+                      <p className="dashboard-progress__meaning">{pesanProgres}</p>
                     </div>
                     <AuraCheckIn
                       aura={auraState.value}

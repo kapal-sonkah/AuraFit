@@ -37,22 +37,27 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
             {consumed ? <><span aria-hidden="true">✓ </span>Sudah dicatat</> : 'Belum dicatat'}
           </span>
         </span>
-        {food.image ? (
-          <img
-            src={food.image}
-            alt=""
-            loading="lazy"
-            className="food-card__media"
-            onError={(event) => {
-              event.currentTarget.hidden = true;
-              if (event.currentTarget.nextElementSibling) event.currentTarget.nextElementSibling.hidden = false;
-            }}
-          />
-        ) : null}
-        <span className="food-card__media food-card__media--empty" hidden={Boolean(food.image)} aria-hidden="true">
-          {food.emoji}
+        <span className="food-card__visual">
+          {food.image ? (
+            <img
+              src={food.image}
+              alt=""
+              loading="lazy"
+              className="food-card__media"
+              onError={(event) => {
+                event.currentTarget.hidden = true;
+                if (event.currentTarget.nextElementSibling) event.currentTarget.nextElementSibling.hidden = false;
+              }}
+            />
+          ) : null}
+          <span className="food-card__media food-card__media--empty" hidden={Boolean(food.image)} aria-hidden="true">
+            {food.emoji}
+          </span>
+          {food.kcal != null && food.kcal !== '' ? (
+            <span className="food-card__kcal-badge">{food.kcal} kcal</span>
+          ) : null}
         </span>
-        <span className="food-card__meta">{foodMeta(food)}</span>
+        {food.portion ? <span className="food-card__meta">{foodMeta(food, { includeCalories: false })}</span> : null}
       </button>
       <button
         type="button"
