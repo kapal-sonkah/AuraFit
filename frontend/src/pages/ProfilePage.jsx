@@ -12,6 +12,15 @@ const GOALS = [
   ['gain_weight', 'Menambah berat badan'],
 ];
 
+function goalLabel(value) {
+  return GOALS.find(([goal]) => goal === value)?.[1] ?? 'Tujuan belum diatur';
+}
+
+function userInitials(user) {
+  const initials = `${user?.first_name?.[0] ?? ''}${user?.last_name?.[0] ?? ''}`.trim();
+  return initials || user?.username?.[0]?.toUpperCase() || '?';
+}
+
 // Kolom NUMERIC dari basis data tiba sebagai teks "58.00"; tampilkan "58".
 function angka(value) {
   if (value === null || value === undefined || value === '') return '';
@@ -190,6 +199,20 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
             <p className="profile-hero__copy">Perbarui data tubuh dan tujuanmu kapan saja. AuraFit akan menghitung ulang BMI setelah perubahan disimpan.</p>
           </section>
 
+          <section className="profile-identity" aria-label="Ringkasan akun">
+            <div className="profile-avatar" aria-hidden="true">{userInitials(user)}</div>
+            <div className="profile-identity__body">
+              <p className="profile-identity__eyebrow">Akunmu</p>
+              <h2 className="profile-identity__name">{user?.first_name || user?.username || 'Pengguna AuraFit'}</h2>
+              <p className="profile-identity__meta">@{user?.username ?? 'akun'} · {goalLabel(user?.goal)}</p>
+            </div>
+            <div className="profile-identity__metric">
+              <span>BMI</span>
+              <strong>{user?.bmi ?? '—'}</strong>
+            </div>
+            <Link to="/dashboard" className="profile-identity__link">Lihat rencana</Link>
+          </section>
+
           <form className="profile-card" noValidate onSubmit={handleSubmit}>
             <div className="profile-card__head">
               <div>
@@ -203,13 +226,37 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
             </div>
 
             <div className="profile-form-grid">
-              <label className="profile-field"><span>Nama depan</span><input id="profile-first-name" value={form.first_name} onChange={(event) => setField('first_name', event.target.value)} maxLength={50} required {...fieldProps('first_name')} /><FieldError errors={fieldErrors} name="first_name" /></label>
-              <label className="profile-field"><span>Nama belakang</span><input id="profile-last-name" value={form.last_name} onChange={(event) => setField('last_name', event.target.value)} maxLength={50} required {...fieldProps('last_name')} /><FieldError errors={fieldErrors} name="last_name" /></label>
-              <label className="profile-field"><span>Jenis kelamin</span><select id="profile-gender" value={form.gender} onChange={(event) => setField('gender', event.target.value)} required {...fieldProps('gender')}><option value="" disabled>Pilih jenis kelamin</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select><FieldError errors={fieldErrors} name="gender" /></label>
-              <label className="profile-field"><span>Umur (tahun)</span><input id="profile-age" type="number" min="10" max="120" value={form.age} onChange={(event) => setField('age', event.target.value)} required {...fieldProps('age')} /><FieldError errors={fieldErrors} name="age" /></label>
-              <label className="profile-field"><span>Berat badan (kg)</span><input id="profile-weight" type="number" min="20" max="400" step="0.1" value={form.weight} onChange={(event) => setField('weight', event.target.value)} required {...fieldProps('weight')} /><FieldError errors={fieldErrors} name="weight" /></label>
-              <label className="profile-field"><span>Tinggi badan (cm)</span><input id="profile-height" type="number" min="80" max="250" step="0.1" value={form.height} onChange={(event) => setField('height', event.target.value)} required {...fieldProps('height')} /><FieldError errors={fieldErrors} name="height" /></label>
-              <label className="profile-field profile-field--wide"><span>Tujuan</span><select id="profile-goal" value={form.goal} onChange={(event) => setField('goal', event.target.value)} required {...fieldProps('goal')}><option value="" disabled>Pilih tujuan</option>{GOALS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><FieldError errors={fieldErrors} name="goal" /></label>
+              <div className="profile-form-section profile-form-section--wide">
+                <div className="profile-form-section__head">
+                  <h3 className="profile-form-section__title">Data diri</h3>
+                  <p className="profile-form-section__copy">Identitas dasar untuk menyapa dan menyesuaikan rencana.</p>
+                </div>
+                <div className="profile-form-section__fields">
+                  <label className="profile-field"><span>Nama depan</span><input id="profile-first-name" value={form.first_name} onChange={(event) => setField('first_name', event.target.value)} maxLength={50} required {...fieldProps('first_name')} /><FieldError errors={fieldErrors} name="first_name" /></label>
+                  <label className="profile-field"><span>Nama belakang</span><input id="profile-last-name" value={form.last_name} onChange={(event) => setField('last_name', event.target.value)} maxLength={50} required {...fieldProps('last_name')} /><FieldError errors={fieldErrors} name="last_name" /></label>
+                  <label className="profile-field"><span>Jenis kelamin</span><select id="profile-gender" value={form.gender} onChange={(event) => setField('gender', event.target.value)} required {...fieldProps('gender')}><option value="" disabled>Pilih jenis kelamin</option><option value="male">Laki-laki</option><option value="female">Perempuan</option></select><FieldError errors={fieldErrors} name="gender" /></label>
+                  <label className="profile-field"><span>Umur (tahun)</span><input id="profile-age" type="number" min="10" max="120" value={form.age} onChange={(event) => setField('age', event.target.value)} required {...fieldProps('age')} /><FieldError errors={fieldErrors} name="age" /></label>
+                </div>
+              </div>
+
+              <div className="profile-form-section">
+                <div className="profile-form-section__head">
+                  <h3 className="profile-form-section__title">Data tubuh</h3>
+                  <p className="profile-form-section__copy">Dipakai untuk menghitung BMI dan intensitas.</p>
+                </div>
+                <div className="profile-form-section__fields">
+                  <label className="profile-field"><span>Berat badan (kg)</span><input id="profile-weight" type="number" min="20" max="400" step="0.1" value={form.weight} onChange={(event) => setField('weight', event.target.value)} required {...fieldProps('weight')} /><FieldError errors={fieldErrors} name="weight" /></label>
+                  <label className="profile-field"><span>Tinggi badan (cm)</span><input id="profile-height" type="number" min="80" max="250" step="0.1" value={form.height} onChange={(event) => setField('height', event.target.value)} required {...fieldProps('height')} /><FieldError errors={fieldErrors} name="height" /></label>
+                </div>
+              </div>
+
+              <div className="profile-form-section">
+                <div className="profile-form-section__head">
+                  <h3 className="profile-form-section__title">Tujuan</h3>
+                  <p className="profile-form-section__copy">Pilih arah rencana yang ingin kamu jaga.</p>
+                </div>
+                <label className="profile-field"><span>Tujuan utama</span><select id="profile-goal" value={form.goal} onChange={(event) => setField('goal', event.target.value)} required {...fieldProps('goal')}><option value="" disabled>Pilih tujuan</option>{GOALS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><FieldError errors={fieldErrors} name="goal" /></label>
+              </div>
             </div>
 
             <FieldErrorSummary ref={errorSummaryRef} errors={fieldErrors} prefix="profile" />
@@ -219,7 +266,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
                 <Link to="/dashboard" className="profile-action profile-action--primary">Kembali ke Hari ini</Link>
               </div>
             ) : (
-              <div className="profile-actions">
+              <div className={`profile-actions ${isDirty ? 'profile-actions--dirty' : ''}`}>
                 {isDirty ? (
                   <button type="button" className="profile-action profile-action--secondary" onClick={resetChanges}>Batalkan perubahan</button>
                 ) : (

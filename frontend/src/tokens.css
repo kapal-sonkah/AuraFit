@@ -22,6 +22,15 @@
   --color-accent-warm-strong: oklch(44% 0.12 58);
   --color-accent-warm-soft: oklch(92% 0.06 78);
   --color-accent-warm-line: oklch(82% 0.08 70);
+  --color-streak: #b93815;
+  --color-streak-soft: #fff3ed;
+  --color-streak-line: #efb7a5;
+  --color-progress-low: #b42318;
+  --color-progress-low-soft: #fff1f0;
+  --color-progress-low-line: #efb4ae;
+  --color-progress-mid: #8a5a00;
+  --color-progress-mid-soft: #fff8e5;
+  --color-progress-mid-line: #e7c779;
   /* Dipakai untuk teks "Selesai" di atas kartu yang sudah bertanda; pada
      48% kontrasnya hanya 4,35:1 terhadap latar hijau lembut (N-04). */
   --color-positive: oklch(42% 0.13 148);
