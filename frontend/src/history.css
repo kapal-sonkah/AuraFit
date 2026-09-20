@@ -256,3 +256,18 @@
   .history-summary__card { min-height: 8rem; padding: var(--space-3); }
   .history-summary__value { margin-top: var(--space-2); font-size: 1.6rem; }
 }
+
+/* Keep this route inside the mobile viewport. Dashboard and Profil keep their
+   own layout rules; this guard only fixes Riwayat's horizontal drift. */
+.history-shell,
+.history-frame,
+.history-main,
+.history-hero,
+.history-summary,
+.history-aura-insight,
+.history-panel { box-sizing: border-box; min-width: 0; max-width: 100%; }
+.history-shell { width: 100%; overflow-x: clip; }
+.history-frame,
+.history-main,
+.history-summary { width: 100%; }
+.history-summary__card { box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; }
