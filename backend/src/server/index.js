@@ -17,6 +17,15 @@ const ALLOWED_ORIGINS = [
 ];
 
 app.use(cors({ origin: ALLOWED_ORIGINS }));
+// Seluruh tanggapan memuat data pribadi yang berubah setiap saat. Tanpa ini
+// Vercel menandainya "public" dan peramban memakai ulang tanggapan lama,
+// termasuk header CORS untuk origin lain, sehingga permintaan dari origin
+// yang sah pun ditolak.
+app.set('etag', false);
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 app.use(routes);
 app.use(ErrorHandler);
 

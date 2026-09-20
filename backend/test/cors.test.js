@@ -28,6 +28,20 @@ test('server pengembangan lokal diizinkan', async () => {
   assert.equal(await preflight('http://127.0.0.1:5174'), 'http://127.0.0.1:5174');
 });
 
+test('tanggapan API tidak boleh disimpan cache peramban', async () => {
+  const server = app.listen(0);
+  try {
+    const { port } = server.address();
+    const res = await fetch(`http://127.0.0.1:${port}/aura/today`, {
+      headers: { Origin: 'http://localhost:5173' },
+    });
+    assert.equal(res.headers.get('cache-control'), 'no-store');
+    assert.equal(res.headers.get('etag'), null);
+  } finally {
+    server.close();
+  }
+});
+
 test('origin lain tidak diizinkan', async () => {
   assert.equal(await preflight('https://situs-lain.example'), null);
   assert.equal(await preflight('https://aurafit-wheat.vercel.app.situs-lain.example'), null);

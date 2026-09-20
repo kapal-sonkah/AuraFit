@@ -54,6 +54,27 @@ test('aura berbeda menghasilkan daftar aktivitas yang berbeda', () => {
   );
 });
 
+test('aura tidak dapat diubah setelah rencana hari itu tersusun', async () => {
+  const { setAuraToday } = await import('../src/services/aura/aura-controller.js');
+  const asli = AuraRepository.setToday;
+  // Repositori mengembalikan null ketika rencana tanggal itu sudah ada.
+  AuraRepository.setToday = async () => null;
+
+  let nextError;
+  let body;
+  const res = {
+    status() { return this; },
+    json(value) { body = value; return this; },
+  };
+  try {
+    await setAuraToday({ user: { id: 'user-test' }, body: { aura: 'menyala' } }, res, (e) => { nextError = e; });
+    assert.equal(body, undefined);
+    assert.equal(nextError?.statusCode, 409);
+  } finally {
+    AuraRepository.setToday = asli;
+  }
+});
+
 test('rencana tidak disusun selama aura hari itu belum dipilih', async () => {
   const asli = {
     getUserById: UserRepositories.getUserById,

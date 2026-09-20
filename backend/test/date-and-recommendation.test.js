@@ -156,7 +156,10 @@ test('kolom DATE dari basis data tetap teks di zona waktu mana pun', async () =>
 // peramban. "morning-streching.jpg" sempat tampil rusak di produksi karena itu.
 test('setiap gambar aktivitas di katalog benar-benar ada di frontend', async () => {
   const { existsSync } = await import('node:fs');
-  const publik = new URL('../../frontend/public', import.meta.url).pathname;
+  const { fileURLToPath } = await import('node:url');
+  // URL.pathname tidak mendekode spasi dan diawali "/C:" di Windows, sehingga
+  // seluruh gambar terbaca hilang bila folder proyek memuat spasi.
+  const publik = fileURLToPath(new URL('../../frontend/public', import.meta.url));
   const hilang = Object.values(KATALOG)
     .flatMap((kolam) => kolam.activities)
     .filter((a) => !existsSync(publik + a.image))

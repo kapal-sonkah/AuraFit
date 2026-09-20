@@ -5,7 +5,9 @@
 .aura-checkin__hint, .aura-checkin__status { margin: 0; color: var(--color-muted); font-size: 0.78rem; line-height: 1.5; }
 .aura-checkin__hint { max-width: 15rem; text-align: right; }
 .aura-checkin__status strong { color: var(--color-ink); }
-.aura-checkin__error { margin: 0; color: var(--color-danger); font-size: 0.78rem; font-weight: 700; }
+.aura-checkin__error { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin: 0; color: var(--color-danger); font-size: 0.78rem; font-weight: 700; }
+.aura-checkin__error p { flex: 1 1 12rem; margin: 0; }
+.aura-option--saving { border-style: dashed; border-color: currentColor; }
 .aura-checkin__options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); }
 .aura-option { display: grid; min-width: 0; min-height: 8rem; place-content: center; gap: 0.35rem; padding: var(--space-3); border: 1px solid var(--color-card-line); border-radius: var(--radius-card); background: var(--color-paper); color: var(--color-muted); font: inherit; text-align: center; cursor: pointer; transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); }
 .aura-option:hover:not(:disabled) { border-color: currentColor; background: var(--color-paper-strong); transform: translateY(-1px); }

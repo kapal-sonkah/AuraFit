@@ -26,7 +26,10 @@ export default function DashboardPage({ onLogout, user }) {
 
   // Pesan kegagalan penyimpanan. Kosong berarti tidak ada kegagalan tertunda.
   const [galatSimpan, setGalatSimpan] = useState('');
-  const [auraState, setAuraState] = useState({ status: 'loading', value: null, error: '' });
+  // value hanya berisi aura yang sudah dikonfirmasi server; pending adalah
+  // pilihan yang sedang atau gagal disimpan, dipakai ulang oleh "Coba lagi".
+  const [auraState, setAuraState] = useState({ status: 'loading', value: null, pending: null, error: '' });
+  const [sumberRencana, setSumberRencana] = useState(null);
 
   function terapkanRencana(data) {
     // Rencana baru baru disusun setelah aura hari itu dipilih, sehingga
@@ -38,6 +41,7 @@ export default function DashboardPage({ onLogout, user }) {
       return;
     }
 
+    setSumberRencana(data.source ?? null);
     setActivities(data.activities ?? []);
     setFoods(data.foods ?? []);
     setCompletedActivityIds(new Set((data.activities ?? []).filter((item) => item.completed).map((item) => item.id)));
@@ -137,29 +141,44 @@ export default function DashboardPage({ onLogout, user }) {
 
   const ambilAura = useCallback(async () => {
     if (!user) return;
-    setAuraState({ status: 'loading', value: null, error: '' });
+    setAuraState({ status: 'loading', value: null, pending: null, error: '' });
     const { error, data } = await getAuraToday();
     setAuraState({
       status: error ? 'error' : 'ready',
       value: error ? null : data?.aura ?? null,
-      error: error ? 'Aura belum dapat dimuat. Kamu masih bisa mencoba memilihnya lagi.' : '',
+      pending: null,
+      error: error ? 'Aura hari ini belum dapat dimuat.' : '',
     });
   }, [user]);
 
+  // Aura baru tampil aktif setelah server mengonfirmasi (F-22). Mengembalikan
+  // true bila tersimpan agar pemilih aura dapat ditutup.
   async function ubahAura(value) {
-    const previous = auraState.value;
-    setAuraState({ status: 'saving', value, error: '' });
-    const { error, data } = await saveAuraToday(value);
+    setAuraState((s) => ({ ...s, status: 'saving', pending: value, error: '' }));
+    const { error, locked, message, data } = await saveAuraToday(value);
     if (error) {
-      setAuraState({ status: 'ready', value: previous, error: 'Aura belum tersimpan. Periksa koneksi, lalu coba lagi.' });
-      return;
+      setAuraState((s) => ({
+        ...s,
+        status: 'ready',
+        pending: locked ? null : value,
+        error: locked ? message : 'Aura belum tersimpan. Periksa koneksi, lalu coba lagi.',
+      }));
+      // Rencana ternyata sudah tersusun, misalnya dari perangkat lain.
+      if (locked) await ambilRencana();
+      return false;
     }
-    setAuraState({ status: 'ready', value: data?.aura ?? value, error: '' });
+    setAuraState({ status: 'ready', value: data?.aura ?? value, pending: null, error: '' });
 
     // Rencana hari ini belum ada selama auranya belum dipilih. Begitu
     // tersimpan, rencananya diambil agar tersusun menurut aura tersebut.
     if (statusRencana === 'menunggu-aura') await ambilRencana();
+    return true;
   }
+
+  const cobaUlangAura = auraState.pending ? () => ubahAura(auraState.pending) : ambilAura;
+  // Rencana tersimpan sekali dan tidak disusun ulang (F-11), jadi aura
+  // dikunci begitu rencana hari ini ada.
+  const auraTerkunci = statusRencana === 'siap';
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => { void ambilRencana(); });
@@ -200,20 +219,23 @@ export default function DashboardPage({ onLogout, user }) {
               </div>
             ) : statusRencana === 'menunggu-aura' ? (
               <>
-                <div className="dashboard-state" aria-live="polite">
-                  <p className="dashboard-state__title">Mulai dari auramu hari ini.</p>
-                  <p className="dashboard-state__copy">
-                    Rencana hari ini disusun mengikuti aura yang kamu pilih, jadi pilih dulu kondisi
-                    yang paling mendekati. Rencananya menyusul begitu auramu tersimpan.
-                  </p>
-                </div>
+                {/* Pemilih aura didahulukan karena itulah satu-satunya langkah
+                    yang bisa dilakukan sebelum rencana ada. */}
                 <AuraCheckIn
                   aura={auraState.value}
+                  pendingAura={auraState.pending}
                   loading={auraState.status === 'loading'}
                   saving={auraState.status === 'saving'}
                   error={auraState.error}
                   onChange={ubahAura}
+                  onRetry={cobaUlangAura}
                 />
+                <div className="dashboard-state" aria-live="polite">
+                  <p className="dashboard-state__copy">
+                    Rencana hari ini disusun dari aura yang kamu pilih dan tetap sama sampai hari
+                    berganti, jadi pilih kondisi yang paling mendekati.
+                  </p>
+                </div>
               </>
             ) : statusRencana === 'gagal' ? (
               showManualForm ? (
@@ -251,7 +273,11 @@ export default function DashboardPage({ onLogout, user }) {
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
                     <h2 id="today-plan-title" className="dashboard-hero__title">Mulai dari satu langkah kecil.</h2>
                     <p className="dashboard-hero__copy">
-                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {auraOption ? `Rencana ini disusun mengikuti Aura ${auraOption.label} yang kamu pilih hari ini.` : 'Rencana ini tersimpan dari hari sebelumnya.'}
+                    Ada {activities.length} aktivitas dan {foods.length} makanan dalam rencanamu. {sumberRencana === 'manual'
+                      ? 'Rencana ini kamu susun sendiri.'
+                      : auraOption
+                        ? `Rencana ini disusun dari Aura ${auraOption.label} yang kamu pilih hari ini.`
+                        : 'Rencana ini sudah tersimpan untuk hari ini.'}
                     </p>
                   </div>
                   <div className="dashboard-hero__metrics">
@@ -282,10 +308,13 @@ export default function DashboardPage({ onLogout, user }) {
                     </div>
                     <AuraCheckIn
                       aura={auraState.value}
+                      pendingAura={auraState.pending}
                       loading={auraState.status === 'loading'}
                       saving={auraState.status === 'saving'}
                       error={auraState.error}
+                      locked={auraTerkunci}
                       onChange={ubahAura}
+                      onRetry={cobaUlangAura}
                       onAdjust={bukaPenyesuaianAura}
                     />
                   </div>

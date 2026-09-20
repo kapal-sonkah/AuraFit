@@ -237,8 +237,12 @@ export default function HistoryPage({ onLogout }) {
       if (day.aura) result[day.aura] = (result[day.aura] || 0) + 1;
       return result;
     }, {});
-    const dominantValue = Object.entries(counts).sort(([, left], [, right]) => right - left)[0]?.[0] ?? null;
-    return { tracked: Object.values(counts).reduce((total, count) => total + count, 0), dominant: getAuraOption(dominantValue) };
+    // Aura "paling sering" hanya disebut bila jumlahnya benar-benar paling
+    // banyak. Saat seri, menyebut satu aura berarti memilih pemenang sembarang.
+    const sorted = Object.entries(counts).sort(([, left], [, right]) => right - left);
+    const seri = sorted.length > 1 && sorted[0][1] === sorted[1][1];
+    const dominantValue = seri ? null : sorted[0]?.[0] ?? null;
+    return { tracked: Object.values(counts).reduce((total, count) => total + count, 0), dominant: getAuraOption(dominantValue), seri };
   }, [days]);
 
   const summaryCards = [
@@ -286,7 +290,7 @@ export default function HistoryPage({ onLogout }) {
             <div className="history-aura-insight__icon">{auraSummary.dominant ? <AuraGlyph aura={auraSummary.dominant.value} /> : <span aria-hidden="true">✦</span>}</div>
             <div>
               <p className="history-aura-insight__eyebrow">Perjalanan Aura</p>
-              <h2 id="history-aura-title">{auraSummary.dominant ? `Aura ${auraSummary.dominant.label} paling sering` : 'Mulai kenali ritmemu'}</h2>
+              <h2 id="history-aura-title">{auraSummary.dominant ? `Aura ${auraSummary.dominant.label} paling sering` : auraSummary.seri ? 'Auramu bervariasi minggu ini' : 'Mulai kenali ritmemu'}</h2>
               <p>{auraSummary.tracked ? `${auraSummary.tracked} dari ${days.length} hari punya check-in Aura. Gunakan pola ini untuk memilih ritme yang terasa berkelanjutan.` : 'Pilih Aura setiap hari untuk melihat pola ritmemu di sini.'}</p>
             </div>
           </section>
