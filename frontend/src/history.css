@@ -92,6 +92,7 @@
 
 @media (max-width: 42rem) {
   .history-frame { padding-inline: var(--space-3); }
+  .history-frame { padding-bottom: calc(var(--space-12) + 4.5rem + env(safe-area-inset-bottom)); }
 }
 
 /* Keep the seven-day comparison as one intentional row once there is enough width. */

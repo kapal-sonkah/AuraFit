@@ -26,6 +26,10 @@ function RouteScrollReset() {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     const judul = PAGE_TITLES[location.pathname];
     document.title = judul ? `${judul} · AuraFit` : 'AuraFit';
+    const frame = window.requestAnimationFrame(() => {
+      document.querySelector('main[data-route-main]')?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [location.pathname]);
 
   return null;

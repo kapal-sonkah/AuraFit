@@ -26,6 +26,10 @@
 .profile-actions { display: flex; justify-content: end; gap: var(--space-3); margin-top: var(--space-6); }
 .profile-action { display: inline-flex; min-height: 2.75rem; align-items: center; justify-content: center; padding: 0 var(--space-4); border: 1px solid var(--color-accent-line); border-radius: var(--radius-pill); background: transparent; color: var(--color-ink); font-weight: var(--weight-semibold); text-decoration: none; cursor: pointer; }
 .profile-action--primary { border-color: var(--color-accent); background: var(--color-accent); color: var(--color-accent-ink); }
+.profile-action--danger { border-color: var(--color-danger); background: transparent; color: var(--color-danger); }
+.profile-action--danger:hover { background: var(--color-alert-surface); }
+.profile-card--account { display: flex; align-items: center; justify-content: space-between; gap: var(--space-5); }
+.profile-card__copy { max-width: 42rem; margin: var(--space-2) 0 0; color: var(--color-muted); line-height: 1.5; }
 .profile-action:disabled { cursor: not-allowed; opacity: 0.48; }
 .profile-action[aria-busy="true"] { cursor: wait; }
 .profile-actions--saved { justify-content: end; }
@@ -44,5 +48,7 @@
 
 @media (max-width: 42rem) {
   .profile-frame { padding-inline: var(--space-3); }
+  .profile-frame { padding-bottom: calc(var(--space-12) + 4.5rem + env(safe-area-inset-bottom)); }
+  .profile-card--account { align-items: stretch; flex-direction: column; }
 }
 

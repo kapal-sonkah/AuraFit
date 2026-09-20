@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { createManualPlan } from '../utils/network-data';
+import FieldErrorSummary from './FieldErrorSummary';
 
 function emptyActivity() {
   return { name: '', description: '' };
@@ -25,6 +26,7 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState({});
   const [saving, setSaving] = useState(false);
+  const errorSummaryRef = useRef(null);
 
   function fieldKey(group, index, field) {
     return `${group}-${index}-${field}`;
@@ -91,7 +93,7 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
     setFieldErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       setError('Lengkapi field yang ditandai sebelum menyimpan.');
-      document.getElementById(Object.keys(nextErrors)[0])?.focus();
+      window.requestAnimationFrame(() => errorSummaryRef.current?.focus());
       return;
     }
 
@@ -208,6 +210,12 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
         </button>
       </fieldset>
 
+      <FieldErrorSummary
+        ref={errorSummaryRef}
+        errors={fieldErrors}
+        prefix="manual"
+        getFieldId={(name) => name}
+      />
       {error ? <p className="manual-plan-form__error" role="alert">{error}</p> : null}
       <div className="manual-plan-form__actions">
         <button type="button" className="manual-plan-form__secondary" onClick={onCancel} disabled={saving}>Batal</button>

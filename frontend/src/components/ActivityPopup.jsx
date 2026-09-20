@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import ActivityIcon from './ActivityIcon';
+import { useModalFocusTrap } from '../utils/modal-focus';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return null;
@@ -15,23 +16,14 @@ function getYouTubeEmbedUrl(url) {
 
 export default function ActivityPopup({ activity, completed, onClose, onDone }) {
   const closeButtonRef = useRef(null);
+  const modalRef = useRef(null);
 
-  useEffect(() => {
-    if (!activity) return undefined;
-    const previousFocus = document.activeElement;
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    closeButtonRef.current?.focus();
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      previousFocus?.focus?.();
-    };
-  }, [activity, onClose]);
+  useModalFocusTrap({
+    open: Boolean(activity),
+    containerRef: modalRef,
+    initialFocusRef: closeButtonRef,
+    onClose,
+  });
 
   if (!activity) return null;
 
@@ -45,7 +37,7 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
         aria-hidden="true"
       />
 
-      <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="activity-dialog-title" aria-describedby="activity-dialog-description" onClick={(event) => event.stopPropagation()}>
+      <div ref={modalRef} className="modal-card" role="dialog" aria-modal="true" aria-labelledby="activity-dialog-title" aria-describedby="activity-dialog-description" onClick={(event) => event.stopPropagation()}>
         <div className="modal-card__head">
           <h2 id="activity-dialog-title" className="modal-card__title">{activity.name}</h2>
           <button ref={closeButtonRef} type="button" className="modal-close" onClick={onClose} aria-label="Tutup detail">×</button>
@@ -69,6 +61,8 @@ export default function ActivityPopup({ activity, completed, onClose, onDone }) 
             <img
               src={activity.image}
               alt={activity.name}
+              loading="lazy"
+              decoding="async"
               className="modal-content__media"
               onError={(e) => {
                 e.target.style.display = 'none';

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from '../assets/images/aurafit-mark.svg';
 import PasswordVisibilityIcon from '../components/PasswordVisibilityIcon';
+import FieldErrorSummary from '../components/FieldErrorSummary';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/network-data";
@@ -40,6 +41,7 @@ function SignupPage() {
   const [galat, setGalat] = React.useState('');
   const [fieldErrors, setFieldErrors] = React.useState({});
   const [sedangKirim, setSedangKirim] = React.useState(false);
+  const errorSummaryRef = React.useRef(null);
 
   const navigate = useNavigate();
 
@@ -62,7 +64,11 @@ function SignupPage() {
     const errors = collectFieldErrors(form);
     setFieldErrors(errors);
     const firstInvalid = form.querySelector(':invalid');
-    firstInvalid?.focus();
+    if (Object.keys(errors).length > 0) {
+      window.requestAnimationFrame(() => errorSummaryRef.current?.focus());
+    } else {
+      firstInvalid?.focus();
+    }
     return Object.keys(errors).length === 0;
   }
 
@@ -124,7 +130,7 @@ function SignupPage() {
   }
 
   return (
-    <main className="auth-shell">
+    <main className="auth-shell" data-route-main tabIndex="-1">
       <section className="auth-panel auth-panel--form">
         <Link to="/" className="auth-back">← Beranda</Link>
         <div className="auth-content">
@@ -153,10 +159,11 @@ function SignupPage() {
 
               <div className="auth-grid-2">
                 <div className="auth-field">
-                  <label htmlFor="signup-firstname">Nama Depan</label>
+                  <label htmlFor="signup-first-name">Nama Depan</label>
                   <input
-                    id="signup-firstname"
+                    id="signup-first-name"
                     type="text"
+                    autoComplete="given-name"
                     className={KELAS_INPUT}
                     value={firstName}
                     onChange={(e) => ubahField('firstName', setFirstName, e.target.value)}
@@ -166,10 +173,11 @@ function SignupPage() {
                   <SignupFieldError errors={fieldErrors} name="firstName" />
                 </div>
                 <div className="auth-field">
-                  <label htmlFor="signup-lastname">Nama Belakang</label>
+                  <label htmlFor="signup-last-name">Nama Belakang</label>
                   <input
-                    id="signup-lastname"
+                    id="signup-last-name"
                     type="text"
+                    autoComplete="family-name"
                     className={KELAS_INPUT}
                     value={lastName}
                     onChange={(e) => ubahField('lastName', setLastName, e.target.value)}
@@ -182,9 +190,10 @@ function SignupPage() {
 
               <div className="auth-field">
                 <label htmlFor="signup-username">Nama Pengguna</label>
-                <input
-                  id="signup-username"
-                  type="text"
+                  <input
+                    id="signup-username"
+                    type="text"
+                    autoComplete="username"
                   className={KELAS_INPUT}
                   value={username}
                   onChange={(e) => ubahField('username', setUsername, e.target.value)}
@@ -199,6 +208,7 @@ function SignupPage() {
                 <input
                   id="signup-email"
                   type="email"
+                  autoComplete="email"
                   placeholder="nama@contoh.com"
                   className={KELAS_INPUT}
                   value={email}
@@ -215,6 +225,7 @@ function SignupPage() {
                     <input
                       id="signup-password"
                       type={showPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
                       className={KELAS_INPUT}
                       value={password}
                       onChange={(e) => ubahField('password', setPassword, e.target.value)}
@@ -324,6 +335,7 @@ function SignupPage() {
             </fieldset>
           )}
 
+          <FieldErrorSummary ref={errorSummaryRef} errors={fieldErrors} prefix="signup" />
           {galat ? (
             <p role="alert" className="auth-error">
               {galat}

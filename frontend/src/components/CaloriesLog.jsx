@@ -46,6 +46,7 @@ function FoodItem({ food, consumed, onClick, onConsume, onDelete, onEdit }) {
               src={food.image}
               alt=""
               loading="lazy"
+              decoding="async"
               className="food-card__media"
               onError={(event) => {
                 event.currentTarget.hidden = true;
