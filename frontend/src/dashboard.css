@@ -375,3 +375,4 @@
 .next-step__secondary:hover { background: var(--color-surface); }
 .next-step--done { border-color: var(--color-accent-warm-line); background: var(--color-accent-warm-soft); }
 .next-step--done .next-step__eyebrow { color: var(--color-accent-warm-strong); }
+.dashboard-progress__meaning { margin: var(--space-2) 0 0; color: var(--color-accent-strong); font-size: var(--text-sm); font-weight: var(--weight-semibold); line-height: 1.45; }

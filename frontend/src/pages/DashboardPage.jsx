@@ -186,6 +186,16 @@ export default function DashboardPage({ onLogout, user }) {
     return true;
   }
 
+  // Angka "2/12" tidak menjelaskan artinya. Kalimat ini menerjemahkannya ke
+  // syarat streak (K-09): satu aktivitas selesai sudah cukup untuk hari ini.
+  const pesanProgres = completedActivities > 0
+    ? (completedItems === totalItems
+      ? 'Semua butir hari ini tercatat.'
+      : `Streak hari ini aman. Sisanya boleh dilanjutkan kapan pun.`)
+    : (activities.length > 0
+      ? 'Selesaikan satu aktivitas untuk menjaga streak hari ini.'
+      : 'Belum ada aktivitas pada rencana hari ini.');
+
   const cobaUlangAura = auraState.pending ? () => ubahAura(auraState.pending) : ambilAura;
   // Rencana tersimpan sekali dan tidak disusun ulang (F-11), jadi aura
   // dikunci begitu rencana hari ini ada.
@@ -324,6 +334,7 @@ export default function DashboardPage({ onLogout, user }) {
                         <span>{completedActivities}/{activities.length} aktivitas</span>
                         <span>{completedFoods}/{foods.length} makanan</span>
                       </div>
+                      <p className="dashboard-progress__meaning">{pesanProgres}</p>
                     </div>
                     <AuraCheckIn
                       aura={auraState.value}

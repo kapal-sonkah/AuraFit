@@ -4,7 +4,7 @@ import { getAuraOption } from '../utils/aura';
 import ActivityIcon from './ActivityIcon';
 import ActivityPopup from './ActivityPopup';
 import ManualItemEditor from './ManualItemEditor';
-import { presentActivity } from '../utils/presentation';
+import { activityMinutes, presentActivity } from '../utils/presentation';
 
 function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
   const [editing, setEditing] = useState(false);
@@ -78,6 +78,16 @@ export default function DailyActivities({ activities = [], completedActivityIds,
   const [selected, setSelected] = useState(null);
   const auraOption = getAuraOption(aura);
 
+  // Total durasi membuat isi hari terbaca sekilas: empat aktivitas terasa
+  // berbeda bila totalnya 60 menit atau 145 menit. Menit diambil dari
+  // keterangan aktivitas, jadi butir manual tanpa durasi tidak ikut dihitung.
+  const totalMenit = activities.reduce((jumlah, a) => jumlah + (activityMinutes(a) ?? 0), 0);
+  const ringkasanRencana = [
+    `${activities.length} aktivitas`,
+    totalMenit ? `${totalMenit} menit` : null,
+    'cukup 1 selesai untuk menjaga streak',
+  ].filter(Boolean).join(' · ');
+
   return (
     <>
       <section id="aktivitas-hari-ini" aria-label="Aktivitas hari ini" className="dashboard-section">
@@ -88,7 +98,7 @@ export default function DailyActivities({ activities = [], completedActivityIds,
           </div>
           <div className="dashboard-section__head-side">
             {auraOption ? <p className="activity-aura-context"><AuraGlyph aura={auraOption.value} /><span><strong>Mode {auraOption.label}</strong> · {auraOption.suggestion}</span></p> : null}
-            <p className="dashboard-section__count">{activities.length} aktivitas · cukup 1 selesai untuk menjaga streak</p>
+            <p className="dashboard-section__count">{ringkasanRencana}</p>
           </div>
         </div>
         <ul className="dashboard-list dashboard-list--activities" role="list">
