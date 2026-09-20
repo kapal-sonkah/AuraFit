@@ -320,7 +320,6 @@ export default function DashboardPage({ onLogout, user }) {
                     <div className="dashboard-progress">
                       <div className="dashboard-progress__head">
                         <span className="dashboard-progress__label">Progres hari ini</span>
-                        <span className="dashboard-progress__percentage">{completionPercentage}%</span>
                       </div>
                       <div
                         className="dashboard-progress__track"

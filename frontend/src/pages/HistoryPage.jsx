@@ -326,7 +326,7 @@ export default function HistoryPage({ onLogout }) {
   }, [days]);
 
   const summaryCards = [
-    ['Item selesai', `${summary.completed}/${summary.total}`, `${summary.rate}% dari progres utama`, completionTone({ hasPlan: true, completionRate: summary.rate })],
+    ['Item selesai', `${summary.completed}/${summary.total}`, 'item dari rencana tersimpan', completionTone({ hasPlan: true, completionRate: summary.rate })],
     ['Hari dengan rencana', summary.activeDays, 'tanggal dengan rencana tersimpan'],
     ['Aktivitas', summary.activities, 'rencana olahraga tersimpan'],
     ['Makanan', summary.foods, 'rekomendasi makanan tersimpan'],
@@ -402,7 +402,6 @@ export default function HistoryPage({ onLogout }) {
                   onClick={() => setSelectedDate(day.date)}
                 >
                   <span className="history-day__date">{formatDate(day.date, { weekday: 'short' })}</span>
-                  <strong className="history-day__rate">{day.hasPlan ? `${day.completionRate}%` : '—'}</strong>
                   <span className="history-day__bar" aria-hidden="true">
                     <span className="history-day__fill" style={{ width: `${day.completionRate}%` }} />
                   </span>
