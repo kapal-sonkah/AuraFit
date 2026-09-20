@@ -54,6 +54,32 @@ test('aura berbeda menghasilkan daftar aktivitas yang berbeda', () => {
   );
 });
 
+test('penyimpanan aura memisahkan parameter untuk pemeriksaan rencana', async () => {
+  const asli = AuraRepository.pool;
+  let captured;
+  AuraRepository.pool = {
+    query: async (query, params) => {
+      captured = { query, params };
+      return { rows: [{ aura_date: '2026-09-20', aura: 'seimbang' }] };
+    },
+  };
+
+  try {
+    const result = await AuraRepository.setToday('user-test', 'seimbang', '2026-09-20');
+    assert.deepEqual(result, { aura_date: '2026-09-20', aura: 'seimbang' });
+    assert.match(captured.query, /daily_plans WHERE user_id = \$5 AND plan_date = \$6/);
+    assert.deepEqual(captured.params.slice(1), [
+      'user-test',
+      '2026-09-20',
+      'seimbang',
+      'user-test',
+      '2026-09-20',
+    ]);
+  } finally {
+    AuraRepository.pool = asli;
+  }
+});
+
 test('aura tidak dapat diubah setelah rencana hari itu tersusun', async () => {
   const { setAuraToday } = await import('../src/services/aura/aura-controller.js');
   const asli = AuraRepository.setToday;
