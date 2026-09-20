@@ -167,3 +167,32 @@
   .history-trend__bar { height: 4rem; }
   .history-trend__hint { text-align: right; }
 }
+
+/* Progres memakai status semantik; angka dan label tetap menyertai warna agar
+   makna tidak bergantung pada persepsi warna saja. */
+.history-summary__card--low .history-summary__value,
+.history-day--low .history-day__rate,
+.history-trend__day--low strong { color: var(--color-progress-low); }
+.history-summary__card--medium .history-summary__value,
+.history-day--medium .history-day__rate,
+.history-trend__day--medium strong { color: var(--color-progress-mid); }
+.history-summary__card--high .history-summary__value,
+.history-day--high .history-day__rate,
+.history-trend__day--high strong { color: var(--color-accent-strong); }
+.history-day--low .history-day__fill,
+.history-trend__day--low .history-trend__bar > span { background: var(--color-progress-low); }
+.history-day--medium .history-day__fill,
+.history-trend__day--medium .history-trend__bar > span { background: var(--color-progress-mid); }
+.history-day--high .history-day__fill,
+.history-trend__day--high .history-trend__bar > span { background: var(--color-accent-strong); }
+.history-trend__day:not(.history-trend__day--selected).history-trend__day--low .history-trend__bar > span { background: var(--color-progress-low); }
+.history-trend__day:not(.history-trend__day--selected).history-trend__day--medium .history-trend__bar > span { background: var(--color-progress-mid); }
+.history-trend__day:not(.history-trend__day--selected).history-trend__day--high .history-trend__bar > span { background: var(--color-accent-strong); }
+.history-day--none .history-day__rate { color: var(--color-muted); }
+.history-trend__legend { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0; padding: 0; color: var(--color-muted); font-size: var(--text-xs); font-weight: var(--weight-semibold); list-style: none; }
+.history-trend__legend li { display: inline-flex; align-items: center; gap: var(--space-1); }
+.history-trend__legend-swatch { width: 0.65rem; height: 0.65rem; border-radius: 50%; }
+.history-trend__legend-swatch--low { background: var(--color-progress-low); }
+.history-trend__legend-swatch--medium { background: var(--color-progress-mid); }
+.history-trend__legend-swatch--high { background: var(--color-accent-strong); }
+.history-plan-item__tag { display: inline-block; margin-left: var(--space-2); padding: 0.1rem var(--space-2); border: 1px solid var(--color-accent-line); border-radius: var(--radius-pill); background: var(--color-accent-soft); color: var(--color-accent-strong); font-size: var(--text-xs); font-weight: var(--weight-semibold); vertical-align: middle; white-space: nowrap; }

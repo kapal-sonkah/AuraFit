@@ -34,6 +34,20 @@ function formatWeekday(dateString) {
   return new Intl.DateTimeFormat('id-ID', { weekday: 'short' }).format(new Date(`${dateString}T12:00:00`));
 }
 
+function completionTone(day) {
+  if (!day?.hasPlan) return 'none';
+  if (day.completionRate >= 80) return 'high';
+  if (day.completionRate >= 40) return 'medium';
+  return 'low';
+}
+
+function completionLabel(day) {
+  if (!day?.hasPlan) return 'Tanpa rencana';
+  if (day.completionRate >= 80) return 'Terjaga';
+  if (day.completionRate >= 40) return 'Berjalan';
+  return 'Mulai';
+}
+
 function CalendarIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -111,9 +125,9 @@ function itemStatus(item, type) {
   return type === 'activity' ? 'Belum dimulai' : 'Belum dicatat';
 }
 
-function SummaryCard({ label, value, hint }) {
+function SummaryCard({ label, value, hint, tone = '' }) {
   return (
-    <article className="history-summary__card">
+    <article className={`history-summary__card ${tone ? `history-summary__card--${tone}` : ''}`}>
       <p className="history-summary__label">{label}</p>
       <p className="history-summary__value">{value}</p>
       <p className="history-summary__hint">{hint}</p>
@@ -144,7 +158,7 @@ function HistoryTrend({ days, selectedDate, loading }) {
       </div>
       <div className="history-trend__bars" aria-hidden="true">
         {latestFirst.map((day) => (
-          <div className={`history-trend__day ${day.date === selectedDate ? 'history-trend__day--selected' : ''}`} key={day.date}>
+          <div className={`history-trend__day history-trend__day--${completionTone(day)} ${day.date === selectedDate ? 'history-trend__day--selected' : ''}`} key={day.date}>
             <span className="history-trend__bar">
               <span style={{ height: `${day.hasPlan ? Math.max(day.completionRate, 8) : 0}%` }} />
             </span>
@@ -153,6 +167,11 @@ function HistoryTrend({ days, selectedDate, loading }) {
           </div>
         ))}
       </div>
+      <ul className="history-trend__legend" aria-label="Legenda warna progres">
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--low" />Mulai · 0–39%</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--medium" />Berjalan · 40–79%</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--high" />Terjaga · 80–100%</li>
+      </ul>
       <p className="history-trend__caption">Batang yang lebih tinggi berarti lebih banyak catatan selesai. Pilih kartu hari di bawah untuk melihat rinciannya.</p>
     </div>
   );
@@ -172,7 +191,10 @@ function PlanItem({ item, type, onToggle, saving, editable }) {
         {type === 'activity' ? <ActivityIcon name={presented.name} /> : presented.emoji}
       </div>
       <div className="history-plan-item__body">
-        <p className="history-plan-item__name">{presented.name}</p>
+        <p className="history-plan-item__name">
+          {presented.name}
+          {item.optional ? <span className="history-plan-item__tag">Pilihan tambahan</span> : null}
+        </p>
         <p className="history-plan-item__meta">
           {(type === 'food' ? foodMeta(presented) : presented.description) || 'Bagian dari rencana harian'}
         </p>
@@ -283,7 +305,7 @@ export default function HistoryPage({ onLogout }) {
   }, [days]);
 
   const summaryCards = [
-    ['Item selesai', `${summary.completed}/${summary.total}`, `${summary.rate}% dari rencana`],
+    ['Item selesai', `${summary.completed}/${summary.total}`, `${summary.rate}% dari progres utama`, completionTone({ hasPlan: true, completionRate: summary.rate })],
     ['Hari dengan rencana', summary.activeDays, 'tanggal dengan rencana tersimpan'],
     ['Aktivitas', summary.activities, 'rencana olahraga tersimpan'],
     ['Makanan', summary.foods, 'rekomendasi makanan tersimpan'],
@@ -319,7 +341,7 @@ export default function HistoryPage({ onLogout }) {
             </section>
           ) : (
             <section className="history-summary" aria-label="Ringkasan tujuh hari">
-              {summaryCards.map(([label, value, hint]) => <SummaryCard key={label} label={label} value={value} hint={hint} />)}
+              {summaryCards.map(([label, value, hint, tone]) => <SummaryCard key={label} label={label} value={value} hint={hint} tone={tone} />)}
             </section>
           )}
 
@@ -354,7 +376,7 @@ export default function HistoryPage({ onLogout }) {
                   <button
                   type="button"
                   key={day.date}
-                  className={`history-day ${day.date === selectedDate ? 'history-day--selected' : ''}`}
+                  className={`history-day history-day--${completionTone(day)} ${day.date === selectedDate ? 'history-day--selected' : ''}`}
                   aria-pressed={day.date === selectedDate}
                   onClick={() => setSelectedDate(day.date)}
                 >
@@ -363,7 +385,7 @@ export default function HistoryPage({ onLogout }) {
                   <span className="history-day__bar" aria-hidden="true">
                     <span className="history-day__fill" style={{ width: `${day.completionRate}%` }} />
                   </span>
-                  <span className="history-day__count">{day.hasPlan ? `${day.completed}/${day.total} selesai` : 'Tanpa rencana'}</span>
+                  <span className="history-day__count">{day.hasPlan ? `${day.completed}/${day.total} selesai · ${completionLabel(day)}` : completionLabel(day)}</span>
                   {aura ? <span className="history-day__aura" data-aura={aura.value}><AuraGlyph aura={aura.value} />{aura.label}</span> : null}
                 </button>
                 );
@@ -392,7 +414,7 @@ export default function HistoryPage({ onLogout }) {
             ) : (
               <div className="history-plan">
                 <div className="history-plan__stats">
-                  <span>{selectedDay?.completed ?? 0}/{selectedDay?.total ?? 0} item selesai</span>
+                  <span>{selectedDay?.completed ?? 0}/{selectedDay?.total ?? 0} item utama selesai</span>
                   <span>{planState.data.source === 'manual' ? 'Rencana manual' : 'Rekomendasi AuraFit'}</span>
                 </div>
                 {editError ? <div className="history-alert" role="alert">{editError}</div> : null}

@@ -11,14 +11,15 @@ function durasi(keterangan = '') {
 // langkah berikutnya harus dicari sendiri. Kartu ini menjawab satu pertanyaan:
 // apa yang perlu saya lakukan sekarang.
 export default function NextStepCard({ activities, completedActivityIds, onDone }) {
-  const berikutnya = activities.find((a) => !completedActivityIds.has(a.id));
+  const aktivitasUtama = activities.filter((activity) => !activity.optional);
+  const berikutnya = aktivitasUtama.find((a) => !completedActivityIds.has(a.id));
 
   if (!berikutnya) {
     return (
       <section className="next-step next-step--done" aria-labelledby="next-step-title">
         <p className="next-step__eyebrow">Aktivitas hari ini</p>
-        <h2 id="next-step-title" className="next-step__title">Semua aktivitas selesai.</h2>
-        <p className="next-step__meta">Catatan hari ini sudah lengkap. Sampai jumpa besok.</p>
+        <h2 id="next-step-title" className="next-step__title">Aktivitas utama selesai.</h2>
+        <p className="next-step__meta">Streak aman. Pilihan tambahan masih tersedia bila kamu ingin bergerak lebih banyak.</p>
       </section>
     );
   }

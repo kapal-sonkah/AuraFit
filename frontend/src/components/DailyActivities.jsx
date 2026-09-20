@@ -27,7 +27,7 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
   }
 
   return (
-    <article className={`activity-card ${active ? 'activity-card--done' : ''}`}>
+    <article className={`activity-card ${active ? 'activity-card--done' : ''} ${activity.optional ? 'activity-card--optional' : ''}`}>
       <button
         type="button"
         className="activity-card__detail"
@@ -40,6 +40,7 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
             {/* Butir tanpa source_ref dicatat sendiri oleh pengguna; tanpa
                 penanda, butir tambahan tampak seperti rekomendasi sistem. */}
             {activity.source_ref == null ? <span className="plan-item-tag">Tambahanmu</span> : null}
+            {activity.optional ? <span className="plan-item-tag plan-item-tag--optional">Pilihan tambahan</span> : null}
           </span>
           <span className={`activity-card__status ${active ? 'activity-card__status--done' : ''}`}>
             {active ? <><span aria-hidden="true">✓ </span>Selesai</> : 'Belum dimulai'}
@@ -85,19 +86,21 @@ export default function DailyActivities({ activities = [], completedActivityIds,
   const [selected, setSelected] = useState(null);
   const auraOption = getAuraOption(aura);
 
-  // Total durasi membuat isi hari terbaca sekilas: empat aktivitas terasa
-  // berbeda bila totalnya 60 menit atau 145 menit. Menit diambil dari
+  // Total durasi membuat isi hari terbaca sekilas. Menit diambil dari
   // keterangan aktivitas, jadi butir manual tanpa durasi tidak ikut dihitung.
+  const aktivitasUtama = activities.filter((activity) => !activity.optional);
+  const aktivitasPilihan = activities.filter((activity) => activity.optional);
   const totalMenit = activities.reduce((jumlah, a) => jumlah + (activityMinutes(a) ?? 0), 0);
   const ringkasanRencana = [
-    `${activities.length} aktivitas`,
+    `${aktivitasUtama.length} utama`,
+    aktivitasPilihan.length ? `${aktivitasPilihan.length} pilihan` : null,
     totalMenit ? `${totalMenit} menit` : null,
     'cukup 1 selesai untuk menjaga streak',
   ].filter(Boolean).join(' · ');
 
   return (
     <>
-      <section id="aktivitas-hari-ini" aria-label="Aktivitas hari ini" className="dashboard-section">
+      <section id="aktivitas-hari-ini" aria-label="Aktivitas hari ini" className="dashboard-section dashboard-section--activities">
         <div className="dashboard-section__head">
           <div>
             <p className="section-kicker">Gerak hari ini</p>

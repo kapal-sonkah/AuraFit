@@ -30,8 +30,13 @@ class PlanRepositories {
       SELECT i.id, i.item_type, i.position, i.source_ref, i.name,
              i.description, i.image_url AS image, i.video_url AS youtube_url,
              i.portion, i.calorie_kcal AS kcal, i.emoji,
+             (d.source = 'recommendation'
+               AND i.item_type = 'activity'
+               AND i.position > 4
+               AND i.source_ref IS NOT NULL) AS optional,
              COALESCE(p.completed, FALSE) AS completed
       FROM daily_plan_items i
+      JOIN daily_plans d ON d.id = i.plan_id
       LEFT JOIN plan_item_progress p ON p.plan_item_id = i.id
       WHERE i.plan_id = $1
       ORDER BY i.item_type, i.position
@@ -310,6 +315,12 @@ class PlanRepositories {
       JOIN daily_plan_items i ON i.plan_id = p.id
       LEFT JOIN plan_item_progress pr ON pr.plan_item_id = i.id
       WHERE p.user_id = $1 AND p.plan_date BETWEEN $2 AND $3
+        AND NOT (
+          p.source = 'recommendation'
+          AND i.item_type = 'activity'
+          AND i.position > 4
+          AND i.source_ref IS NOT NULL
+        )
       GROUP BY p.plan_date, i.item_type
       ORDER BY p.plan_date DESC, i.item_type
     `, [userId, fromDate, toDate]);

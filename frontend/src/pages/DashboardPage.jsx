@@ -60,10 +60,13 @@ export default function DashboardPage({ onLogout, user }) {
     foods.reduce((total, food) => total + (Number(food.kcal) || 0), 0)
   , [foods]);
 
-  const completedActivities = completedActivityIds.size;
+  const aktivitasUtama = activities.filter((item) => !item.optional);
+  const aktivitasPilihan = activities.filter((item) => item.optional);
+  const completedActivities = aktivitasUtama.filter((item) => completedActivityIds.has(item.id)).length;
+  const completedActivitiesPilihan = aktivitasPilihan.filter((item) => completedActivityIds.has(item.id)).length;
   const completedFoods = consumedFoodIds.size;
-  const completedItems = completedActivityIds.size + consumedFoodIds.size;
-  const totalItems = activities.length + foods.length;
+  const completedItems = completedActivities + completedFoods;
+  const totalItems = aktivitasUtama.length + foods.length;
   const completionPercentage = totalItems === 0 ? 0 : Math.round((completedItems / totalItems) * 100);
   const auraOption = getAuraOption(auraState.value);
   const consumedCalories = foods
@@ -188,7 +191,7 @@ export default function DashboardPage({ onLogout, user }) {
 
   // Angka "2/12" tidak menjelaskan artinya. Kalimat ini menerjemahkannya ke
   // syarat streak (K-09): satu aktivitas selesai sudah cukup untuk hari ini.
-  const pesanProgres = completedActivities > 0
+  const pesanProgres = completedActivityIds.size > 0
     ? (completedItems === totalItems
       ? 'Semua butir hari ini tercatat.'
       : `Streak hari ini aman. Sisanya boleh dilanjutkan kapan pun.`)
@@ -306,7 +309,7 @@ export default function DashboardPage({ onLogout, user }) {
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
                     <h2 id="today-plan-title" className="dashboard-hero__title">Rencana hari ini</h2>
                     <p className="dashboard-hero__copy">
-                    {activities.length} aktivitas dan {foods.length} makanan tersimpan untuk hari ini. {sumberRencana === 'manual'
+                    {aktivitasUtama.length} aktivitas utama{aktivitasPilihan.length ? ` + ${aktivitasPilihan.length} pilihan` : ''} dan {foods.length} makanan tersimpan untuk hari ini. {sumberRencana === 'manual'
                       ? 'Rencana ini kamu susun sendiri.'
                       : auraOption
                         ? `Rencana ini disusun dari Aura ${auraOption.label} yang kamu pilih hari ini.`
@@ -335,9 +338,12 @@ export default function DashboardPage({ onLogout, user }) {
                         <span className="dashboard-progress__hint">item tercatat</span>
                       </div>
                       <div className="dashboard-progress__breakdown" aria-label="Rincian progres">
-                        <span>{completedActivities}/{activities.length} aktivitas</span>
+                        <span>{completedActivities}/{aktivitasUtama.length} aktivitas utama</span>
                         <span>{completedFoods}/{foods.length} makanan</span>
                       </div>
+                      {aktivitasPilihan.length ? (
+                        <p className="dashboard-progress__bonus">Pilihan tambahan: {completedActivitiesPilihan}/{aktivitasPilihan.length} selesai</p>
+                      ) : null}
                       <p className="dashboard-progress__meaning">{pesanProgres}</p>
                     </div>
                     <AuraCheckIn

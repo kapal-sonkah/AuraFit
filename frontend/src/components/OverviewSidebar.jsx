@@ -1,4 +1,12 @@
-function StatCard({ label, value, unit, sub, subColor, tone = '' }) {
+function FireIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M12.1 3.2c.5 3.1-1.5 4.2-2.7 6.1-1 1.5-1 3.7.7 5.1-.2-1.8.8-3.1 2.2-4.1 1.8 1.6 2.7 3.3 2.7 5.1 0 1.4-.5 2.7-1.5 3.6 3-.6 5-2.9 5-6.1 0-3.2-2.1-6.7-6.4-9.7Z" />
+    </svg>
+  );
+}
+
+function StatCard({ label, value, unit, sub, subColor, tone = '', icon = null }) {
   return (
     <article className={`stat-card ${tone ? `stat-card--${tone}` : ''}`}>
       <div>
@@ -8,6 +16,7 @@ function StatCard({ label, value, unit, sub, subColor, tone = '' }) {
         </p>
         <p className={`stat-card__sub ${subColor}`}>{sub}</p>
       </div>
+      {icon ? <span className="stat-card__icon" aria-hidden="true">{icon}</span> : null}
     </article>
   );
 }
@@ -46,7 +55,7 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
     completedActivities < totalActivities ? 'stat-card__sub--warning' : 'stat-card__sub--positive';
     
   // Warna streak
-  const streakSubColor = streak > 0 ? 'stat-card__sub--positive' : 'stat-card__sub--muted';
+  const streakSubColor = streak > 0 ? 'stat-card__sub--streak' : 'stat-card__sub--muted';
 
   return (
     <aside className="w-full shrink-0 overflow-hidden">
@@ -84,7 +93,8 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
           value={planReady ? streak : '—'}
           sub={planReady ? 'hari berturut-turut' : inactivePlanSub}
           subColor={streakSubColor}
-          tone={streak > 0 ? 'warm' : ''} />
+          tone={streak > 0 ? 'streak' : ''}
+          icon={streak > 0 ? <FireIcon /> : null} />
       </section>
     </aside>
   );
