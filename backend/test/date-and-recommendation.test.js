@@ -10,6 +10,7 @@ const [
   { todayInJakarta },
   { JUMLAH_AKTIVITAS, JUMLAH_MAKANAN, susunRencanaHarian },
   { default: KATALOG },
+  { default: AuraRepository },
 ] = await Promise.all([
   import('../src/services/plans/plan-repositories.js'),
   import('../src/services/users/repositories/user-repositories.js'),
@@ -17,6 +18,7 @@ const [
   import('../src/utils/date.js'),
   import('../src/services/recommendations/recommendation-service.js'),
   import('../src/services/recommendations/katalog.js'),
+  import('../src/services/aura/aura-repository.js'),
 ]);
 
 // ambil() memotong permintaan sebesar isi kolamnya, sehingga jumlah yang
@@ -44,6 +46,58 @@ test('rencana memuat butir sebanyak yang dijanjikan', () => {
   );
   assert.equal(rencana.activities.length, JUMLAH_AKTIVITAS);
   assert.equal(rencana.foods.length, JUMLAH_MAKANAN);
+});
+
+test('rencana rekomendasi lama ditambah pilihan aktivitas tanpa menghapus progres', async () => {
+  const asli = {
+    getUserById: UserRepositories.getUserById,
+    getPlan: PlanRepositories.getPlan,
+    addItems: PlanRepositories.addItems,
+    getStreak: PlanRepositories.getStreak,
+    getToday: AuraRepository.getToday,
+  };
+  const tersimpan = {
+    id: 'saved-plan',
+    source: 'recommendation',
+    activities: [
+      { id: 'plan-item-1', source_ref: 1 },
+      { id: 'plan-item-2', source_ref: 2 },
+      { id: 'plan-item-3', source_ref: 3 },
+      { id: 'plan-item-4', source_ref: 4 },
+    ],
+    foods: [],
+  };
+  let tambahan;
+
+  UserRepositories.getUserById = async () => ({
+    id: 'user-test', weight_kg: 62, height_cm: 168, goal: 'maintain_weight',
+  });
+  PlanRepositories.getPlan = async () => tersimpan;
+  AuraRepository.getToday = async () => ({ aura: 'seimbang' });
+  PlanRepositories.addItems = async (_userId, payload) => {
+    tambahan = payload;
+    return { ...tersimpan, activities: [...tersimpan.activities, ...payload.activities] };
+  };
+  PlanRepositories.getStreak = async () => 1;
+
+  let body;
+  try {
+    await getRecommendationToday({ user: { id: 'user-test' } }, {
+      status() { return this; },
+      json(value) { body = value; return this; },
+      end() { return this; },
+    }, (error) => { throw error; });
+    assert.equal(tambahan.source, 'recommendation');
+    assert.equal(tambahan.activities.length, 2);
+    assert.equal(body.data.activities.length, 6);
+    assert.equal(body.data.streak, 1);
+  } finally {
+    UserRepositories.getUserById = asli.getUserById;
+    PlanRepositories.getPlan = asli.getPlan;
+    PlanRepositories.addItems = asli.addItems;
+    PlanRepositories.getStreak = asli.getStreak;
+    AuraRepository.getToday = asli.getToday;
+  }
 });
 
 test('tanggal bawaan repository mengikuti Asia/Jakarta', async () => {
