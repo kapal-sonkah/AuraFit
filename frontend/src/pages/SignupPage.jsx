@@ -4,9 +4,14 @@ import PasswordVisibilityIcon from '../components/PasswordVisibilityIcon';
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../utils/network-data";
+import { collectFieldErrors } from '../utils/validation-messages';
 import '../auth.css';
 
 const KELAS_INPUT = "auth-input";
+
+function SignupFieldError({ errors, name }) {
+  return errors[name] ? <p id={`signup-${name}-error`} className="auth-field__error">{errors[name]}</p> : null;
+}
 
 // Pendaftaran dibagi menjadi dua langkah.
 //
@@ -33,22 +38,53 @@ function SignupPage() {
   const [goal, setGoal] = React.useState('');
 
   const [galat, setGalat] = React.useState('');
+  const [fieldErrors, setFieldErrors] = React.useState({});
   const [sedangKirim, setSedangKirim] = React.useState(false);
 
   const navigate = useNavigate();
+
+  function clearFieldError(name) {
+    setFieldErrors((current) => {
+      if (!current[name]) return current;
+      const next = { ...current };
+      delete next[name];
+      return next;
+    });
+  }
+
+  function ubahField(name, setter, value) {
+    setter(value);
+    clearFieldError(name);
+    if (galat) setGalat('');
+  }
+
+  function validasi(form) {
+    const errors = collectFieldErrors(form);
+    setFieldErrors(errors);
+    const firstInvalid = form.querySelector(':invalid');
+    firstInvalid?.focus();
+    return Object.keys(errors).length === 0;
+  }
+
+  function fieldProps(name, describedBy = '') {
+    return {
+      name,
+      'aria-invalid': Boolean(fieldErrors[name]),
+      'aria-describedby': [describedBy, fieldErrors[name] ? `signup-${name}-error` : ''].filter(Boolean).join(' ') || undefined,
+      onBlur: (event) => {
+        const errors = collectFieldErrors(event.currentTarget.form);
+        setFieldErrors((current) => ({ ...current, ...(errors[name] ? { [name]: errors[name] } : {}) }));
+      },
+    };
+  }
 
   function keLangkahDua(event) {
     event.preventDefault();
     setGalat('');
 
     const form = event.currentTarget;
-    if (!form.checkValidity()) {
+    if (!validasi(form)) {
       setGalat('Lengkapi seluruh isian pada langkah ini.');
-      form.querySelector(':invalid')?.focus();
-      return;
-    }
-    if (password.length < 8) {
-      setGalat('Kata sandi minimal 8 karakter.');
       return;
     }
     setLangkah(2);
@@ -64,9 +100,8 @@ function SignupPage() {
     setGalat('');
 
     const form = event.currentTarget;
-    if (!form.checkValidity()) {
+    if (!validasi(form)) {
       setGalat('Lengkapi seluruh isian pada langkah ini.');
-      form.querySelector(':invalid')?.focus();
       return;
     }
 
@@ -124,9 +159,11 @@ function SignupPage() {
                     type="text"
                     className={KELAS_INPUT}
                     value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => ubahField('firstName', setFirstName, e.target.value)}
                     required
+                    {...fieldProps('firstName')}
                   />
+                  <SignupFieldError errors={fieldErrors} name="firstName" />
                 </div>
                 <div className="auth-field">
                   <label htmlFor="signup-lastname">Nama Belakang</label>
@@ -135,9 +172,11 @@ function SignupPage() {
                     type="text"
                     className={KELAS_INPUT}
                     value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    onChange={(e) => ubahField('lastName', setLastName, e.target.value)}
                     required
+                    {...fieldProps('lastName')}
                   />
+                  <SignupFieldError errors={fieldErrors} name="lastName" />
                 </div>
               </div>
 
@@ -148,9 +187,11 @@ function SignupPage() {
                   type="text"
                   className={KELAS_INPUT}
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => ubahField('username', setUsername, e.target.value)}
                   required
+                  {...fieldProps('username')}
                 />
+                <SignupFieldError errors={fieldErrors} name="username" />
               </div>
 
               <div className="auth-field">
@@ -161,9 +202,11 @@ function SignupPage() {
                   placeholder="nama@contoh.com"
                   className={KELAS_INPUT}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => ubahField('email', setEmail, e.target.value)}
                   required
+                  {...fieldProps('email')}
                 />
+                <SignupFieldError errors={fieldErrors} name="email" />
               </div>
 
               <div className="auth-field">
@@ -174,16 +217,17 @@ function SignupPage() {
                       type={showPassword ? 'text' : 'password'}
                       className={KELAS_INPUT}
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => ubahField('password', setPassword, e.target.value)}
                       minLength={8}
                       required
-                      aria-describedby="bantuan-sandi"
+                      {...fieldProps('password', 'bantuan-sandi')}
                     />
                     <button type="button" className="auth-password__toggle" onClick={() => setShowPassword((visible) => !visible)} aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'} aria-pressed={showPassword}>
                       <PasswordVisibilityIcon visible={showPassword} />
                     </button>
                   </div>
                 <p id="bantuan-sandi" className="text-xs text-gray-600 mt-1">Minimal 8 karakter.</p>
+                <SignupFieldError errors={fieldErrors} name="password" />
               </div>
             </fieldset>
           ) : (
@@ -200,13 +244,15 @@ function SignupPage() {
                   id="signup-sex"
                   className={KELAS_INPUT}
                   value={sex}
-                  onChange={(e) => setSex(e.target.value)}
+                  onChange={(e) => ubahField('sex', setSex, e.target.value)}
                   required
+                  {...fieldProps('sex')}
                 >
                   <option value="" disabled>Pilih jenis kelamin</option>
                   <option value="male">Laki-laki</option>
                   <option value="female">Perempuan</option>
                 </select>
+                <SignupFieldError errors={fieldErrors} name="sex" />
               </div>
 
               <div className="auth-field">
@@ -218,9 +264,11 @@ function SignupPage() {
                   max={120}
                   className={KELAS_INPUT}
                   value={age}
-                  onChange={(e) => setAge(e.target.value)}
+                  onChange={(e) => ubahField('age', setAge, e.target.value)}
                   required
+                  {...fieldProps('age')}
                 />
+                <SignupFieldError errors={fieldErrors} name="age" />
               </div>
 
               <div className="auth-grid-2">
@@ -233,9 +281,11 @@ function SignupPage() {
                     max={400}
                     className={KELAS_INPUT}
                     value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
+                    onChange={(e) => ubahField('weight', setWeight, e.target.value)}
                     required
+                    {...fieldProps('weight')}
                   />
+                  <SignupFieldError errors={fieldErrors} name="weight" />
                 </div>
                 <div className="auth-field">
                   <label htmlFor="signup-height">Tinggi Badan (cm)</label>
@@ -246,9 +296,11 @@ function SignupPage() {
                     max={250}
                     className={KELAS_INPUT}
                     value={height}
-                    onChange={(e) => setHeight(e.target.value)}
+                    onChange={(e) => ubahField('height', setHeight, e.target.value)}
                     required
+                    {...fieldProps('height')}
                   />
+                  <SignupFieldError errors={fieldErrors} name="height" />
                 </div>
               </div>
 
@@ -257,15 +309,17 @@ function SignupPage() {
                 <select
                   id="signup-goal"
                   value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                  className={KELAS_INPUT}
-                  required
-                >
+                    onChange={(e) => ubahField('goal', setGoal, e.target.value)}
+                    className={KELAS_INPUT}
+                    required
+                    {...fieldProps('goal')}
+                  >
                   <option value="" disabled>Pilih tujuan</option>
                   <option value="lose_weight">Menurunkan berat badan</option>
                   <option value="maintain_weight">Mempertahankan berat badan</option>
                   <option value="gain_weight">Menambah berat badan</option>
                 </select>
+                <SignupFieldError errors={fieldErrors} name="goal" />
               </div>
             </fieldset>
           )}

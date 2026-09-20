@@ -9,11 +9,12 @@ function emptyFood() {
   return { name: '', portion: '', kcal: '' };
 }
 
-function Field({ label, value, onChange, ...props }) {
+function Field({ id, label, value, onChange, error, onBlur, ...props }) {
   return (
     <label className="manual-plan-form__field">
       <span>{label}</span>
-      <input value={value} onChange={(event) => onChange(event.target.value)} {...props} />
+      <input id={id} value={value} onChange={(event) => onChange(event.target.value)} onBlur={onBlur} aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} {...props} />
+      {error ? <small id={`${id}-error`} className="manual-plan-form__field-error">{error}</small> : null}
     </label>
   );
 }
@@ -22,21 +23,63 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
   const [activities, setActivities] = useState([emptyActivity()]);
   const [foods, setFoods] = useState([emptyFood()]);
   const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
   const [saving, setSaving] = useState(false);
+
+  function fieldKey(group, index, field) {
+    return `${group}-${index}-${field}`;
+  }
+
+  function clearFieldError(key) {
+    setFieldErrors((current) => {
+      if (!current[key]) return current;
+      const next = { ...current };
+      delete next[key];
+      return next;
+    });
+  }
 
   function updateRow(setRows, index, field, value) {
     setRows((rows) => rows.map((row, rowIndex) => (
       rowIndex === index ? { ...row, [field]: value } : row
     )));
+    clearFieldError(fieldKey(setRows === setActivities ? 'activity' : 'food', index, field));
+    if (error) setError('');
   }
 
   function removeRow(setRows, index, emptyRow) {
     setRows((rows) => rows.length === 1 ? [emptyRow()] : rows.filter((_, rowIndex) => rowIndex !== index));
+    setFieldErrors({});
+  }
+
+  function validateRowField(group, index, field, value) {
+    const rows = group === 'activity' ? activities : foods;
+    const row = rows[index];
+    const otherValues = Object.entries({ ...row, [field]: value })
+      .some(([key, entry]) => key !== field && String(entry).trim());
+    let message = '';
+    if (field === 'name' && !value.trim() && otherValues) message = `${group === 'activity' ? 'Nama aktivitas' : 'Nama makanan'} wajib diisi jika baris ini digunakan.`;
+    if (field === 'name' && value.trim() && value.trim().length < 2) message = 'Nama harus berisi minimal dua huruf.';
+    if (field === 'kcal' && value !== '' && (!Number.isFinite(Number(value)) || Number(value) < 0 || Number(value) > 100000)) message = 'Kalori harus berada di antara 0 dan 100.000 kcal.';
+    const key = fieldKey(group, index, field);
+    if (message) setFieldErrors((current) => ({ ...current, [key]: message }));
+    else clearFieldError(key);
   }
 
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
+
+    const nextErrors = {};
+    activities.forEach((item, index) => {
+      if (!item.name.trim() && item.description.trim()) nextErrors[fieldKey('activity', index, 'name')] = 'Nama aktivitas wajib diisi jika catatan diisi.';
+      if (item.name.trim() && item.name.trim().length < 2) nextErrors[fieldKey('activity', index, 'name')] = 'Nama harus berisi minimal dua huruf.';
+    });
+    foods.forEach((item, index) => {
+      if (!item.name.trim() && (item.portion.trim() || item.kcal !== '')) nextErrors[fieldKey('food', index, 'name')] = 'Nama makanan wajib diisi jika baris ini digunakan.';
+      if (item.name.trim() && item.name.trim().length < 2) nextErrors[fieldKey('food', index, 'name')] = 'Nama harus berisi minimal dua huruf.';
+      if (item.kcal !== '' && (!Number.isFinite(Number(item.kcal)) || Number(item.kcal) < 0 || Number(item.kcal) > 100000)) nextErrors[fieldKey('food', index, 'kcal')] = 'Kalori harus berada di antara 0 dan 100.000 kcal.';
+    });
 
     const cleanActivities = activities
       .map((item) => ({ ...item, name: item.name.trim(), description: item.description.trim() }))
@@ -44,6 +87,13 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
     const cleanFoods = foods
       .map((item) => ({ ...item, name: item.name.trim(), portion: item.portion.trim() }))
       .filter((item) => item.name);
+
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) {
+      setError('Lengkapi field yang ditandai sebelum menyimpan.');
+      document.getElementById(Object.keys(nextErrors)[0])?.focus();
+      return;
+    }
 
     if (cleanActivities.length + cleanFoods.length === 0) {
       setError('Tambahkan minimal satu aktivitas atau makanan.');
@@ -62,7 +112,7 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
   }
 
   return (
-    <form className="manual-plan-form" onSubmit={handleSubmit}>
+    <form className="manual-plan-form" noValidate onSubmit={handleSubmit}>
       <div className="manual-plan-form__head">
         <div>
           <p className="manual-plan-form__eyebrow">{auraLabel ? `Mode Aura ${auraLabel}` : 'Mode cadangan'}</p>
@@ -79,14 +129,18 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
           {activities.map((item, index) => (
             <div className="manual-plan-form__row" key={`activity-${index}`}>
               <Field
+                id={`activity-${index}-name`}
                 label={`Aktivitas ${index + 1}`}
                 type="text"
                 placeholder="Nama aktivitas"
                 value={item.name}
                 onChange={(value) => updateRow(setActivities, index, 'name', value)}
+                onBlur={(event) => validateRowField('activity', index, 'name', event.target.value)}
+                error={fieldErrors[fieldKey('activity', index, 'name')]}
                 maxLength={150}
               />
               <Field
+                id={`activity-${index}-description`}
                 label="Catatan singkat"
                 type="text"
                 placeholder="Opsional"
@@ -112,14 +166,18 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
           {foods.map((item, index) => (
             <div className="manual-plan-form__row manual-plan-form__row--food" key={`food-${index}`}>
               <Field
+                id={`food-${index}-name`}
                 label={`Makanan ${index + 1}`}
                 type="text"
                 placeholder="Nama makanan"
                 value={item.name}
                 onChange={(value) => updateRow(setFoods, index, 'name', value)}
+                onBlur={(event) => validateRowField('food', index, 'name', event.target.value)}
+                error={fieldErrors[fieldKey('food', index, 'name')]}
                 maxLength={150}
               />
               <Field
+                id={`food-${index}-portion`}
                 label="Porsi"
                 type="text"
                 placeholder="Opsional"
@@ -128,6 +186,7 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
                 maxLength={80}
               />
               <Field
+                id={`food-${index}-kcal`}
                 label="Kalori (kcal)"
                 type="number"
                 min="0"
@@ -135,6 +194,8 @@ export default function ManualPlanForm({ onCancel, onSaved, auraLabel = null }) 
                 placeholder="Opsional"
                 value={item.kcal}
                 onChange={(value) => updateRow(setFoods, index, 'kcal', value)}
+                onBlur={(event) => validateRowField('food', index, 'kcal', event.target.value)}
+                error={fieldErrors[fieldKey('food', index, 'kcal')]}
               />
               <button type="button" className="manual-plan-form__remove" onClick={() => removeRow(setFoods, index, emptyFood)} aria-label={`Hapus makanan ${index + 1}`}>
                 Hapus
