@@ -13,6 +13,10 @@
   --color-surface: oklch(99% 0.006 145);
   --color-surface-dark: oklch(24% 0.045 155);
   --color-surface-dark-2: oklch(29% 0.06 155);
+  --color-accent-warm: oklch(52% 0.13 62);
+  --color-accent-warm-strong: oklch(44% 0.12 58);
+  --color-accent-warm-soft: oklch(92% 0.06 78);
+  --color-accent-warm-line: oklch(82% 0.08 70);
   --color-positive: oklch(48% 0.14 148);
   --color-warning: oklch(55% 0.14 82);
   --color-danger: oklch(48% 0.14 28);
@@ -34,6 +38,19 @@
   --color-overlay: oklch(16% 0.035 155 / 0.62);
   --color-overlay-shadow: oklch(16% 0.035 155 / 0.6);
   --color-focus-soft: oklch(58% 0.14 153 / 0.2);
+
+  /* Skala tipografi. Sebelumnya ada sebelas ukuran berdekatan antara 0,66rem
+     dan 0,9rem; teks sekecil itu membuat antarmuka sulit dibaca. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
   --font-body: Montserrat, sans-serif;
   --font-display: SpecialGothicExpandedOne-Regular, sans-serif;
   --space-1: 0.25rem;

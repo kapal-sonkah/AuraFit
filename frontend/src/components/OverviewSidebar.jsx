@@ -1,6 +1,6 @@
-function StatCard({ label, value, unit, sub, subColor }) {
+function StatCard({ label, value, unit, sub, subColor, tone = '' }) {
   return (
-    <article className="stat-card">
+    <article className={`stat-card ${tone ? `stat-card--${tone}` : ''}`}>
       <div>
         <p className="stat-card__label">{label}</p>
         <p className="stat-card__value">
@@ -69,11 +69,15 @@ export default function OverviewSidebar({ user, completedActivities = 0, totalAc
           sub="selesai dari rencana"
           subColor={activitySubColor} />
         
+        {/* Streak memakai warna hangat, satu-satunya aksen non-hijau pada
+            ringkasan, agar capaian yang dikumpulkan berhari-hari tidak
+            tenggelam di antara kartu lain. */}
         <StatCard 
           label="Streak" 
           value={streak}
           sub="hari berturut-turut"
-          subColor={streakSubColor} />
+          subColor={streakSubColor}
+          tone={streak > 0 ? 'warm' : ''} />
       </section>
     </aside>
   );

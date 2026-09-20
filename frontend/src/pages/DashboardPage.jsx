@@ -6,6 +6,8 @@ import CaloriesLog from "../components/CaloriesLog";
 import AuraCheckIn from '../components/AuraCheckIn';
 import ManualPlanForm from '../components/ManualPlanForm';
 import ConfirmDialog from '../components/ConfirmDialog';
+import PlanSkeleton from '../components/PlanSkeleton';
+import NextStepCard from '../components/NextStepCard';
 import { savePlanItemProgress } from '../utils/progress-storage';
 import { deletePlanItem, getAIRecommendations, getAuraToday, saveAuraToday, updatePlanItem } from '../utils/network-data';
 import { getAuraOption } from '../utils/aura';
@@ -223,9 +225,10 @@ export default function DashboardPage({ onLogout, user }) {
             ) : null}
 
             {statusRencana === 'memuat' ? (
-              <div className="dashboard-state" aria-live="polite">
-                <p className="dashboard-state__title">Menyusun rencana hari ini…</p>
-              </div>
+              <>
+                <p className="visually-hidden" aria-live="polite">Menyusun rencana hari ini…</p>
+                <PlanSkeleton />
+              </>
             ) : statusRencana === 'menunggu-aura' ? (
               <>
                 {/* Pemilih aura didahulukan karena itulah satu-satunya langkah
@@ -277,6 +280,13 @@ export default function DashboardPage({ onLogout, user }) {
               </div>
             ) : (
               <>
+                {/* Langkah berikutnya didahulukan; ringkasan dan daftar tetap
+                    di bawahnya untuk yang ingin melihat keseluruhan hari. */}
+                <NextStepCard
+                  activities={activities}
+                  completedActivityIds={completedActivityIds}
+                  onDone={(id, selesai) => handlePlanItemToggle(id, selesai, 'activity')}
+                />
                 <section className="dashboard-hero" aria-labelledby="today-plan-title">
                   <div className="dashboard-hero__copyblock">
                     <p className="dashboard-hero__eyebrow">Hari ini</p>
