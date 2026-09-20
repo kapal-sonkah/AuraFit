@@ -228,3 +228,19 @@
 .history-trend__legend-swatch--streak-missed { display: grid; place-items: center; background: var(--color-progress-low-soft); color: var(--color-progress-low); font-size: 0.65rem; font-weight: var(--weight-bold); }
 .history-trend__legend-swatch--streak-rest { display: grid; place-items: center; background: var(--color-paper-soft); color: var(--color-muted); font-size: 0.65rem; font-weight: var(--weight-bold); }
 .history-plan-item__tag { display: inline-block; margin-left: var(--space-2); padding: 0.1rem var(--space-2); border: 1px solid var(--color-accent-line); border-radius: var(--radius-pill); background: var(--color-accent-soft); color: var(--color-accent-strong); font-size: var(--text-xs); font-weight: var(--weight-semibold); vertical-align: middle; white-space: nowrap; }
+
+/* Keep narrow cards readable instead of making the page feel zoomable. */
+.history-summary__card,
+.history-hero > div,
+.history-panel__head > div,
+.history-aura-insight > div { min-width: 0; }
+.history-hero__title,
+.history-hero__copy,
+.history-summary__label,
+.history-summary__hint,
+.history-aura-insight h2,
+.history-aura-insight p { overflow-wrap: anywhere; }
+
+@media (max-width: 24.375rem) {
+  .history-summary { grid-template-columns: 1fr; }
+}

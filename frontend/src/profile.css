@@ -79,3 +79,11 @@
   .profile-actions--dirty { margin-inline: calc(var(--space-3) * -1); border-inline: 0; border-radius: 0; }
 }
 
+@media (max-width: 24.375rem) {
+  .profile-identity { grid-template-columns: 1fr; }
+  .profile-identity__metric,
+  .profile-identity__link { grid-column: 1; }
+  .profile-identity__metric { padding-top: var(--space-3); }
+  .profile-identity__link { justify-content: center; white-space: normal; }
+}
+

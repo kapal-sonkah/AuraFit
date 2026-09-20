@@ -404,3 +404,7 @@
    dalamnya memakai warna yang lebih gelap agar tetap 4,5:1 (N-04). */
 .activity-card--done .activity-card__meta,
 .food-card--done .food-card__meta { color: var(--color-muted-on-accent); }
+
+@media (max-width: 24.375rem) {
+  .overview-card { grid-template-columns: 1fr; }
+}
