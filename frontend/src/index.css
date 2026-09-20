@@ -52,6 +52,12 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+@media (max-width: 42rem) {
+  body:has(.app-header) {
+    padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+  }
+}
+
 /* Cincin fokus.
  *
  * Sebelumnya tidak ada satu pun gaya :focus di seluruh antarmuka, sehingga
@@ -130,3 +136,20 @@ body {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.field-error-summary {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-card);
+  background: var(--color-alert-surface);
+  color: var(--color-ink);
+}
+
+.field-error-summary:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.field-error-summary__title { margin: 0; color: var(--color-danger); font-weight: var(--weight-semibold); }
+.field-error-summary__list { display: grid; gap: var(--space-1); margin: 0; padding-left: var(--space-5); }
+.field-error-summary__link { padding: 0; border: 0; background: transparent; color: var(--color-danger); font: inherit; text-align: left; text-decoration: underline; cursor: pointer; }
+main[data-route-main]:focus { outline: 0; }

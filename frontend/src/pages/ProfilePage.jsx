@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AppHeader from '../components/AppHeader';
 import { changePassword, updateUserProfile } from '../utils/network-data';
 import { collectFieldErrors } from '../utils/validation-messages';
+import FieldErrorSummary from '../components/FieldErrorSummary';
 import '../profile.css';
 
 const GOALS = [
@@ -43,6 +44,7 @@ function PasswordCard() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [status, setStatus] = useState({ type: '', message: '' });
   const [saving, setSaving] = useState(false);
+  const errorSummaryRef = useRef(null);
 
   function setField(field, value) {
     setFields((current) => ({ ...current, [field]: value }));
@@ -73,8 +75,7 @@ function PasswordCard() {
     if (fields.next && fields.confirm && fields.next !== fields.confirm) errors.confirm = 'Konfirmasi kata sandi baru tidak sama.';
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
-      const firstInvalid = event.currentTarget.querySelector(':invalid');
-      (firstInvalid || (errors.confirm ? document.getElementById('password-confirm') : null))?.focus();
+      window.requestAnimationFrame(() => errorSummaryRef.current?.focus());
       return;
     }
 
@@ -105,6 +106,7 @@ function PasswordCard() {
         <label className="profile-field"><span>Ulangi kata sandi baru</span><input id="password-confirm" type="password" autoComplete="new-password" minLength={8} value={fields.confirm} onChange={(event) => setField('confirm', event.target.value)} required {...fieldProps('confirm')} /><FieldError errors={fieldErrors} name="confirm" prefix="password" /></label>
       </div>
 
+      <FieldErrorSummary ref={errorSummaryRef} errors={fieldErrors} prefix="password" />
       {status.message ? <p className={`profile-message profile-message--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p> : null}
       <div className="profile-actions">
         <button type="submit" className="profile-action profile-action--primary" disabled={saving} aria-busy={saving}>{saving ? 'Menyimpan…' : 'Ganti kata sandi'}</button>
@@ -119,6 +121,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
   const [fieldErrors, setFieldErrors] = useState({});
   const [status, setStatus] = useState({ type: '', message: '' });
   const [saving, setSaving] = useState(false);
+  const errorSummaryRef = useRef(null);
   const isDirty = !sameProfile(form, savedForm);
 
   function setField(field, value) {
@@ -156,7 +159,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
     const errors = collectFieldErrors(event.currentTarget);
     setFieldErrors(errors);
     if (Object.keys(errors).length > 0) {
-      event.currentTarget.querySelector(':invalid')?.focus();
+      window.requestAnimationFrame(() => errorSummaryRef.current?.focus());
       return;
     }
     setSaving(true);
@@ -180,7 +183,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
       <div className="profile-frame">
         <AppHeader onLogout={onLogout} />
 
-        <main className="profile-main">
+        <main className="profile-main" data-route-main tabIndex="-1">
           <section className="profile-hero" aria-labelledby="profile-title">
             <p className="profile-hero__eyebrow">Preferensi pribadi</p>
             <h1 id="profile-title" className="profile-hero__title">Buat rencana terasa lebih sesuai.</h1>
@@ -209,6 +212,7 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
               <label className="profile-field profile-field--wide"><span>Tujuan</span><select id="profile-goal" value={form.goal} onChange={(event) => setField('goal', event.target.value)} required {...fieldProps('goal')}><option value="" disabled>Pilih tujuan</option>{GOALS.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select><FieldError errors={fieldErrors} name="goal" /></label>
             </div>
 
+            <FieldErrorSummary ref={errorSummaryRef} errors={fieldErrors} prefix="profile" />
             {status.message ? <p className={`profile-message profile-message--${status.type}`} role={status.type === 'error' ? 'alert' : 'status'}>{status.message}</p> : null}
             {status.type === 'success' && !isDirty ? (
               <div className="profile-actions profile-actions--saved">
@@ -227,6 +231,15 @@ export default function ProfilePage({ onLogout, user, onUserUpdated }) {
           </form>
 
           <PasswordCard />
+
+          <section className="profile-card profile-card--account" aria-labelledby="profile-account-actions-title">
+            <div>
+              <p className="profile-card__eyebrow">Akun</p>
+              <h2 id="profile-account-actions-title" className="profile-card__title">Keluar dari AuraFit</h2>
+              <p className="profile-card__copy">Sesi di perangkat ini akan diakhiri. Kamu dapat masuk kembali kapan saja.</p>
+            </div>
+            <button type="button" className="profile-action profile-action--danger" onClick={onLogout}>Keluar</button>
+          </section>
         </main>
       </div>
     </div>

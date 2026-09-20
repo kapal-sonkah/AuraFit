@@ -49,6 +49,8 @@ function ActivityCard({ activity, active, onClick, onDone, onDelete, onEdit }) {
           <img
             src={activity.image}
             alt=""
+            loading="lazy"
+            decoding="async"
             className="activity-card__media"
             onError={(event) => {
               event.currentTarget.hidden = true;

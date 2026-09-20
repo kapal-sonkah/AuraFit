@@ -294,7 +294,7 @@ export default function HistoryPage({ onLogout }) {
       <div className="history-frame">
         <AppHeader onLogout={onLogout} />
 
-        <main className="history-main">
+        <main className="history-main" data-route-main tabIndex="-1">
           <section className="history-hero" aria-labelledby="history-title">
             <div>
               <p className="history-hero__eyebrow">Tujuh hari terakhir</p>

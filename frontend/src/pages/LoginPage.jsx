@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Logo from '../assets/images/aurafit-mark.svg';
 import PasswordVisibilityIcon from '../components/PasswordVisibilityIcon';
+import FieldErrorSummary from '../components/FieldErrorSummary';
 import { login } from '../utils/network-data';
 import { collectFieldErrors } from '../utils/validation-messages';
 import React from "react";
@@ -14,6 +15,7 @@ function LoginPage({ loginSuccess }) {
   const [galat, setGalat] = React.useState('');
   const [fieldErrors, setFieldErrors] = React.useState({});
   const [sedangKirim, setSedangKirim] = React.useState(false);
+  const errorSummaryRef = React.useRef(null);
 
   function clearFieldError(name) {
     setFieldErrors((current) => {
@@ -42,7 +44,7 @@ function LoginPage({ loginSuccess }) {
     const fieldErrorsNext = collectFieldErrors(event.currentTarget);
     setFieldErrors(fieldErrorsNext);
     if (Object.keys(fieldErrorsNext).length > 0) {
-      event.currentTarget.querySelector(':invalid')?.focus();
+      window.requestAnimationFrame(() => errorSummaryRef.current?.focus());
       return;
     }
     setSedangKirim(true);
@@ -58,7 +60,7 @@ function LoginPage({ loginSuccess }) {
   }
 
   return (
-    <main className="auth-shell">
+    <main className="auth-shell" data-route-main tabIndex="-1">
       <section className="auth-panel auth-panel--form">
         <Link to="/" className="auth-back">← Beranda</Link>
         <div className="auth-content">
@@ -105,6 +107,12 @@ function LoginPage({ loginSuccess }) {
             </p>
           </div>
 
+          <FieldErrorSummary
+            ref={errorSummaryRef}
+            errors={fieldErrors}
+            prefix="login"
+            getFieldId={(name) => name === 'username_email' ? 'login-username' : `login-${name}`}
+          />
           {galat ? (
             <p role="alert" className="auth-error">
               {galat}

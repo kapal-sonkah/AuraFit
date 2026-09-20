@@ -1,25 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { foodMeta } from '../utils/presentation';
+import { useModalFocusTrap } from '../utils/modal-focus';
 
 export default function FoodPopup({ food, consumed, onClose, onConsume }) {
   const closeButtonRef = useRef(null);
+  const modalRef = useRef(null);
 
-  useEffect(() => {
-    if (!food) return undefined;
-    const previousFocus = document.activeElement;
-    const handleKeyDown = (event) => {
-      if (event.key === 'Escape') {
-        event.preventDefault();
-        onClose();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    closeButtonRef.current?.focus();
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      previousFocus?.focus?.();
-    };
-  }, [food, onClose]);
+  useModalFocusTrap({
+    open: Boolean(food),
+    containerRef: modalRef,
+    initialFocusRef: closeButtonRef,
+    onClose,
+  });
 
   if (!food) return null;
 
@@ -30,7 +22,7 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
       <div className="absolute inset-0" aria-hidden="true" />
 
       {/* Card - Scales and slides up slightly */}
-      <div className="modal-card modal-card--food" role="dialog" aria-modal="true" aria-labelledby="food-dialog-title" aria-describedby="food-dialog-description" onClick={(event) => event.stopPropagation()}>
+      <div ref={modalRef} className="modal-card modal-card--food" role="dialog" aria-modal="true" aria-labelledby="food-dialog-title" aria-describedby="food-dialog-description" onClick={(event) => event.stopPropagation()}>
 
         <div className="modal-card__head">
           <h2 id="food-dialog-title" className="modal-card__title">Detail makanan</h2>
@@ -38,7 +30,7 @@ export default function FoodPopup({ food, consumed, onClose, onConsume }) {
         </div>
 
         {food.image ? (
-          <img src={food.image} alt="" className="food-card__media mt-5" />
+          <img src={food.image} alt="" loading="lazy" decoding="async" className="food-card__media mt-5" />
         ) : null}
 
         <div className="food-detail flex items-center gap-4 mt-5">

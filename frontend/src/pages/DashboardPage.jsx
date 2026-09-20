@@ -216,7 +216,7 @@ export default function DashboardPage({ onLogout, user }) {
       <div className="dashboard-frame">
         <AppHeader onLogout={onLogout} />
 
-        <main className="dashboard-layout">
+        <main className="dashboard-layout" data-route-main tabIndex="-1">
           <div className="dashboard-summary">
             <OverviewSidebar
               user={user}

@@ -208,7 +208,7 @@
   .dashboard-list--activities, .dashboard-list--foods { grid-template-columns: 1fr; }
   .overview-card { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .modal-content { grid-template-columns: 1fr; }
-  .modal-actions { align-items: stretch; flex-direction: column-reverse; }
+  .modal-actions { align-items: stretch; flex-direction: column; }
   .modal-action { width: 100%; }
   .manual-plan-form__head { flex-direction: column; }
   .manual-plan-form__row, .manual-plan-form__row--food { grid-template-columns: 1fr; align-items: stretch; }
@@ -250,6 +250,7 @@
 
 @media (max-width: 42rem) {
   .dashboard-frame { padding-inline: var(--space-3); }
+  .dashboard-frame { padding-bottom: calc(var(--space-12) + 4.5rem + env(safe-area-inset-bottom)); }
 }
 
 /* Layout pass: keep the daily action area readable at tablet and laptop widths. */
@@ -303,6 +304,7 @@
   .dashboard-summary { order: 1; }
   .activity-card__head { grid-template-columns: 1fr; gap: var(--space-1); }
   .activity-card__status { max-width: none; text-align: left; }
+  .activity-card__media { aspect-ratio: 16 / 9; }
 }
 
 /* Aura mode: place the daily state beside progress and keep the selected state compact. */
