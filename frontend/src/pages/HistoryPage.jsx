@@ -125,6 +125,29 @@ function itemStatus(item, type) {
   return type === 'activity' ? 'Belum dimulai' : 'Belum dicatat';
 }
 
+function PlanItemVisual({ presented, type }) {
+  return (
+    <div className="history-plan-item__icon" aria-hidden="true">
+      {presented.image ? (
+        <img
+          src={presented.image}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="history-plan-item__image"
+          onError={(event) => {
+            event.currentTarget.hidden = true;
+            if (event.currentTarget.nextElementSibling) event.currentTarget.nextElementSibling.hidden = false;
+          }}
+        />
+      ) : null}
+      <span className="history-plan-item__fallback" hidden={Boolean(presented.image)}>
+        {type === 'activity' ? <ActivityIcon name={presented.name} /> : presented.emoji}
+      </span>
+    </div>
+  );
+}
+
 function SummaryCard({ label, value, hint, tone = '' }) {
   return (
     <article className={`history-summary__card ${tone ? `history-summary__card--${tone}` : ''}`}>
@@ -187,9 +210,7 @@ function PlanItem({ item, type, onToggle, saving, editable }) {
 
   return (
     <article className={`history-plan-item ${item.completed ? 'history-plan-item--done' : ''}`}>
-      <div className="history-plan-item__icon" aria-hidden="true">
-        {type === 'activity' ? <ActivityIcon name={presented.name} /> : presented.emoji}
-      </div>
+      <PlanItemVisual presented={presented} type={type} />
       <div className="history-plan-item__body">
         <p className="history-plan-item__name">
           {presented.name}
