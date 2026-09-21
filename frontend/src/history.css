@@ -267,10 +267,13 @@
 .history-aura-insight,
 .history-panel { box-sizing: border-box; min-width: 0; max-width: 100%; }
 .history-shell { width: 100%; overflow-x: clip; }
-.history-frame,
-.history-main,
-.history-summary { width: 100%; }
 .history-summary__card { box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; }
+
+@media (max-width: 42rem) {
+  .history-frame,
+  .history-main,
+  .history-summary { width: 100%; }
+}
 
 /* Mobile-only detail layout: keep activity and food cards readable and
    centered instead of squeezing their status/actions beside the copy. */
