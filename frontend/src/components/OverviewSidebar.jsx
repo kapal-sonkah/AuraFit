@@ -57,13 +57,17 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
     
   // Warna streak
   const streakSubColor = streak > 0 ? 'stat-card__sub--streak' : 'stat-card__sub--muted';
+  const waitingForAura = planStatus === 'menunggu-aura';
+  const canShowLastStreak = planReady || (waitingForAura && streak > 0);
   const streakSub = planReady
     ? todayActivityCompleted
       ? 'hari berturut-turut · hari ini aman'
       : streak > 0
         ? 'hari berturut-turut · selesaikan 1 aktivitas hari ini'
         : 'selesaikan 1 aktivitas hari ini'
-    : inactivePlanSub;
+    : waitingForAura && streak > 0
+      ? 'hari berturut-turut · pilih aura untuk lanjut'
+      : inactivePlanSub;
 
   return (
     <aside className="w-full shrink-0 overflow-hidden">
@@ -98,7 +102,7 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
             tenggelam di antara kartu lain. */}
         <StatCard 
           label="Streak" 
-          value={planReady ? streak : '—'}
+          value={canShowLastStreak ? streak : '—'}
           sub={streakSub}
           subColor={streakSubColor}
           tone={streak > 0 ? 'streak' : ''}

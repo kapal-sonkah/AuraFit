@@ -45,7 +45,7 @@ function completionLabel(day) {
   if (!day?.hasPlan) return 'Tanpa rencana';
   if (day.completionRate >= 80) return 'Terjaga';
   if (day.completionRate >= 40) return 'Berjalan';
-  return 'Mulai';
+  return 'Belum mulai';
 }
 
 function streakStatus(day, today) {
@@ -57,11 +57,13 @@ function streakStatus(day, today) {
 
 function streakStatusLabel(status) {
   return {
-    done: 'Selesai',
-    'done-today': 'Selesai hari ini',
+    done: 'Streak terjaga',
+    'done-today': 'Streak terjaga hari ini',
     today: 'Hari ini',
     missed: 'Belum dilakukan',
-    rest: 'Istirahat / tanpa rencana',
+    // API saat ini belum membedakan hari istirahat dari tanggal tanpa rencana.
+    // Jangan menyebutnya hari istirahat sebelum backend memiliki datanya.
+    rest: 'Tanpa rencana',
   }[status] ?? 'Belum diketahui';
 }
 
@@ -242,15 +244,15 @@ function HistoryTrend({ days, selectedDate, today, loading }) {
         ))}
       </div>
       <ul className="history-trend__legend" aria-label="Legenda warna progres">
-        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--low" />Mulai · 0–39%</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--low" />Belum mulai · 0–39%</li>
         <li><span className="history-trend__legend-swatch history-trend__legend-swatch--medium" />Berjalan · 40–79%</li>
         <li><span className="history-trend__legend-swatch history-trend__legend-swatch--high" />Terjaga · 80–100%</li>
       </ul>
       <ul className="history-trend__legend history-trend__legend--streak" aria-label="Legenda status streak">
-        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-done">✓</span>Selesai</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-done">✓</span>Streak terjaga</li>
         <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-today">•</span>Hari ini</li>
         <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-missed">–</span>Belum dilakukan</li>
-        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-rest">·</span>Istirahat / tanpa rencana</li>
+        <li><span className="history-trend__legend-swatch history-trend__legend-swatch--streak-rest">·</span>Tanpa rencana</li>
       </ul>
       <p className="history-trend__caption">Batang yang lebih tinggi berarti lebih banyak catatan selesai. Status streak dihitung dari aktivitas, bukan makanan. Pilih kartu hari di bawah untuk melihat rinciannya.</p>
     </div>

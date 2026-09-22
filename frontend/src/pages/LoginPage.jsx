@@ -103,7 +103,7 @@ function LoginPage({ loginSuccess }) {
             </div>
             {fieldErrors.password ? <p id="login-password-error" className="auth-field__error">{fieldErrors.password}</p> : null}
             <p className="auth-help">
-              Lupa kata sandi? Minta admin AuraFit membuat kata sandi sementara, lalu ganti di halaman Profil setelah masuk.
+              Lupa kata sandi? Hubungi pengelola AuraFit untuk meminta kata sandi sementara. Setelah masuk, segera ganti di halaman Profil.
             </p>
           </div>
 
