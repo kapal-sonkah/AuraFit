@@ -225,7 +225,7 @@ export default function DashboardPage({ onLogout, user }) {
               user={user}
               planStatus={statusRencana}
               completedActivities={completedActivities}
-              totalActivities={activities.length}
+              totalActivities={aktivitasUtama.length}
               consumedCalories={consumedCalories}
               streak={streak}
               dailyCalorieTarget={dailyCalorieTarget}

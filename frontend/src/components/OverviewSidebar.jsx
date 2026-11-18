@@ -82,7 +82,7 @@ export default function OverviewSidebar({ user, planStatus = 'memuat', completed
         <StatCard 
           label="Aktivitas Tercatat" 
           value={planReady ? `${completedActivities} / ${totalActivities}` : '—'}
-          sub={planReady ? 'selesai dari rencana' : inactivePlanSub}
+          sub={planReady ? 'aktivitas utama selesai' : inactivePlanSub}
           subColor={activitySubColor} />
         
         {/* Streak memakai warna hangat, satu-satunya aksen non-hijau pada
