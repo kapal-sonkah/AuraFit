@@ -1,6 +1,7 @@
 import InvariantError from "../../../exceptions/invariant-error.js";
 import response from "../../../utils/response.js";
 import UserRepositories from "../repositories/user-repositories.js";
+import AuthenticationRepositories from '../../authentication/repositories/authentication-repositories.js';
 import { isAcceptablePassword } from '../../../security/password.js';
 
 export const createUser = async (req, res, next) => {
@@ -61,6 +62,10 @@ export const changePassword = async (req, res, next) => {
     // 400, bukan 401: pengguna sudah terautentikasi, yang salah hanya isian
     // borang. 401 lazim dibaca klien sebagai sesi habis lalu memaksa keluar.
     if (!berhasil) return next(new InvariantError('Kata sandi saat ini salah.'));
+
+    // AF-06: sandi lama mungkin sudah bocor, jadi sesi di perangkat lain
+    // dicabut. Sesi perangkat ini dipertahankan bila tokennya dikirim.
+    await AuthenticationRepositories.deleteRefreshTokensForUser(req.user.id, req.body.refresh_token ?? null);
 
     return response(res, 200, 'Kata sandi berhasil diganti', null);
   } catch (error) {

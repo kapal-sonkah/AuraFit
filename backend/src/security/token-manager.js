@@ -4,7 +4,7 @@ import AuthenticationError from '../exceptions/authentication-error.js';
 
 const TokenManager = {
   generateAccessToken: (payload) => jwt.sign(payload, process.env.ACCESS_TOKEN_KEY, { expiresIn: '3h' }),
-  generateRefreshToken: (payload) => jwt.sign(payload, process.env.REFRESH_TOKEN_KEY),
+  generateRefreshToken: (payload) => jwt.sign(payload, process.env.REFRESH_TOKEN_KEY, { expiresIn: '7d' }),
   verifyRefreshToken: (refreshToken) => {
     try {
       const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);

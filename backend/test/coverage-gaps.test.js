@@ -128,6 +128,9 @@ test('setiap kueri pada rencana menyertakan user_id', () => {
 // F-08: jalur berhasil mengganti kata sandi, bukan hanya penolakannya.
 test('kata sandi lama yang benar mengganti hash dan menghapus kata sandi lama', async () => {
   const asliPool = UserRepositories.pool;
+  const { default: AuthenticationRepositories } = await import('../src/services/authentication/repositories/authentication-repositories.js');
+  const asliCabut = AuthenticationRepositories.deleteRefreshTokensForUser;
+  AuthenticationRepositories.deleteRefreshTokensForUser = async () => 0;
   const lama = 'kataSandiLama1';
   const baru = 'kataSandiBaru9';
   const hashLama = await hashPassword(lama);
@@ -158,6 +161,7 @@ test('kata sandi lama yang benar mengganti hash dan menghapus kata sandi lama', 
     assert.equal(await verifyPassword(lama, tersimpan.params[1]), false);
   } finally {
     UserRepositories.pool = asliPool;
+    AuthenticationRepositories.deleteRefreshTokensForUser = asliCabut;
   }
 });
 

@@ -218,7 +218,7 @@ async function changePassword(currentPassword, newPassword) {
     const response = await fetchWithToken(`${BASE_URL}/users/me/password`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword, refresh_token: localStorage.getItem('refreshToken') }),
     });
     const responseJson = await response.json();
 

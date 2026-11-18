@@ -124,3 +124,49 @@ test('pendaftaran menolak jenis kelamin, tujuan, dan data tubuh di luar pilihan'
     assert.equal(galat?.statusCode, 400, JSON.stringify(salah));
   }
 });
+
+// AF-06: refresh token kedaluwarsa dan ganti sandi mencabut sesi perangkat lain.
+test('refresh token diterbitkan dengan masa berlaku', async () => {
+  process.env.ACCESS_TOKEN_KEY ??= 'kunci-uji-akses';
+  const { default: TokenManager } = await import('../src/security/token-manager.js');
+  const { iat, exp } = jwt.decode(TokenManager.generateRefreshToken({ id: 'budi' }));
+  assert.equal(exp - iat, 7 * 24 * 60 * 60);
+});
+
+test('ganti kata sandi mencabut sesi lain dan menyisakan sesi perangkat ini', async () => {
+  const asliGanti = UserRepositories.changePassword;
+  const asliCabut = AuthenticationRepositories.deleteRefreshTokensForUser;
+  let dicabut = null;
+  UserRepositories.changePassword = async () => true;
+  AuthenticationRepositories.deleteRefreshTokensForUser = async (...args) => { dicabut = args; return 1; };
+  try {
+    const res = resTiruan();
+    await changePassword({ user: { id: 'u1' }, body: { current_password: 'lama-12345', new_password: 'baru-12345', refresh_token: 'tok-ini' } }, res, (e) => { throw e; });
+    assert.equal(res.code, 200);
+    assert.deepEqual(dicabut, ['u1', 'tok-ini']);
+  } finally {
+    UserRepositories.changePassword = asliGanti;
+    AuthenticationRepositories.deleteRefreshTokensForUser = asliCabut;
+  }
+});
+
+test('pencabutan sesi tidak menghapus token yang dikecualikan', async () => {
+  const kunci = process.env.REFRESH_TOKEN_KEY;
+  const ini = jwt.sign({ id: 'budi', iat: 2 }, kunci);
+  const lain = jwt.sign({ id: 'budi', iat: 3 }, kunci);
+  const originalPool = AuthenticationRepositories.pool;
+  let dihapus = null;
+  AuthenticationRepositories.pool = {
+    query: async (text, params) => {
+      if (text.startsWith('SELECT')) return { rows: [ini, lain].map((token) => ({ token })) };
+      dihapus = params[0];
+      return { rows: [] };
+    },
+  };
+  try {
+    assert.equal(await AuthenticationRepositories.deleteRefreshTokensForUser('budi', ini), 1);
+    assert.deepEqual(dihapus, [lain]);
+  } finally {
+    AuthenticationRepositories.pool = originalPool;
+  }
+});

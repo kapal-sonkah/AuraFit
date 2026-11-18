@@ -24,17 +24,18 @@ class AuthenticationRepositories {
     await this.pool.query(query);
   }
 
-  // Tabel authentications hanya menyimpan token tanpa id pengguna, dan refresh
-  // token tidak pernah kedaluwarsa. Sesi seorang pengguna karena itu dicabut
-  // dengan membaca id di dalam setiap token. Token yang tidak dapat diverifikasi
-  // dibiarkan, karena sudah pasti ditolak saat dipakai.
-  async deleteRefreshTokensForUser(userId) {
+  // Tabel authentications hanya menyimpan token tanpa id pengguna. Sesi seorang
+  // pengguna karena itu dicabut dengan membaca id di dalam setiap token. Token
+  // yang tidak dapat diverifikasi dibiarkan, karena sudah pasti ditolak saat
+  // dipakai. `kecuali` menyisakan
+  // sesi perangkat yang sedang dipakai, misalnya saat mengganti kata sandi.
+  async deleteRefreshTokensForUser(userId, kecuali = null) {
     const result = await this.pool.query('SELECT token FROM authentications');
     const milikPengguna = result.rows
       .map((row) => row.token)
       .filter((token) => {
         try {
-          return jwt.verify(token, process.env.REFRESH_TOKEN_KEY).id === userId;
+          return token !== kecuali && jwt.verify(token, process.env.REFRESH_TOKEN_KEY).id === userId;
         } catch {
           return false;
         }
