@@ -1,6 +1,7 @@
 import { nanoid } from "nanoid";
 import { hashPassword, verifyPassword } from '../../../security/password.js';
 import pool from '../../../database/pool.js';
+import { kategoriBmi } from '../../recommendations/recommendation-service.js';
 
 class UserRepositories {
   constructor() {
@@ -10,10 +11,7 @@ class UserRepositories {
   async createUser(username, email, password, first_name, last_name, gender, weight, height, goal, age) {
     const id = nanoid(16);
     const bmi = weight / ((height / 100) ** 2);
-    const bmi_category = 
-      bmi < 18.5 ? 'Underweight' :
-      bmi < 25 ? 'Normal' :
-      bmi < 30 ? 'Overweight' : 'Obese';
+    const bmi_category = kategoriBmi(bmi);
 
     const passwordHash = await hashPassword(password);
     const query = {
@@ -39,10 +37,7 @@ class UserRepositories {
 
   async updateProfile(id, { first_name, last_name, gender, weight, height, goal, age }) {
     const bmi = weight / ((height / 100) ** 2);
-    const bmi_category =
-      bmi < 18.5 ? 'Underweight' :
-      bmi < 25 ? 'Normal' :
-      bmi < 30 ? 'Overweight' : 'Obese';
+    const bmi_category = kategoriBmi(bmi);
 
     const result = await this.pool.query({
       text: `UPDATE users

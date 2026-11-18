@@ -24,8 +24,12 @@ export function hitungBmi(beratKg, tinggiCm) {
   return beratKg / (tinggiM ** 2);
 }
 
+// Kategori ditentukan dari BMI yang dibulatkan dua desimal (sama dengan yang
+// ditampilkan), agar galat pecahan biner seperti 24.999999999999996 tidak
+// membuat BMI tampil 25.00 tetapi berkategori Normal.
 export function kategoriBmi(bmi) {
-  return KATEGORI_BMI.find((k) => bmi < k.batasAtas).nama;
+  const tampil = Math.round(bmi * 100) / 100;
+  return KATEGORI_BMI.find((k) => tampil < k.batasAtas).nama;
 }
 
 // Intensitas dasar menurut kategori BMI.
